@@ -21,10 +21,10 @@ const YourApp = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
   if(fontsLoaded){
     return(
-        // <RootStackScreen />
+        <RootStackScreen />
         //  <Otp />
         // <ForgotPass />
-        <Home />
+        // <Home />
     )
   } else {
     return(

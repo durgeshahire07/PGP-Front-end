@@ -18,7 +18,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-const NewPass = () => {
+const NewPass = ({navigation}) => {
 
     const [data, setData] = React.useState({
         password: '',
@@ -136,7 +136,7 @@ const NewPass = () => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    
+                    onPress={() => navigation.push('Login')}
                 >
                 <LinearGradient
                     colors={['#4700b3', '#4700b3']}

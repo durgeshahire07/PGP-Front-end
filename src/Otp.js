@@ -154,13 +154,6 @@ const { pin1, pin2, pin3, pin4 } = data
                     <Text style={[{ fontFamily: 'nunito-semi' }, { color: 'grey' }]}>
                         Didn't get code?
                 </Text>
-                {/* <CountDown
-                  until={60*2}
-                  size={10}
-                  digitStyle={{backgroundColor: '#FFF'}}
-                  timeToShow={['M','S']}
-                  timeLabels={{m: null, s: null}}
-                /> */}
                     <TouchableOpacity>
                         <Text style={[{ fontFamily: 'nunito-bold' }, { color: '#4700b3' }]}>{" "}Resend OTP</Text>
                     </TouchableOpacity>
