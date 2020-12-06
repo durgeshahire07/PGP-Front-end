@@ -18,32 +18,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-const SignUp = ({navigation}) => {
+const NewPass = () => {
 
     const [data, setData] = React.useState({
-        username: '',
         password: '',
         confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
-
-    const textInputChange = (val) => {
-        if( val.length > 10 ) {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: true
-            });
-        } else {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: false
-            });
-        }
-    }
 
     const handlePasswordChange = (val) => {
         setData({
@@ -74,64 +57,32 @@ const SignUp = ({navigation}) => {
     }
 
     return (
-        <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+        
       <View style={styles.container}>
-         
+          <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
         <StatusBar backgroundColor='#4700b3' barStyle="light-content"/>
         <View style={styles.header} />
-        <Text style={{
-                fontFamily: 'nunito-bold',
-                fontSize: 28,
-                color: '#fff',
-                paddingLeft: 20
-            }}>Hey, get on board</Text>
-            <Text style={{
-                fontFamily: 'nunito-semi',
-                fontSize: 18,
-                paddingBottom: 30,
-                color: '#fff',
-                paddingLeft:20,
-            }}>Sign up to start your Journey!</Text>
-              
+   
         <Animatable.View 
             animation="fadeInUp"
             style={styles.footer}
         >
-          
+           <Text style={{
+                fontFamily: 'nunito-bold',
+                fontSize: 28,
+                color: '#blue',
+                color: '#4700b3'
+            }}>Reset Password</Text>
+            <Text style={{
+                fontFamily: 'nunito-semi',
+                fontSize: 18,
+                paddingBottom: 10,
+                color: 'grey'
+            }}>Please enter your new password</Text>
+
             <View style={styles.action}>
                 <TextInput 
-                    placeholder="First Name"
-                    style={styles.textInput}
-                />
-            </View>
-            <View style={styles.action}>
-                <TextInput 
-                    placeholder="Last Name"
-                    style={styles.textInput}
-                />
-            </View>
-            <View style={styles.action}>
-                <TextInput 
-                    placeholder="Email Address"
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    onChangeText={(val) => textInputChange(val)}
-                />
-                {data.check_textInputChange ? 
-                    <Animatable.View
-                    animation="bounceIn"
-                    >
-                    <Feather 
-                        name="check"
-                        color="#8533ff"
-                        size={20}
-                    />
-                </Animatable.View>
-                : null}
-            </View> 
-            <View style={styles.action}>
-                <TextInput 
-                    placeholder="Your Password"
+                    placeholder="Your New Password"
                     secureTextEntry={data.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
@@ -143,13 +94,13 @@ const SignUp = ({navigation}) => {
                     {data.secureTextEntry ? 
                     <Feather 
                         name="eye-off"
-                        color="#a6a6a6"
+                        color="#4700b3"
                         size={20}
                     />
                     :
                     <Feather 
                         name="eye"
-                        color="#8533ff"
+                        color="#4700b3"
                         size={20}
                     />
                     }
@@ -157,7 +108,7 @@ const SignUp = ({navigation}) => {
             </View>
             <View style={styles.action}>
                 <TextInput 
-                    placeholder="Confirm Your Password"
+                    placeholder="Confirm Your New Password"
                     style={styles.textInput}
                     secureTextEntry={data.confirm_secureTextEntry ? true : false}
                     autoCapitalize="none"
@@ -169,26 +120,19 @@ const SignUp = ({navigation}) => {
                     {data.confirm_secureTextEntry ? 
                     <Feather 
                         name="eye-off"
-                        color="#a6a6a6"
+                        color="#4700b3"
                         size={20}
                     />
                     :
                     <Feather 
                         name="eye"
-                        color="#8533ff"
+                        color="#4700b3"
                         size={20}
                     />
                     }
                 </TouchableOpacity>
             </View>  
-            <View style={styles.textPrivate}>
-                <Text style={styles.color_textPrivate}>
-                    By signing up you agree to our
-                </Text>
-                <Text style={[{color: '#595959'}, {fontFamily: 'nunito-bold'}]}>{" "}Terms of service</Text>
-                <Text style={styles.color_textPrivate}>{" "}and</Text>
-                <Text style={[{color: '#595959'}, {fontFamily: 'nunito-bold'}]}>{" "}Privacy policy</Text>
-            </View>
+
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
@@ -200,28 +144,19 @@ const SignUp = ({navigation}) => {
                 >
                     <Text style={[styles.textSign, {
                         color:'#fff',
-                    }]}>Sign Up</Text>
+                    }]}>Reset Password</Text>
                 </LinearGradient>
                 </TouchableOpacity>
-                <View style={styles.textPrivate}>
-                <Text style={styles.color_textPrivate}>
-                    Already have an Account?
-                </Text>
-                <TouchableOpacity
-                 onPress={() => navigation.push('Login')}
-                >
-                <Text style={[{color:'#4700b3'}, {fontFamily: 'nunito-bold'}]}>{" "}Login</Text>
-                </TouchableOpacity>  
-            </View>
+            
             </View>   
       </Animatable.View>   
-      
-      </View> 
       </ScrollView>
+      </View> 
+     
     );
 };
 
-export default SignUp;
+export default NewPass;
 
 const styles = StyleSheet.create({
     container: {
@@ -235,28 +170,23 @@ const styles = StyleSheet.create({
         paddingBottom: 50
     },
     footer: {
-        flex: 2,
+        flex: 0.1,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 30,
         paddingVertical: 30
     },
-    text_footer: {
-        color: '#05375a',
-        fontSize: 18,
-    },
     action: {
         flexDirection: 'row',
         marginTop: 15,
-        borderBottomColor: '#b380ff',
+        borderBottomColor: '#4700b3',
         borderBottomWidth: 2,
     },
     textInput: {
         fontFamily: 'nunito-regular',
         flex: 1,
-        color: '#000000',
-        
+        color: '#000000',  
     },
     button: {
         alignItems: 'center',
@@ -273,16 +203,8 @@ const styles = StyleSheet.create({
         elevation: 6,
     },
     textSign: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: 'nunito-bold'
-    },
-    textPrivate: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 20
-    },
-    color_textPrivate: {
-        fontFamily: 'nunito-regular',
-        color: 'grey'
-    },
+    }
+   
   });
