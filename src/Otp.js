@@ -20,21 +20,42 @@ import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { BorderlessButton } from 'react-native-gesture-handler';
-
+import axios from 'axios'
 
 const Otp = ({ navigation }) => {
     const pin1Ref = React.useRef()
     const pin2Ref = React.useRef()
     const pin3Ref = React.useRef()
     const pin4Ref = React.useRef()
-    const [data, setData] = React.useState({
+    const [pin, setPin] = React.useState({
         pin1: '',
         pin2: '',
         pin3: '',
         pin4: ''
     });
     
-const { pin1, pin2, pin3, pin4 } = data
+const { pin1, pin2, pin3, pin4 } = pin
+
+
+const submitHandler = () => {
+    const data = '' + pin1 + pin2 + pin3 + pin4 ;
+    console.log(data)
+    // var config = {
+    //     method: 'post',
+    //     url: 'http://127.0.0.1:3000/api/v1/otp/get',
+    //     headers: { },
+    //     data : data
+    //   };
+      
+    //   axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     alert(error)
+    //   });
+}
 
     return (
 
@@ -70,7 +91,7 @@ const { pin1, pin2, pin3, pin4 } = data
                     <TextInput
                     ref={pin1Ref}
                     onChangeText={(pin1)=> { 
-                        setData({pin1:pin1})
+                        setPin({...pin,pin1:pin1})
                          if(pin1!=''){
                             pin2Ref.current.focus()
                             
@@ -88,7 +109,7 @@ const { pin1, pin2, pin3, pin4 } = data
                     <TextInput 
                     ref={pin2Ref}
                     onChangeText={(pin2)=> {
-                        setData({ ...data,pin2:pin2})
+                        setPin({ ...pin,pin2:pin2})
                         if(pin2!=''){
                             pin3Ref.current.focus()
                             
@@ -105,7 +126,7 @@ const { pin1, pin2, pin3, pin4 } = data
                     <TextInput 
                      ref={pin3Ref}
                     onChangeText={(pin3)=> {
-                        setData({...data,pin3:pin3})
+                        setPin({...pin,pin3:pin3})
                         
                         if(pin3!=''){
                             
@@ -123,7 +144,7 @@ const { pin1, pin2, pin3, pin4 } = data
                      
                     onChangeText={(pin4)=>{
                         
-                    setData({...data,pin4:pin4})
+                    setPin({...pin,pin4:pin4})
 
                     }}
                    
@@ -137,7 +158,8 @@ const { pin1, pin2, pin3, pin4 } = data
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
-                        onPress={() => navigation.navigate('NewPass')}
+                        onPress={submitHandler}
+                        // onPress={() => navigation.navigate('NewPass')}
                     >
                         <LinearGradient
                             colors={['#4700b3', '#4700b3']}

@@ -18,25 +18,27 @@ import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { BorderlessButton } from 'react-native-gesture-handler';
+import axios from 'axios'
 
 const Login = ({navigation}) => {
 
+    
     const [data, setData] = React.useState({
-        username: '',
+        userEmailId: '',
         password: '',
         secureTextEntry: true,
     });
 
-    const textInput= (val) => {
+    const textInput= (user) => {
             setData({
                 ...data,
-                username: val,
+                userEmailId: user,
             });
         }
-    const handlePasswordChange = (val) => {
+    const handlePasswordChange = (pass) => {
         setData({
             ...data,
-            password: val
+            password: pass
         });
     }
 
@@ -46,6 +48,38 @@ const Login = ({navigation}) => {
             secureTextEntry: !data.secureTextEntry
         });
     }
+    const submitHandler = () => {
+        console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://127.0.0.1:3000/api/v1/auth/login',
+            headers: { },
+            data : data
+          };
+          
+          axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            navigation.navigate('Home')
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert(error);
+          });
+
+        //   navigation.navigate('Home')
+    }
+    // const axios = require('axios');
+    // axios.post('localhost:3000/api/v1/auth/login', {
+    //     userEmailId: data.user,
+    //     password: data.pass
+    //   })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(err =>{
+    //       console.log(err);
+    //   })
 
     return (
       
@@ -53,9 +87,7 @@ const Login = ({navigation}) => {
       <View style={styles.container}>
            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
         <StatusBar backgroundColor='#4700b3' barStyle="light-content"/>
-        <View style={styles.header} />
-        
-              
+        <View style={styles.header} />   
         <Animatable.View 
             animation="fadeInUp"
             style={styles.footer}
@@ -79,7 +111,7 @@ const Login = ({navigation}) => {
                     placeholder="Email Address"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => textInput(val)}
+                    onChangeText={(user) => textInput(user)}
                 />
             </View> 
             <View style={styles.action}>
@@ -88,7 +120,7 @@ const Login = ({navigation}) => {
                     secureTextEntry={data.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => handlePasswordChange(val)}
+                    onChangeText={(pass) => handlePasswordChange(pass)}
                 />
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
@@ -119,7 +151,8 @@ const Login = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.navigate('Home')}
+                    // onPress={() => navigation.navigate('Home')}
+                    onPress={submitHandler}
                 >
                 <LinearGradient
                     colors={['#4700b3', '#4700b3']}

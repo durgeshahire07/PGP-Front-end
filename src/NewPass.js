@@ -28,10 +28,10 @@ const NewPass = ({navigation}) => {
         confirm_secureTextEntry: true,
     });
 
-    const handlePasswordChange = (val) => {
+    const handlePasswordChange = (pass1) => {
         setData({
             ...data,
-            password: val
+            password: pass1
         });
     }
 
@@ -42,10 +42,10 @@ const NewPass = ({navigation}) => {
         });
     }
 
-    const handleConfirmPasswordChange = (val) => {
+    const handleConfirmPasswordChange = (pass2) => {
         setData({
             ...data,
-            confirm_password: val
+            confirm_password: pass2
         });
     }
 
@@ -54,6 +54,25 @@ const NewPass = ({navigation}) => {
             ...data,
             confirm_secureTextEntry: !data.confirm_secureTextEntry
         });
+    }
+
+    const submitHandler = () => {
+        console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://127.0.0.1:3000/api/v1/auth/passwordUpdateConfirmation',
+            headers: { },
+            data : data
+          };
+          
+          axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert(error)
+          });
     }
 
     return (
@@ -86,7 +105,7 @@ const NewPass = ({navigation}) => {
                     secureTextEntry={data.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => handlePasswordChange(val)}
+                    onChangeText={(pass1) => handlePasswordChange(pass1)}
                 />
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
@@ -112,7 +131,7 @@ const NewPass = ({navigation}) => {
                     style={styles.textInput}
                     secureTextEntry={data.confirm_secureTextEntry ? true : false}
                     autoCapitalize="none"
-                    onChangeText={(val) => handleConfirmPasswordChange(val)}
+                    onChangeText={(pass2) => handleConfirmPasswordChange(pass2)}
                 />
                 <TouchableOpacity
                     onPress={updateConfirmSecureTextEntry}
@@ -136,7 +155,8 @@ const NewPass = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.push('Login')}
+                    onPress={() => submitHandler}
+                    // onPress={() => navigation.push('Login')}
                 >
                 <LinearGradient
                     colors={['#4700b3', '#4700b3']}

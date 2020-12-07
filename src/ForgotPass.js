@@ -6,23 +6,53 @@ import {
     TouchableOpacity, 
     Dimensions,
     TextInput,
-    Platform,
     StyleSheet,
     ScrollView,
     StatusBar,
-    Keyboard,
     SafeAreaView,
     
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
+import axios from 'axios'
+
 
 const ForgotPass = ({navigation}) => {
 
+    const [data, setData] = React.useState({
+        userEmailId: ''
+    });
+
+    const handleInputChange = (email) => {
+        setData({
+            ...data,
+            userEmailId: email
+        });
+    }
+
+    const submitHandler = () => {
+        console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://127.0.0.1//3000/api/v1/otp/get',
+            headers: { },
+            data : data
+          };
+          
+          axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert(error)
+          });
+
+    }
+
     return (
-        
-         
+
       <View style={styles.container}>
           <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
           
@@ -56,6 +86,7 @@ const ForgotPass = ({navigation}) => {
                     placeholder="Email Address"
                     style={styles.textInput}
                     autoCapitalize="none"
+                    onChangeText={(email) => handleInputChange(email)}
                 />
             </View> 
 
@@ -63,7 +94,8 @@ const ForgotPass = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.push('Otp')}
+                    // onPress={() => navigation.push('Otp')}
+                    onPress={submitHandler}
                 >
                 <LinearGradient
                     colors={['#4700b3', '#4700b3']}
