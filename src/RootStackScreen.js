@@ -22,8 +22,9 @@ const RootStackScreen = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
-        <Stack.Screen name="Otp" component={Otp} />
         <Stack.Screen name="NewPass" component={NewPass} />
+        <Stack.Screen name="Otp" component={Otp} />
+        
         
       </Stack.Navigator>
     </NavigationContainer>

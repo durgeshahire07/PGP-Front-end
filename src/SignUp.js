@@ -18,43 +18,56 @@ import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
+
+
+
 const SignUp = ({navigation}) => {
 
     const [data, setData] = React.useState({
         firstName:'',
         lastName: '',
         userEmailId: '',
-        password: '',
-        confirm_password: '',
+        password: ''
+    });
+
+    const[secureEntry, setSecureEntry] = React.useState({
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
-    });
+        confirm_password: ''
+    })
+
     const textInputFirstName = (first) =>{
         setData({
             ...data,
-            firstName:'first'
+            firstName: first
         })
     }
     const textInputlastName = (last) => {
         setData({
             ...data,
-            lastName: 'last'
+            lastName: last
         })
     }
     const textInputChange = (user) => {
         
         if( user.length > 10 ) {
+            setSecureEntry({
+                ...secureEntry,
+                check_textInputChange: true
+            })
             setData({
                 ...data,
                 userEmailId: user,
-                check_textInputChange: true
             });
         } else {
+            setSecureEntry({
+                ...secureEntry,
+                check_textInputChange: false
+            })
             setData({
                 ...data,
-                userEmailId: user,
-                check_textInputChange: false
+                userEmailId: user
             });
         }
     }
@@ -67,46 +80,51 @@ const SignUp = ({navigation}) => {
     }
 
     const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
+        setSecureEntry({
+            ...secureEntry,
+            secureTextEntry: !secureEntry.secureTextEntry
         });
     }
 
     const handleConfirmPasswordChange = (pass2) => {
-        setData({
-            ...data,
+        setSecureEntry({
+            ...secureEntry,
             confirm_password: pass2
         });
     }
 
     const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
+        setSecureEntry({
+            ...secureEntry,
+            confirm_secureTextEntry: !secureEntry.confirm_secureTextEntry
         });
     }
-   const submitHandler = () =>{
-
-       console.log(data)
-       var config = {
-        method: 'post',
-        url: 'http://127.0.0.1:3000/api/v1/auth/register',
-        headers: { },
-        data : data
-      };
-      
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        navigation.push('Home')
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert(error);
-      });
-    //   navigation.push('Home')
-
+     async function submitHandler () {
+          if(data.password!=secureEntry.confirm_password){
+              alert("password don't match")
+          }
+          else{
+          try{
+            var config = {
+                method: 'post',
+                url: 'http://127.0.0.1:3000/api/v1/auth/register',
+                headers: { },
+                data : data
+              };
+              const key = await axios(config)
+              const response = key
+              console.log(response)
+              if(response.data.success){
+                navigation.push('Home')
+            }
+            else{
+                alert("Sign Up failed")
+            }
+            }catch(error){
+                console.log(error)
+                alert(error)
+            }
+        }
    }
     return (
         <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
@@ -154,7 +172,7 @@ const SignUp = ({navigation}) => {
                     autoCapitalize="none"
                     onChangeText={(userEmailId) => textInputChange(userEmailId)}
                 />
-                {data.check_textInputChange ? 
+                {secureEntry.check_textInputChange ? 
                     <Animatable.View
                     animation="bounceIn"
                     >
@@ -169,7 +187,7 @@ const SignUp = ({navigation}) => {
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Your Password"
-                    secureTextEntry={data.secureTextEntry ? true : false}
+                    secureTextEntry={secureEntry.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={(pass1) => handlePasswordChange(pass1)}
@@ -177,7 +195,7 @@ const SignUp = ({navigation}) => {
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
                 >
-                    {data.secureTextEntry ? 
+                    {secureEntry.secureTextEntry ? 
                     <Feather 
                         name="eye-off"
                         color="#a6a6a6"
@@ -196,14 +214,14 @@ const SignUp = ({navigation}) => {
                 <TextInput 
                     placeholder="Confirm Your Password"
                     style={styles.textInput}
-                    secureTextEntry={data.confirm_secureTextEntry ? true : false}
+                    secureTextEntry={secureEntry.confirm_secureTextEntry ? true : false}
                     autoCapitalize="none"
                     onChangeText={(pass2) => handleConfirmPasswordChange(pass2)}
                 />
                 <TouchableOpacity
                     onPress={updateConfirmSecureTextEntry}
                 >
-                    {data.confirm_secureTextEntry ? 
+                    {secureEntry.confirm_secureTextEntry ? 
                     <Feather 
                         name="eye-off"
                         color="#a6a6a6"

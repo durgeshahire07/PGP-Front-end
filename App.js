@@ -9,6 +9,7 @@ import Otp from './src/Otp'
 import Newpass from './src/NewPass'
 import ForgotPass from './src/ForgotPass';
 import Home from './src/Home'
+import NewPass from './src/NewPass';
 
 
 const getFonts = () => Font.loadAsync({
@@ -22,6 +23,7 @@ const YourApp = () => {
   if(fontsLoaded){
     return(
         <RootStackScreen />
+        // <NewPass />
         //  <Otp />
         // <ForgotPass />
         // <Home />

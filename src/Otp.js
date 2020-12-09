@@ -20,9 +20,16 @@ import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { BorderlessButton } from 'react-native-gesture-handler';
+
 import axios from 'axios'
 
-const Otp = ({ navigation }) => {
+
+
+const Otp = ({ route, navigation }) => {
+
+    const { UserId } = route.params;
+    // const id = JSON.stringify(UserId)
+    console.log(UserId)
     const pin1Ref = React.useRef()
     const pin2Ref = React.useRef()
     const pin3Ref = React.useRef()
@@ -34,28 +41,45 @@ const Otp = ({ navigation }) => {
         pin4: ''
     });
     
+
 const { pin1, pin2, pin3, pin4 } = pin
+   
+    async function submitHandler () {
+        const otp = '' + pin1 + pin2 + pin3 + pin4 ;
+        // console.log(id)
+        console.log(otp)
+        try{
+          var config = {
+              method: 'post',
+              url: 'http://127.0.0.1:3000/api/v2/auth/otp',
+              headers: { },
+              data : {id:UserId,otp}
+            };
+            const key = await axios(config)
+            const response = key
+            console.log(response)
+            if(response.data.success){
+              navigation.push('NewPass', {UserId})
+           }
+          else{
+              alert("Invalid code")
+          }
+          }catch(error){
+            console.log(error)
+            if (error.response.status == 404) {
+              alert("User not found")
+          } else if (error.response.status === 500) {
+              alert("Opps something went wrong")
+          }
+          else if (error.response.status === 400) {
+              alert("Wrong OTP code entered")
+          }
+          }
+        
+     
+ }
+    
 
-
-const submitHandler = () => {
-    const data = '' + pin1 + pin2 + pin3 + pin4 ;
-    console.log(data)
-    // var config = {
-    //     method: 'post',
-    //     url: 'http://127.0.0.1:3000/api/v1/otp/get',
-    //     headers: { },
-    //     data : data
-    //   };
-      
-    //   axios(config)
-    //   .then(function (response) {
-    //     console.log(JSON.stringify(response.data));
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //     alert(error)
-    //   });
-}
 
     return (
 

@@ -17,16 +17,22 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import axios from 'axios'
 
-const NewPass = ({navigation}) => {
+const NewPass = ({route,navigation}) => {
 
+    const { UserId } = route.params;
+    // const id = JSON.stringify(UserId)
+    console.log(UserId)
     const [data, setData] = React.useState({
         password: '',
-        confirm_password: '',
-        check_textInputChange: false,
+    });
+
+    const[secureEntry, setSecureEntry] = React.useState({
         secureTextEntry: true,
         confirm_secureTextEntry: true,
-    });
+        confirm_password: ''
+    })
 
     const handlePasswordChange = (pass1) => {
         setData({
@@ -36,44 +42,56 @@ const NewPass = ({navigation}) => {
     }
 
     const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
+        setSecureEntry({
+            ...secureEntry,
+            secureTextEntry: !secureEntry.secureTextEntry
         });
     }
 
     const handleConfirmPasswordChange = (pass2) => {
-        setData({
-            ...data,
+        setSecureEntry({
+            ...secureEntry,
             confirm_password: pass2
         });
     }
 
     const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
+        setSecureEntry({
+            ...secureEntry,
+            confirm_secureTextEntry: !secureEntry.confirm_secureTextEntry
         });
     }
 
-    const submitHandler = () => {
+    async function submitHandler () {
         console.log(data)
-        var config = {
-            method: 'post',
-            url: 'http://127.0.0.1:3000/api/v1/auth/passwordUpdateConfirmation',
-            headers: { },
-            data : data
-          };
-          
-          axios(config)
-          .then(function (response) {
-            console.log(JSON.stringify(response.data));
-          })
-          .catch(function (error) {
-            console.log(error);
-            alert(error)
-          });
-    }
+        
+        if(secureEntry.confirm_password!=data.password){
+            alert("Password don't match")
+        }
+        else{
+        try{
+          var config = {
+              method: 'patch',
+              url: 'http://127.0.0.1:3000/api/v2/auth/password',
+              headers: { },
+              data : {id: UserId,password:data.password} //id
+            };
+            const key = await axios(config)
+            const response = key
+            console.log(response)
+            if(response.data.success){
+              navigation.push('Login')
+           }
+          }catch(error){
+              console.log(error)
+              if (error.response.status == 404) {
+                alert("User not found")
+            } else if (error.response.status === 500) {
+                alert("Opps something went wrong")
+            }
+          }
+        }
+ }
 
     return (
         
@@ -102,7 +120,7 @@ const NewPass = ({navigation}) => {
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Your New Password"
-                    secureTextEntry={data.secureTextEntry ? true : false}
+                    secureTextEntry={secureEntry.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={(pass1) => handlePasswordChange(pass1)}
@@ -110,7 +128,7 @@ const NewPass = ({navigation}) => {
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
                 >
-                    {data.secureTextEntry ? 
+                    {secureEntry.secureTextEntry ? 
                     <Feather 
                         name="eye-off"
                         color="#4700b3"
@@ -129,14 +147,14 @@ const NewPass = ({navigation}) => {
                 <TextInput 
                     placeholder="Confirm Your New Password"
                     style={styles.textInput}
-                    secureTextEntry={data.confirm_secureTextEntry ? true : false}
+                    secureTextEntry={secureEntry.confirm_secureTextEntry ? true : false}
                     autoCapitalize="none"
                     onChangeText={(pass2) => handleConfirmPasswordChange(pass2)}
                 />
                 <TouchableOpacity
                     onPress={updateConfirmSecureTextEntry}
                 >
-                    {data.confirm_secureTextEntry ? 
+                    {secureEntry.confirm_secureTextEntry ? 
                     <Feather 
                         name="eye-off"
                         color="#4700b3"
@@ -155,8 +173,7 @@ const NewPass = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => submitHandler}
-                    // onPress={() => navigation.push('Login')}
+                    onPress={ submitHandler}
                 >
                 <LinearGradient
                     colors={['#4700b3', '#4700b3']}

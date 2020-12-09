@@ -26,9 +26,11 @@ const Login = ({navigation}) => {
     const [data, setData] = React.useState({
         userEmailId: '',
         password: '',
-        secureTextEntry: true,
+        
     });
-
+    const [secureEntry, setSecureEntry] = React.useState({
+        secureTextEntry: true
+    })
     const textInput= (user) => {
             setData({
                 ...data,
@@ -43,43 +45,39 @@ const Login = ({navigation}) => {
     }
 
     const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
+        setSecureEntry({
+            ...secureEntry,
+            secureTextEntry: !secureEntry.secureTextEntry
         });
     }
-    const submitHandler = () => {
-        console.log(data)
-        var config = {
-            method: 'post',
-            url: 'http://127.0.0.1:3000/api/v1/auth/login',
-            headers: { },
-            data : data
-          };
-          
-          axios(config)
-          .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            navigation.navigate('Home')
-          })
-          .catch(function (error) {
-            console.log(error);
-            alert(error);
-          });
-
-        //   navigation.navigate('Home')
-    }
-    // const axios = require('axios');
-    // axios.post('localhost:3000/api/v1/auth/login', {
-    //     userEmailId: data.user,
-    //     password: data.pass
-    //   })
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(err =>{
-    //       console.log(err);
-    //   })
+    async function submitHandler () {
+        try{
+          var config = {
+              method: 'post',
+              url: 'http://127.0.0.1:3000/api/v1/auth/login',
+              headers: { },
+              data : data
+            };
+            const key = await axios(config)
+            const response = key
+            console.log(response)
+            if(response.data.success){
+              navigation.navigate('Home')
+          }
+          else{
+              alert("Incorrect username or password")
+          }
+          }catch(error){
+            console.log(error)
+            if (error.response.status == 404) {
+              alert("User not found")
+          } else if (error.response.status === 500) {
+              alert("Opps something went wrong")
+          }
+          }
+     
+ }
+   
 
     return (
       
@@ -117,7 +115,7 @@ const Login = ({navigation}) => {
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Your Password"
-                    secureTextEntry={data.secureTextEntry ? true : false}
+                    secureTextEntry={secureEntry.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={(pass) => handlePasswordChange(pass)}
@@ -125,7 +123,7 @@ const Login = ({navigation}) => {
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
                 >
-                    {data.secureTextEntry ? 
+                    {secureEntry.secureTextEntry ? 
                     <Feather 
                         name="eye-off"
                         color="#a6a6a6"
@@ -151,7 +149,7 @@ const Login = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    // onPress={() => navigation.navigate('Home')}
+                
                     onPress={submitHandler}
                 >
                 <LinearGradient

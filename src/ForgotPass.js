@@ -31,25 +31,35 @@ const ForgotPass = ({navigation}) => {
         });
     }
 
-    const submitHandler = () => {
+    async function submitHandler () {
         console.log(data)
-        var config = {
-            method: 'post',
-            url: 'http://127.0.0.1//3000/api/v1/otp/get',
-            headers: { },
-            data : data
-          };
-          
-          axios(config)
-          .then(function (response) {
-            console.log(JSON.stringify(response.data));
-          })
-          .catch(function (error) {
-            console.log(error);
-            alert(error)
-          });
-
-    }
+        try{
+          var config = {
+              method: 'get',
+              url: `http://127.0.0.1:3000/api/v2/auth/otp?email=${data.userEmailId}`,
+              headers: { }
+            };
+            const key = await axios(config)
+            const response = key
+            console.log(key)
+            console.log(response)
+            if(response.data.success){
+              navigation.push('Otp', {UserId: response.data.data.id,
+            })
+           }
+           else{
+               console.log("invalid email")
+           }
+          }catch(error){
+              console.log(error)
+              if (error.response.status == 404) {
+                alert("User not found")
+            } else if (error.response.status === 500) {
+                alert("Opps something went wrong")
+            }
+          }
+     
+ }
 
     return (
 
