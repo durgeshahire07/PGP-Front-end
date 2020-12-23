@@ -103,7 +103,7 @@ const SignUp = ({ navigation }) => {
         if (data.password != secureEntry.confirm_password) {
             alert("password don't match")
         }
-        else {
+        else if(data.password && data.firstName && data.lastName && data.userEmailId) {
             try {
                 var config = {
                     method: 'post',
@@ -123,6 +123,9 @@ const SignUp = ({ navigation }) => {
                 console.log(error)
                 alert(error)
             }
+        }
+        else{
+            alert("Please fill all the information")
         }
     }
     return (
@@ -177,7 +180,7 @@ const SignUp = ({ navigation }) => {
                             >
                                 <Feather
                                     name="check"
-                                    color="#8533ff"
+                                    color="#00e600"
                                     size={20}
                                 />
                             </Animatable.View>
@@ -198,13 +201,13 @@ const SignUp = ({ navigation }) => {
                                 <Feather
                                     name="eye-off"
                                     color="#a6a6a6"
-                                    size={20}
+                                    size={17}
                                 />
                                 :
                                 <Feather
                                     name="eye"
                                     color="#8533ff"
-                                    size={20}
+                                    size={17}
                                 />
                             }
                         </TouchableOpacity>
@@ -224,13 +227,13 @@ const SignUp = ({ navigation }) => {
                                 <Feather
                                     name="eye-off"
                                     color="#a6a6a6"
-                                    size={20}
+                                    size={17}
                                 />
                                 :
                                 <Feather
                                     name="eye"
                                     color="#8533ff"
-                                    size={20}
+                                    size={17}
                                 />
                             }
                         </TouchableOpacity>
@@ -310,7 +313,6 @@ const styles = StyleSheet.create({
         fontFamily: 'nunito-regular',
         flex: 1,
         color: '#000000',
-
     },
     button: {
         alignItems: 'center',

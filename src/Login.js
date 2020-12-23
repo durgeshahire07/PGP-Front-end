@@ -126,13 +126,13 @@ const Login = ({ navigation }) => {
                                 <Feather
                                     name="eye-off"
                                     color="#a6a6a6"
-                                    size={20}
+                                    size={17}
                                 />
                                 :
                                 <Feather
                                     name="eye"
                                     color="#8533ff"
-                                    size={20}
+                                    size={17}
                                 />
                             }
                         </TouchableOpacity>

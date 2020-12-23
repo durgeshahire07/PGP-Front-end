@@ -26,9 +26,8 @@ import axios from 'axios'
 
 
 const Otp = ({ route, navigation }) => {
-
+    // let clockCall = null
     const { UserId } = route.params;
-    // const id = JSON.stringify(UserId)
     console.log(UserId)
     const pin1Ref = React.useRef()
     const pin2Ref = React.useRef()
@@ -40,18 +39,47 @@ const Otp = ({ route, navigation }) => {
         pin3: '',
         pin4: ''
     });
-
-
+    // const [enableResend, setEnableResend] = useState(false)
+    // const defaultCountdown = 30
+    // const [countdown, setCountdown] = useState(defaultCountdown)
+    // useEffect(() => {
+    //     clockCall = setInterval(() => {
+    //         decrementClock();
+    //     }, 1000)
+    //     return () => {
+    //         clearInterval(clockCall)
+    //     }
+    // }, [])
+    // const onResendOTP = () => {
+    //     if (enableResend) {
+    //         setCountdown(defaultCountdown)
+    //         setEnableResend(false)
+    //         clearInterval(clockCall)
+    //         clockCall = setInterval(() => {
+    //             decrementClock(0)
+    //         }, 1000)
+    //     }
+    // }
+    // const decrementClock = () => {
+    //     if (countdown === 0) {
+    //         setEnableResend(true)
+    //         setCountdown(0)
+    //         clearInterval(clockCall)
+    //     } else {
+    //         setCountdown(countdown - 1)
+            
+    //     }
+       
+    // }
     const { pin1, pin2, pin3, pin4 } = pin
 
     async function submitHandler() {
         const otp = '' + pin1 + pin2 + pin3 + pin4;
-        // console.log(id)
         console.log(otp)
         try {
             var config = {
                 method: 'post',
-                url: 'http://192.168.43.19:3000/api/v2/auth/otp',
+                url: 'http://192.168.43.19:3000/api/v1/auth/otp',
                 headers: {},
                 data: { id: UserId, otp }
             };
@@ -181,8 +209,7 @@ const Otp = ({ route, navigation }) => {
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
-                            onPress={submitHandler}
-                        // onPress={() => navigation.navigate('NewPass')}
+                        onPress={submitHandler}
                         >
                             <LinearGradient
                                 colors={['#4700b3', '#4700b3']}
@@ -196,11 +223,19 @@ const Otp = ({ route, navigation }) => {
                     </View>
 
                     <View style={styles.textPrivate}>
-                        <Text style={[{ fontFamily: 'nunito-semi' }, { color: 'grey' }]}>
+                        <Text style={
+                            [{ fontFamily: 'nunito-semi' },
+                            { color: 'grey' }]}>
                             Didn't get code?
-                </Text>
-                        <TouchableOpacity>
-                            <Text style={[{ fontFamily: 'nunito-bold' }, { color: '#4700b3' }]}>{" "}Resend OTP</Text>
+                        </Text>
+                        <TouchableOpacity >
+                        {/* onPress={onResendOTP} */}
+                            <Text style={[
+                                { fontFamily: 'nunito-bold' },
+                                // { color: enableResend ? '#4700b3' : 'grey' }
+                                { color: '#4700b3' }]}
+                            // >{" "}Resend OTP({countdown})</Text>
+                            >{" "}Resend OTP</Text>
                         </TouchableOpacity>
 
                     </View>

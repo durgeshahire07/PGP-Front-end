@@ -72,7 +72,7 @@ const NewPass = ({ route, navigation }) => {
             try {
                 var config = {
                     method: 'patch',
-                    url: 'http://192.168.43.19:3000/api/v2/auth/password',
+                    url: 'http://192.168.43.19:3000/api/v1/auth/password',
                     headers: {},
                     data: { id: UserId, password: data.password } //id
                 };
@@ -130,14 +130,14 @@ const NewPass = ({ route, navigation }) => {
                             {secureEntry.secureTextEntry ?
                                 <Feather
                                     name="eye-off"
-                                    color="#4700b3"
-                                    size={20}
+                                    color="#a6a6a6"
+                                    size={17}
                                 />
                                 :
                                 <Feather
                                     name="eye"
-                                    color="#4700b3"
-                                    size={20}
+                                    color="#8533ff"
+                                    size={17}
                                 />
                             }
                         </TouchableOpacity>
@@ -155,16 +155,16 @@ const NewPass = ({ route, navigation }) => {
                         >
                             {secureEntry.confirm_secureTextEntry ?
                                 <Feather
-                                    name="eye-off"
-                                    color="#4700b3"
-                                    size={20}
-                                />
-                                :
-                                <Feather
-                                    name="eye"
-                                    color="#4700b3"
-                                    size={20}
-                                />
+                                name="eye-off"
+                                color="#a6a6a6"
+                                size={17}
+                            />
+                            :
+                            <Feather
+                                name="eye"
+                                color="#8533ff"
+                                size={17}
+                            />
                             }
                         </TouchableOpacity>
                     </View>

@@ -10,6 +10,8 @@ import {
     ScrollView,
     StatusBar,
     SafeAreaView,
+    ActivityIndicator,
+    Image
 
 } from 'react-native';
 
@@ -32,28 +34,29 @@ const ForgotPass = ({ navigation }) => {
     }
 
     async function submitHandler() {
+
         console.log(data)
         try {
             var config = {
                 method: 'get',
-                url: `http://192.168.43.19:3000/api/v2/auth/otp?email=${data.userEmailId}`,
+                url: `http://192.168.43.19:3000/api/v1/auth/otp?email=${data.userEmailId}`,
                 headers: {}
             };
             const response = await axios(config)
-            
+            console.log(response)
             if (response.data.success) {
                 console.log(response)
                 navigation.push('Otp', {
                     UserId: response.data.data.id,
                 })
             }
-            // else {
-            //     console.log("invalid email")
-            //     alert("Invalid User")
-            // }
+            else {
+                console.log("invalid email")
+                alert("Invalid User")
+            }
         } catch (error) {
             console.log(error)
-              if (error.response.status === 404) {
+            if (error.response.status === 404) {
                 alert("User not found")
             } else if (error.response.status === 500) {
                 alert("Opps something went wrong")
@@ -68,9 +71,16 @@ const ForgotPass = ({ navigation }) => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
 
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
-                <View style={styles.text_header}>
+                <Animatable.View
+                animation="slideInUp" 
+                style={{flex:1,justifyContent:"center",alignItems:"center"}}
+                >
+                    <Image
+                        source={require('../assets/icons/f-p.png')}
+                        style={{height:190 , width:200,}}
 
-                </View>
+                    />
+                </Animatable.View>
 
                 <Animatable.View
                     animation="fadeInUp"
@@ -141,14 +151,7 @@ export default ForgotPass;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#4700b3'
-    },
-    text_header: {
-        flex: 1,
-        paddingTop: 10,
-        paddingHorizontal: 20,
-        paddingBottom: 10,
-        justifyContent: 'flex-start'
+        backgroundColor: '#4700b3',
     },
     footer: {
         flex: 0.1,

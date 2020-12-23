@@ -10,8 +10,9 @@ import Newpass from './src/NewPass'
 import ForgotPass from './src/ForgotPass';
 import Home from './src/Home'
 import NewPass from './src/NewPass';
-
-
+import Daily from './src/Daily'
+import Weekly from './src/Weekly'
+import Monthly from './src/Monthly'
 const getFonts = () => Font.loadAsync({
     'nunito-regular' : require('./assets/fonts/Nunito-Regular.ttf'),
     'nunito-bold' : require('./assets/fonts/Nunito-Bold.ttf'),
@@ -22,11 +23,15 @@ const YourApp = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
   if(fontsLoaded){
     return(
-        <RootStackScreen />
+        // <RootStackScreen />
         // <NewPass />
         //  <Otp />
         // <ForgotPass />
         // <Home />
+        <Daily />
+        // <Weekly />
+        // <Monthly />
+        // <Weekly />
     )
   } else {
     return(
