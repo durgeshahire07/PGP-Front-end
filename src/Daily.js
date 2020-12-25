@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -11,6 +11,7 @@ import {
     ScrollView,
     StatusBar,
     SafeAreaView,
+    ActivityIndicator
 
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -23,6 +24,65 @@ import axios from 'axios'
 import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
 
 const Daily = () => {
+
+    const [state, setState] = useState({
+        data: '',
+        isLoading: true
+    });
+
+    
+        // try {
+        //     var config = {
+        //         method: 'get',
+        //         url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
+        //         headers: {},
+        //     };
+        //     axios(config)
+        //         .then(function (response) {
+        //             console.log(JSON.stringify(response.data));
+        //             setState({
+        //                 isLoading: false,
+        //                 data: response.data.data,
+        //             })
+        //             if (response.data.success) {
+        
+        //             }
+        //             else {
+        //                 alert("Oops..something went wrong")
+        //             }
+        //         })}
+        //         catch(error) {
+        //             console.log(error);
+        //             alert(error)
+        //         };
+                
+    var config = {
+        method: 'get',
+        url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
+        headers: {}
+    };
+
+    axios(config)
+        .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            
+            if (response.data.success) {
+                setState({
+                    isLoading: false,
+                    data: response.data.data,
+                })
+            }
+            else {
+                alert("Oops..something went wrong")
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            alert(error)
+        });
+    
+
+
     const [checkChoice, setCheckChoice] = React.useState({
         choice1: false,
         choice2: false,
@@ -85,247 +145,240 @@ const Daily = () => {
         })
     }
     
-        // try {
-        //     var config = {
-        //         method: 'get',
-        //         url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
-        //         headers: {}
-        //     };
-
-        //     const response = axios(config)
-        //     console.log(response)
-        //     if (response.success) {
-        //        console.log("success")
-        //     }
-        //     else {
-        //         alert("Something went wrong")
-        //     }
-        // }
-        // catch (error) {
-        //     console.log(error)
-
-        // }
-   
-
-    var config = {
-        method: 'get',
-        url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
-        headers: { }
-      };
-      
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        if(response.data.success){
-            const myObj = response.data.data
-        }
-        else{
-            alert("Oops..something went wrong")
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    return (
-
+    if (state.isLoading) {
+        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>)   
+    }
+    else {
         
-        
-        <View style={{ flex: 1 }}>
-            <View style={styles.header}>
-                <View style={{ paddingTop: 13 }}>
-                    <TouchableOpacity>
-                        <Feather
-                            name="arrow-left"
-                            size={25}
-                            color="#fff"
-                        />
-                    </TouchableOpacity>
+        let question = state.data.map((val, key)=>{
+            if(val.type=="radio button"){
+                return <View key={key}> 
+                <View style={styles.QuestionContainer}>
+                <Text style={styles.Questions}>{val.question}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkChoice.choice1}
+                        onChange={() => updateCheckChoice1()}
+                    />
+                    <Text style={styles.text_options}>{val.options[0]}</Text>
                 </View>
-
-                <Text style={{
-                    fontFamily: 'nunito-semi',
-                    fontSize: 20,
-                    color: '#fff',
-                    paddingLeft: 10,
-                    paddingTop: 10
-                }}>Daily Personal Growth Planner</Text>
-
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkChoice.choice2}
+                        onChange={() => updateCheckChoice2()}
+                    />
+                    <Text style={styles.text_options}>{val.options[1]}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkChoice.choice3}
+                        onChange={() => updateCheckChoice3()}
+                    />
+                    <Text style={styles.text_options}>{val.options[2]}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkChoice.choice4}
+                        onChange={() => updateCheckChoice4()}
+                    />
+                    <Text style={styles.text_options}>{val.options[3]}</Text>
+                </View>
+                </View>
+                <View style={{ paddingBottom: 20 }}></View>
             </View>
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+            }
+            else if(val.type=="text"){
+                return <View key={key}>
+                    <View style={styles.QuestionContainer}>
+                <Text style={styles.Questions}>{val.question}</Text>
+                <View style={{
+                    borderWidth: 1,
+                    borderColor: 'grey',
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    paddingVertical: 10,
+                }}>
+                    <TextInput
+                        multiline
+                        style={styles.textInput} />
+                </View>
+                
+            </View>
+            <View style={{ paddingBottom: 20 }}></View>
+            </View>
+           
+            }
+            else if(val.type=="check box"){
+                return <View key={key}>
+                    <View style={styles.QuestionContainer}>
+                <Text style={styles.Questions}>{val.question}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkbox.tick1}
+                        onChange={() => updateCheckbox1()}
+                    />
+                    <Text style={styles.text_options}>{val.options[0]}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkbox2.tick2}
+                        onChange={() => updateCheckbox2()}
+                    />
+                    <Text style={styles.text_options}>{val.options[1]}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkbox3.tick3}
+                        onChange={() => updateCheckbox3()}
+                    />
+                    <Text style={styles.text_options}>{val.options[2]}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <CheckBox
+                        value={checkbox4.tick4}
+                        onChange={() => updateCheckbox4()}
+                    />
+                    <Text style={styles.text_options}>{val.options[3]}</Text>
+                </View>
+            </View>
+            <View style={{ paddingBottom: 20 }}></View>
+            </View>
+            }
+            else if(val.type=="text feilds"){
+                return  <View key={key}>
+                    <View style={styles.QuestionContainer}>
+                <Text style={styles.Questions}>{val.question}</Text>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                    <Text style={styles.Numbers}>1.</Text>
+                    <TextInput maxLength={38}
+                        style={[styles.textInput,
+                        {
+                            borderBottomColor: 'grey',
+                            borderBottomWidth: 2,
+                        }]} ></TextInput>
+                </View>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                    <Text style={styles.Numbers}>2.</Text>
+                    <TextInput maxLength={38}
+                        style={[styles.textInput,
+                        {
+                            borderBottomColor: 'grey',
+                            borderBottomWidth: 2,
+                        }]} ></TextInput>
+                </View>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                    <Text style={styles.Numbers}>3.</Text>
+                    <TextInput maxLength={38}
+                        style={[styles.textInput,
+                        {
+                            borderBottomColor: 'grey',
+                            borderBottomWidth: 2,
+                        }]} ></TextInput>
+                </View>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                    <Text style={styles.Numbers}>4.</Text>
+                    <TextInput maxLength={38}
+                        style={[styles.textInput,
+                        {
+                            borderBottomColor: 'grey',
+                            borderBottomWidth: 2,
+                        }]} ></TextInput>
+                </View>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                    <Text style={styles.Numbers}>5.</Text>
+                    <TextInput maxLength={38}
+                        style={[styles.textInput,
+                        {
+                            borderBottomColor: 'grey',
+                            borderBottomWidth: 2,
+                        }]} ></TextInput>
+                </View>
+            </View>
+            <View style={{ paddingBottom: 20 }}></View>
+            </View>
+            }
 
-                <View style={styles.container}>
+        })
+        
+        return ( 
+            
+            <View style={{ flex: 1 }}>
+                <View style={styles.header}>
+                    <View style={{ paddingTop: 13 }}>
+                        <TouchableOpacity>
+                            <Feather
+                                name="arrow-left"
+                                size={25}
+                                color="#fff"
+                            />
+                        </TouchableOpacity>
+                    </View>
 
                     <Text style={{
                         fontFamily: 'nunito-semi',
-                        fontSize: 15,
-                        color: '#a6a6a6',
-                        textAlign: 'center',
-                        paddingTop: 15,
-                        paddingBottom: 10
-                    }}>17/12/2020</Text>
+                        fontSize: 20,
+                        color: '#fff',
+                        paddingLeft: 10,
+                        paddingTop: 10
+                    }}>Daily Personal Growth Planner</Text>
 
-                
-                    {/* long answers */}
-                    <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>My today's Mission?</Text>
-                        <View style={{
-                            borderWidth: 1,
-                            borderColor: 'grey',
-                            borderBottomLeftRadius: 10,
-                            borderBottomRightRadius: 10,
-                            borderTopLeftRadius: 10,
-                            borderTopRightRadius: 10,
-                            paddingVertical: 10,
-                        }}>
-                            <TextInput
-                                multiline
-                                style={styles.textInput} />
-                        </View>
-                    </View>
-                    <View style={{ paddingBottom: 20 }}></View>
-
-                    {/* multiple choice Questions */}
-                    <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>I am determined to do important tasks today?</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox.tick1}
-                                onChange={() => updateCheckbox1()}
-                            />
-                            <Text style={styles.text_options}>Listening Good English for 30 mins</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox2.tick2}
-                                onChange={() => updateCheckbox2()}
-                            />
-                            <Text style={styles.text_options}>Teaching and Value Adding in others</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox3.tick3}
-                                onChange={() => updateCheckbox3()}
-                            />
-                            <Text style={styles.text_options}>Creating happiness around me</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox4.tick4}
-                                onChange={() => updateCheckbox4()}
-                            />
-                            <Text style={styles.text_options}>Acknowledge self and others</Text>
-                        </View>
-                    </View>
-                    <View style={{ paddingBottom: 20 }}></View>
-
-                    {/* one liner answer */}
-                    <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>My Favorite Moments of the day?</Text>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>1.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>2.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>3.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>4.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>5.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                    </View>
-                    <View style={{ paddingBottom: 20 }}></View>
-
-                    {/* anyone option */}
-                    <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>My today’s choices and decision making influenced by</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice1}
-                                onChange={() => updateCheckChoice1()}
-                            />
-                            <Text style={styles.text_options}>Focusing on Outcomes</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice2}
-                                onChange={() => updateCheckChoice2()}
-                            />
-                            <Text style={styles.text_options}>Doing Even Better</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice3}
-                                onChange={() => updateCheckChoice3()}
-                            />
-                            <Text style={styles.text_options}>Confident and Humble</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice4}
-                                onChange={() => updateCheckChoice4()}
-                            />
-                            <Text style={styles.text_options}>Sense of awareness of Reality</Text>
-                        </View>
-                    </View>
-
-
-                    <View style={{ paddingVertical: 20 }}>
-                        <TouchableOpacity style={{
-                            flexDirection: 'row',
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                            <LinearGradient
-                                colors={['#4700b3', '#4700b3']}
-                                style={styles.button}
-                            >
-                                <Text style={[styles.textSign, {
-                                    color: '#fff',
-                                }]}>Submit</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
                 </View>
-            </ScrollView>
-        </View>
-    );
-};
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                    <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+
+                    <View style={styles.container}>
+
+                        <Text style={{
+                            fontFamily: 'nunito-semi',
+                            fontSize: 15,
+                            color: '#a6a6a6',
+                            textAlign: 'center',
+                            paddingTop: 15,
+                            paddingBottom: 10
+                        }}>17/12/2020</Text>
+
+                        {question}
+
+
+                        {/* long answers */}
+                        
+
+                        {/* multiple choice Questions */}
+                        
+
+                        {/* one liner answer */}
+                       
+
+                        {/* anyone option */}
+                        
+
+
+                        <View >
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                                <LinearGradient
+                                    colors={['#4700b3', '#4700b3']}
+                                    style={styles.button}
+                                >
+                                    <Text style={[styles.textSign, {
+                                        color: '#fff',
+                                    }]}>Submit</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
+}
 
 export default Daily;
 
