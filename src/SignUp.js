@@ -9,7 +9,8 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    StatusBar
+    StatusBar,
+    ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -34,7 +35,8 @@ const SignUp = ({ navigation }) => {
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
-        confirm_password: ''
+        confirm_password: '',
+        isLoading: false
     })
 
     const textInputFirstName = (first) => {
@@ -99,7 +101,17 @@ const SignUp = ({ navigation }) => {
             confirm_secureTextEntry: !secureEntry.confirm_secureTextEntry
         });
     }
+    if (secureEntry.isLoading) {
+        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>)
+    }
     async function submitHandler() {
+        setSecureEntry({
+            ...secureEntry,
+            isLoading: true
+        })
+       
         if (data.password != secureEntry.confirm_password) {
             alert("password don't match")
         }
@@ -114,14 +126,27 @@ const SignUp = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
                     navigation.push('Home')
                 }
                 else {
                     alert("Sign Up failed")
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
                 }
             } catch (error) {
+                setSecureEntry({
+                    ...secureEntry,
+                    isLoading: false
+                })
                 console.log(error)
                 alert(error)
+                
             }
         }
         else{
@@ -149,7 +174,7 @@ const SignUp = ({ navigation }) => {
                 }}>Sign up to start your Journey!</Text>
 
                 <Animatable.View
-                    animation="fadeInUp"
+                    // animation="fadeInUp"
                     style={styles.footer}
                 >
 

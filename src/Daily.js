@@ -27,61 +27,39 @@ const Daily = () => {
 
     const [state, setState] = useState({
         data: '',
-        isLoading: true
+        isLoading: true,
+        // ans: ''
     });
 
-    
-        // try {
-        //     var config = {
-        //         method: 'get',
-        //         url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
-        //         headers: {},
-        //     };
-        //     axios(config)
-        //         .then(function (response) {
-        //             console.log(JSON.stringify(response.data));
-        //             setState({
-        //                 isLoading: false,
-        //                 data: response.data.data,
-        //             })
-        //             if (response.data.success) {
-        
-        //             }
-        //             else {
-        //                 alert("Oops..something went wrong")
-        //             }
-        //         })}
-        //         catch(error) {
-        //             console.log(error);
-        //             alert(error)
-        //         };
-                
-    var config = {
-        method: 'get',
-        url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
-        headers: {}
-    };
+    getSurvey = () => {
+        var config = {
+            method: 'get',
+            url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
+            headers: {}
+        };
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
 
-    axios(config)
-        .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            
-            if (response.data.success) {
-                setState({
-                    isLoading: false,
-                    data: response.data.data,
-                })
-            }
-            else {
-                alert("Oops..something went wrong")
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-            alert(error)
-        });
-    
-
+                if (response.data.success) {
+                    setState({
+                        isLoading: false,
+                        data: response.data.data,
+                        // ans: response.data.response
+                    })
+                }
+                else {
+                    alert("Oops..something went wrong")
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert(error)
+            });
+    }
+    useEffect(() => {
+        getSurvey()
+    }, [])
 
     const [checkChoice, setCheckChoice] = React.useState({
         choice1: false,
@@ -144,168 +122,199 @@ const Daily = () => {
             tick4: !checkbox4.tick4
         })
     }
-    
+
+    const changeParagraph = (value,key) => {
+        var temp = state.data
+        // console.log(temp)
+        temp[key].answer = value
+        // console.log(temp[key])
+        setState({
+            ...state,
+            data: temp
+        })
+        console.log(state.data)
+       
+        // console.log(state.data)
+        // var temp = state.data.question
+        // console.log(temp)
+        // ans.response.questionID=temp[event.target.key]._id
+        // ans.response.questionType=temp[event.target.key].type
+        // temp[key].answer=value
+        // setState({
+        //     ...state,
+        //     data: temp
+        // })
+        // console.log(data);
+
+    }
+
+
     if (state.isLoading) {
         return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="#0000ff" />
-        </View>)   
+        </View>)
     }
     else {
-        
-        let question = state.data.map((val, key)=>{
-            if(val.type=="radio button"){
-                return <View key={key}> 
-                <View style={styles.QuestionContainer}>
-                <Text style={styles.Questions}>{val.question}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkChoice.choice1}
-                        onChange={() => updateCheckChoice1()}
-                    />
-                    <Text style={styles.text_options}>{val.options[0]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkChoice.choice2}
-                        onChange={() => updateCheckChoice2()}
-                    />
-                    <Text style={styles.text_options}>{val.options[1]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkChoice.choice3}
-                        onChange={() => updateCheckChoice3()}
-                    />
-                    <Text style={styles.text_options}>{val.options[2]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkChoice.choice4}
-                        onChange={() => updateCheckChoice4()}
-                    />
-                    <Text style={styles.text_options}>{val.options[3]}</Text>
-                </View>
-                </View>
-                <View style={{ paddingBottom: 20 }}></View>
-            </View>
-            }
-            else if(val.type=="text"){
+
+        let question = state.data.map((val, key) => {
+            if (val.type == "radio button") {
                 return <View key={key}>
                     <View style={styles.QuestionContainer}>
-                <Text style={styles.Questions}>{val.question}</Text>
-                <View style={{
-                    borderWidth: 1,
-                    borderColor: 'grey',
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    paddingVertical: 10,
-                }}>
-                    <TextInput
-                        multiline
-                        style={styles.textInput} />
+                        <Text style={styles.Questions}>{val.question}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkChoice.choice1}
+                                onChange={() => updateCheckChoice1()}
+                            />
+                            <Text style={styles.text_options}>{val.options[0]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkChoice.choice2}
+                                onChange={() => updateCheckChoice2()}
+                            />
+                            <Text style={styles.text_options}>{val.options[1]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkChoice.choice3}
+                                onChange={() => updateCheckChoice3()}
+                            />
+                            <Text style={styles.text_options}>{val.options[2]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkChoice.choice4}
+                                onChange={() => updateCheckChoice4()}
+                            />
+                            <Text style={styles.text_options}>{val.options[3]}</Text>
+                        </View>
+                    </View>
+                    <View style={{ paddingBottom: 20 }}></View>
                 </View>
-                
-            </View>
-            <View style={{ paddingBottom: 20 }}></View>
-            </View>
-           
             }
-            else if(val.type=="check box"){
-                return <View key={key}>
-                    <View style={styles.QuestionContainer}>
-                <Text style={styles.Questions}>{val.question}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkbox.tick1}
-                        onChange={() => updateCheckbox1()}
-                    />
-                    <Text style={styles.text_options}>{val.options[0]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkbox2.tick2}
-                        onChange={() => updateCheckbox2()}
-                    />
-                    <Text style={styles.text_options}>{val.options[1]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkbox3.tick3}
-                        onChange={() => updateCheckbox3()}
-                    />
-                    <Text style={styles.text_options}>{val.options[2]}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <CheckBox
-                        value={checkbox4.tick4}
-                        onChange={() => updateCheckbox4()}
-                    />
-                    <Text style={styles.text_options}>{val.options[3]}</Text>
-                </View>
-            </View>
-            <View style={{ paddingBottom: 20 }}></View>
-            </View>
-            }
-            else if(val.type=="text feilds"){
+            else if (val.type == "text") {
                 return  <View key={key}>
+                    
                     <View style={styles.QuestionContainer}>
-                <Text style={styles.Questions}>{val.question}</Text>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                    <Text style={styles.Numbers}>1.</Text>
-                    <TextInput maxLength={38}
-                        style={[styles.textInput,
-                        {
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 2,
-                        }]} ></TextInput>
+                        <Text style={styles.Questions}>{val.question}</Text>
+                        <View style={{
+                            borderWidth: 1,
+                            borderColor: 'grey',
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            paddingVertical: 10,
+                        }}>
+                            <TextInput
+                                multiline
+                                value={val.answer}
+                                style={styles.textInput}
+                                // onChangeText={changeParagraph(key,value)} 
+                                onChangeText={(value) => changeParagraph(value,key)}
+                            />    
+                        </View>
+
+                    </View>
+                    <View style={{ paddingBottom: 20 }}></View>
                 </View>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                    <Text style={styles.Numbers}>2.</Text>
-                    <TextInput maxLength={38}
-                        style={[styles.textInput,
-                        {
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 2,
-                        }]} ></TextInput>
+
+            }
+            else if (val.type == "check box") {
+                return <View key={key}>
+                    <View style={styles.QuestionContainer}>
+                        <Text style={styles.Questions}>{val.question}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkbox.tick1}
+                                onChange={() => updateCheckbox1()}
+                            />
+                            <Text style={styles.text_options}>{val.options[0]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkbox2.tick2}
+                                onChange={() => updateCheckbox2()}
+                            />
+                            <Text style={styles.text_options}>{val.options[1]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkbox3.tick3}
+                                onChange={() => updateCheckbox3()}
+                            />
+                            <Text style={styles.text_options}>{val.options[2]}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <CheckBox
+                                value={checkbox4.tick4}
+                                onChange={() => updateCheckbox4()}
+                            />
+                            <Text style={styles.text_options}>{val.options[3]}</Text>
+                        </View>
+                    </View>
+                    <View style={{ paddingBottom: 20 }}></View>
                 </View>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                    <Text style={styles.Numbers}>3.</Text>
-                    <TextInput maxLength={38}
-                        style={[styles.textInput,
-                        {
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 2,
-                        }]} ></TextInput>
+            }
+            else if (val.type == "text fields") {
+                return <View key={key}>
+                    <View style={styles.QuestionContainer}>
+                        <Text style={styles.Questions}>{val.question}</Text>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <Text style={styles.Numbers}>1.</Text>
+                            <TextInput maxLength={38}
+                                style={[styles.textInput,
+                                {
+                                    borderBottomColor: 'grey',
+                                    borderBottomWidth: 2,
+                                }]} ></TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <Text style={styles.Numbers}>2.</Text>
+                            <TextInput maxLength={38}
+                                style={[styles.textInput,
+                                {
+                                    borderBottomColor: 'grey',
+                                    borderBottomWidth: 2,
+                                }]} ></TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <Text style={styles.Numbers}>3.</Text>
+                            <TextInput maxLength={38}
+                                style={[styles.textInput,
+                                {
+                                    borderBottomColor: 'grey',
+                                    borderBottomWidth: 2,
+                                }]} ></TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <Text style={styles.Numbers}>4.</Text>
+                            <TextInput maxLength={38}
+                                style={[styles.textInput,
+                                {
+                                    borderBottomColor: 'grey',
+                                    borderBottomWidth: 2,
+                                }]} ></TextInput>
+                        </View>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <Text style={styles.Numbers}>5.</Text>
+                            <TextInput maxLength={38}
+                                style={[styles.textInput,
+                                {
+                                    borderBottomColor: 'grey',
+                                    borderBottomWidth: 2,
+                                }]} ></TextInput>
+                        </View>
+                    </View>
+                    <View style={{ paddingBottom: 20 }}></View>
                 </View>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                    <Text style={styles.Numbers}>4.</Text>
-                    <TextInput maxLength={38}
-                        style={[styles.textInput,
-                        {
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 2,
-                        }]} ></TextInput>
-                </View>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                    <Text style={styles.Numbers}>5.</Text>
-                    <TextInput maxLength={38}
-                        style={[styles.textInput,
-                        {
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 2,
-                        }]} ></TextInput>
-                </View>
-            </View>
-            <View style={{ paddingBottom: 20 }}></View>
-            </View>
             }
 
         })
-        
-        return ( 
-            
+
+        return (
+
             <View style={{ flex: 1 }}>
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
@@ -328,7 +337,7 @@ const Daily = () => {
 
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                    <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+                    <StatusBar backgroundColor='#310080' barStyle="light-content" />
 
                     <View style={styles.container}>
 
@@ -345,19 +354,19 @@ const Daily = () => {
 
 
                         {/* long answers */}
-                        
+
 
                         {/* multiple choice Questions */}
-                        
+
 
                         {/* one liner answer */}
-                       
+
 
                         {/* anyone option */}
-                        
 
 
-                        <View >
+
+                        <View style={{ paddingBottom: 20 }}>
                             <TouchableOpacity style={{
                                 flexDirection: 'row',
                                 justifyContent: "center",

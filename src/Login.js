@@ -86,7 +86,7 @@ const Login = ({ navigation }) => {
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <View style={styles.header} />
                 <Animatable.View
-                    animation="fadeInUp"
+                    // animation="fadeInUp"
                     style={styles.footer}
                 >
 

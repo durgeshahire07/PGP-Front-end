@@ -118,7 +118,7 @@ const Otp = ({ route, navigation }) => {
 
                 <View style={styles.header} />
                 <Animatable.View
-                    animation="fadeInUp"
+                    // animation="fadeInUp"
                     style={styles.footer}
                 >
                     <Text style={{

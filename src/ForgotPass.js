@@ -33,8 +33,22 @@ const ForgotPass = ({ navigation }) => {
         });
     }
 
-    async function submitHandler() {
+    const [loading, setLoading] = React.useState({
+        isLoading: false
+    })
 
+    if (loading.isLoading) {
+        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>)
+    }
+
+    async function submitHandler() {
+        setLoading({
+            ...loading,
+            isLoading: true
+        })
+        
         console.log(data)
         try {
             var config = {
@@ -45,12 +59,17 @@ const ForgotPass = ({ navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-                console.log(response)
+                setLoading({
+                    isLoading: false
+                })
                 navigation.push('Otp', {
                     UserId: response.data.data.id,
                 })
             }
             else {
+                setLoading({
+                    isLoading: false
+                })
                 console.log("invalid email")
                 alert("Invalid User")
             }
@@ -58,8 +77,14 @@ const ForgotPass = ({ navigation }) => {
             console.log(error)
             if (error.response.status === 404) {
                 alert("User not found")
+                setLoading({
+                    isLoading: false
+                })
             } else if (error.response.status === 500) {
                 alert("Opps something went wrong")
+                setLoading({
+                    isLoading: false
+                })
             }
         }
 
@@ -72,7 +97,7 @@ const ForgotPass = ({ navigation }) => {
 
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <Animatable.View
-                animation="slideInUp" 
+                // animation="slideInUp" 
                 style={{flex:1,justifyContent:"center",alignItems:"center"}}
                 >
                     <Image
@@ -83,7 +108,7 @@ const ForgotPass = ({ navigation }) => {
                 </Animatable.View>
 
                 <Animatable.View
-                    animation="fadeInUp"
+                    // animation="fadeInUp"
                     style={styles.footer}
                 >
                     <Text style={{
