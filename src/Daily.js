@@ -22,13 +22,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import { BorderlessButton, State } from 'react-native-gesture-handler';
 import axios from 'axios'
 import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
+import SelectMultiple from 'react-native-select-multiple'
+import Textarea from 'react-native-textarea';
 
 const Daily = () => {
 
     const [state, setState] = useState({
         data: '',
         isLoading: true,
-        // ans: ''
     });
 
     getSurvey = () => {
@@ -44,8 +45,7 @@ const Daily = () => {
                 if (response.data.success) {
                     setState({
                         isLoading: false,
-                        data: response.data.data,
-                        // ans: response.data.response
+                        data: response.data.data
                     })
                 }
                 else {
@@ -61,91 +61,55 @@ const Daily = () => {
         getSurvey()
     }, [])
 
-    const [checkChoice, setCheckChoice] = React.useState({
-        choice1: false,
-        choice2: false,
-        choice3: false,
-        choice4: false,
-    })
+    const onChoiceChange = (selectedChoice,index) => {
+        var tmp = state.data
+        // if(tmp[index].answer){
+        //     // tmp[index].answer = selectedChoice
+        //     // selectedChoice = selectedChoice.splice(0,1);
+        //     // tmp[index].answer = selectedChoice
+        //     console.log(tmp[index])
+            
+        // }
+        
+        tmp[index].answer = selectedChoice
+        if(tmp[index].answer.length>=2){
+            tmp[index].answer.shift();
 
-    const updateCheckChoice1 = () => {
-        setCheckChoice({
-            choice1: !checkChoice.choice1
+        }
+        console.log(tmp[index])
+        setState({
+            data: tmp
         })
     }
-    const updateCheckChoice2 = () => {
-        setCheckChoice({
-            choice2: !checkChoice.choice2
+    
+    const onSelectionsChange = (selectedItems, key) => {
+        var tmp = state.data
+        tmp[key].answer = selectedItems
+        setState({
+            ...state,
+            data: tmp
         })
-    }
-    const updateCheckChoice3 = () => {
-        setCheckChoice({
-            choice3: !checkChoice.choice3
-        })
-    }
-    const updateCheckChoice4 = () => {
-        setCheckChoice({
-            choice4: !checkChoice.choice4
-        })
-    }
-
-    const [checkbox, setCheckbox] = React.useState({
-        tick1: false,
-    })
-
-    const [checkbox2, setCheckbox2] = React.useState({
-        tick2: false
-    })
-    const [checkbox3, setCheckbox3] = React.useState({
-        tick3: false
-    })
-    const [checkbox4, setCheckbox4] = React.useState({
-        tick4: false
-    })
-    const updateCheckbox1 = () => {
-        setCheckbox({
-            tick1: !checkbox.tick1
-        })
-    }
-    const updateCheckbox2 = () => {
-        setCheckbox2({
-            tick2: !checkbox2.tick2
-        })
-    }
-    const updateCheckbox3 = () => {
-        setCheckbox3({
-            tick3: !checkbox3.tick3
-        })
-    }
-    const updateCheckbox4 = () => {
-        setCheckbox4({
-            tick4: !checkbox4.tick4
-        })
+        console.log(state.data)
     }
 
     const changeParagraph = (value,key) => {
         var temp = state.data
-        // console.log(temp)
         temp[key].answer = value
-        // console.log(temp[key])
         setState({
             ...state,
             data: temp
         })
-        console.log(state.data)
-       
-        // console.log(state.data)
-        // var temp = state.data.question
-        // console.log(temp)
-        // ans.response.questionID=temp[event.target.key]._id
-        // ans.response.questionType=temp[event.target.key].type
-        // temp[key].answer=value
-        // setState({
-        //     ...state,
-        //     data: temp
-        // })
-        // console.log(data);
+        
+    }
 
+    const changeLongPara = (value,key) => {
+        var tmp = state.data
+        tmp[key].answer = value
+        setState({
+            ...state,
+            data: tmp
+        })
+        console.log(state.data)
     }
 
 
@@ -158,37 +122,15 @@ const Daily = () => {
 
         let question = state.data.map((val, key) => {
             if (val.type == "radio button") {
+
                 return <View key={key}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice1}
-                                onChange={() => updateCheckChoice1()}
-                            />
-                            <Text style={styles.text_options}>{val.options[0]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice2}
-                                onChange={() => updateCheckChoice2()}
-                            />
-                            <Text style={styles.text_options}>{val.options[1]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice3}
-                                onChange={() => updateCheckChoice3()}
-                            />
-                            <Text style={styles.text_options}>{val.options[2]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkChoice.choice4}
-                                onChange={() => updateCheckChoice4()}
-                            />
-                            <Text style={styles.text_options}>{val.options[3]}</Text>
-                        </View>
+                        <SelectMultiple
+                         items={val.options}
+                         selectedItems={val.answer}
+                         onSelectionsChange={choice=> onChoiceChange(choice,key)} 
+                         />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
@@ -209,9 +151,7 @@ const Daily = () => {
                         }}>
                             <TextInput
                                 multiline
-                                value={val.answer}
                                 style={styles.textInput}
-                                // onChangeText={changeParagraph(key,value)} 
                                 onChangeText={(value) => changeParagraph(value,key)}
                             />    
                         </View>
@@ -225,34 +165,11 @@ const Daily = () => {
                 return <View key={key}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox.tick1}
-                                onChange={() => updateCheckbox1()}
-                            />
-                            <Text style={styles.text_options}>{val.options[0]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox2.tick2}
-                                onChange={() => updateCheckbox2()}
-                            />
-                            <Text style={styles.text_options}>{val.options[1]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox3.tick3}
-                                onChange={() => updateCheckbox3()}
-                            />
-                            <Text style={styles.text_options}>{val.options[2]}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <CheckBox
-                                value={checkbox4.tick4}
-                                onChange={() => updateCheckbox4()}
-                            />
-                            <Text style={styles.text_options}>{val.options[3]}</Text>
-                        </View>
+                        <SelectMultiple
+                         items={val.options}
+                         selectedItems={val.answer}
+                         onSelectionsChange={list=> onSelectionsChange(list,key)} 
+                         />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
@@ -261,51 +178,11 @@ const Daily = () => {
                 return <View key={key}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>1.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>2.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>3.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>4.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-                            <Text style={styles.Numbers}>5.</Text>
-                            <TextInput maxLength={38}
-                                style={[styles.textInput,
-                                {
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: 2,
-                                }]} ></TextInput>
-                        </View>
+                        <Textarea 
+                        containerStyle={styles.textareaContainer}
+                        style={styles.textarea}
+                        onChangeText={(value) => changeLongPara(value,key)}
+                        />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
@@ -348,23 +225,9 @@ const Daily = () => {
                             textAlign: 'center',
                             paddingTop: 15,
                             paddingBottom: 10
-                        }}>17/12/2020</Text>
+                        }}>17/01/2021</Text>
 
                         {question}
-
-
-                        {/* long answers */}
-
-
-                        {/* multiple choice Questions */}
-
-
-                        {/* one liner answer */}
-
-
-                        {/* anyone option */}
-
-
 
                         <View style={{ paddingBottom: 20 }}>
                             <TouchableOpacity style={{
@@ -416,6 +279,23 @@ const styles = StyleSheet.create({
         elevation: 7
 
     },
+    textareaContainer: {
+        height: 180,
+        padding: 5,
+        borderWidth: 1,
+        borderColor: 'grey',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+      },
+    textarea: {
+        textAlignVertical: 'top',  
+        height: 170,
+        fontSize: 14,
+        color: '#333',
+        fontFamily: 'nunito-regular'
+      },
     Questions: {
         paddingTop: 10,
         paddingBottom: 10,
