@@ -13,21 +13,31 @@ import Otp from '../src/Otp'
 import NewPass from '../src/NewPass'
 import Home from '../src/Home'
 import Daily from '../src/Daily'
+import Screen1 from '../src/Screen1'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 // import { Tabs } from 'native-base'
-const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
-const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const Screen1Stack= createStackNavigator();
 
-const HomeStackScreen = () =>{
+const HomeStackScreen = () =>(
+  <HomeStack.Navigator headerMode='none'>
+    <HomeStack.Screen name="Home" component={Home}  />
+  </HomeStack.Navigator>
+)
+const Screen1StackScreen = () =>(
+
+  <Screen1Stack.Navigator headerMode='none'>
+    <Screen1Stack.Screen name="Screen1" component={Screen1} />
+  </Screen1Stack.Navigator>
+)
+const HomeDrawer = () =>{
   return(
-  <HomeStack.Navigator >
-    <HomeStack.Screen name="Home" component = {Home} />
-  </HomeStack.Navigator> 
-  // <NavigationContainer>
-  //   <Tabs.Navigator>
-  //     <Tabs.Screen name="Home" component={Home} />
-  //   </Tabs.Navigator>
-  // </NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomeStackScreen} />
+        <Drawer.Screen name="Screen1" component={Screen1StackScreen} />
+      </Drawer.Navigator>
   )
 }
 const RootStackScreen = () => {
@@ -35,7 +45,7 @@ const RootStackScreen = () => {
     <NavigationContainer>
       <Stack.Navigator headerMode='none'>
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Home" component={HomeStackScreen} />
+        <Stack.Screen name="Home" component={HomeDrawer} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
         <Stack.Screen name="NewPass" component={NewPass} />

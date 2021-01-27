@@ -74,7 +74,6 @@ const Daily = () => {
         tmp[index].answer = selectedChoice
         if(tmp[index].answer.length>=2){
             tmp[index].answer.shift();
-
         }
         console.log(tmp[index])
         setState({
@@ -111,6 +110,22 @@ const Daily = () => {
         })
         console.log(state.data)
     }
+
+    // const submitHandler = () => {
+    //     let res = state.data.map((val)=>{
+    //         {questionID: val._id
+    //         answer:val.answer
+    //         questionType=val.type}
+    //     })
+    //     console.log(res)
+    //     const response ={
+    //         userID:"",
+    //         surveyType:"",
+    //         surveyNumber:"",
+    //         response:res
+    //     }
+    //     console.log(response)
+    // }
 
 
     if (state.isLoading) {
@@ -233,8 +248,11 @@ const Daily = () => {
                             <TouchableOpacity style={{
                                 flexDirection: 'row',
                                 justifyContent: "center",
-                                alignItems: "center"
-                            }}>
+                                alignItems: "center",
+                               
+                            }} 
+                            // onPress={submitHandler}
+                            >
                                 <LinearGradient
                                     colors={['#4700b3', '#4700b3']}
                                     style={styles.button}

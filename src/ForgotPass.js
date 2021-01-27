@@ -125,7 +125,7 @@ const ForgotPass = ({ navigation }) => {
                         paddingBottom: 20
                     }}>To recover your password, you need to enter your
                         registered email address. We'll send the recovery
-            code to your email</Text>
+                        code to your email</Text>
                     <View style={styles.action}>
 
                         <TextInput

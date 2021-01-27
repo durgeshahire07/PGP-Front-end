@@ -19,10 +19,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
+import {createDrawerNavigator} from '@react-navigation/drawer'
 
 import Daily from './Daily';
 import { FlatList } from 'react-native-gesture-handler';
-
+const Drawer = createDrawerNavigator();
 
 
 const Home = ({ navigation }) => {
@@ -30,32 +31,48 @@ const Home = ({ navigation }) => {
 
     return (
 
+        
+
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
-                <View style={styles.header} />
-                <Text style={{
-                    fontFamily: 'nunito-bold',
-                    fontSize: 25,
-                    color: '#fff',
-                    paddingLeft: 20,
-                }}>Welcome </Text>
-                <Animatable.View
-                    animation="fadeInUp"
+                <StatusBar backgroundColor='#310080' barStyle="light-content" />
+                <View style={styles.header}>
+                <View style={{ paddingTop: 13 }}>
+                        <TouchableOpacity onPress={()=> navigation.openDrawer()}>
+                            <Feather
+                                name="menu"
+                                size={24}
+                                color="#fff"
+                            />
+                            </TouchableOpacity>
+                            </View>
+                            <Text style={{
+                        fontFamily: 'nunito-bold',
+                        fontSize: 20,
+                        color: '#fff',
+                        paddingLeft: 15,
+                        paddingTop: 10
+                    }}>Personal Growth Planner</Text>
+                </View>
+                <View
                     style={styles.footer}
                 >
                     <TouchableOpacity >
-                        <LinearGradient
-                            colors={['#4700b3', '#4700b3']}
-                            style={styles.signIn}
-                        >
-                            <Text style={[styles.textSign, {
-                                color: '#fff',
-                            }]}>Daily Survey</Text>
-                        </LinearGradient>
+                        <View style={styles.box}>
+                            <Text style={ {
+                                color: '#4700b3',
+                                textAlign: 'center',
+                                fontFamily: 'nunito-semi',
+                                fontSize: 20,
+                                paddingVertical: 25
+                            }}>Take your Daily Survey!</Text>
+                        </View>
                     </TouchableOpacity>
 
-                </Animatable.View>
+                      
+
+                  
+                </View>
 
 
             </ScrollView>
@@ -67,22 +84,30 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#4700b3'
+        flex: 1
     },
     header: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        paddingBottom: 50,
+        flexDirection: 'row',
+        backgroundColor: "#4700b3",
+        height: 50,
+        elevation: 10,
+        paddingLeft: 10
+    },
+    box:{ 
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        backgroundColor: '#fff',
+        borderColor: '#b3b3b3',
+        borderWidth: 2,
+        elevation: 7
     },
     footer: {
-        flex: 2,
+        flex: 1,
         backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        paddingHorizontal: 30,
-        paddingVertical: 30
+        paddingHorizontal: 20,
+        paddingVertical: 20
     },
     text_footer: {
         color: '#05375a',
