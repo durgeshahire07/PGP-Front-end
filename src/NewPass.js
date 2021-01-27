@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     action: {
         flexDirection: 'row',
         marginTop: 15,
-        borderBottomColor: '#4700b3',
+        borderBottomColor: '#b380ff',
         borderBottomWidth: 2,
     },
     textInput: {

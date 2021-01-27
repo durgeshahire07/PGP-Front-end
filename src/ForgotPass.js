@@ -33,23 +33,24 @@ const ForgotPass = ({ navigation }) => {
         });
     }
 
-    const [loading, setLoading] = React.useState({
-        isLoading: false
-    })
+    // const [loading, setLoading] = React.useState({
+    //     isLoading: false
+    // })
 
-    if (loading.isLoading) {
-        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color="#0000ff" />
-        </View>)
-    }
+    // if (loading.isLoading) {
+    //     return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    //         <ActivityIndicator size="large" color="#0000ff" />
+    //     </View>)
+    // }
 
     async function submitHandler() {
-        setLoading({
-            ...loading,
-            isLoading: true
-        })
+        // setLoading({
+        //     ...loading,
+        //     isLoading: true
+        // })
         
         console.log(data)
+        if(data.userEmailId){
         try {
             var config = {
                 method: 'get',
@@ -59,17 +60,17 @@ const ForgotPass = ({ navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-                setLoading({
-                    isLoading: false
-                })
+                // setLoading({
+                //     isLoading: false
+                // })
                 navigation.push('Otp', {
                     UserId: response.data.data.id,
                 })
             }
             else {
-                setLoading({
-                    isLoading: false
-                })
+                // setLoading({
+                //     isLoading: false
+                // })
                 console.log("invalid email")
                 alert("Invalid User")
             }
@@ -77,16 +78,20 @@ const ForgotPass = ({ navigation }) => {
             console.log(error)
             if (error.response.status === 404) {
                 alert("User not found")
-                setLoading({
-                    isLoading: false
-                })
+                // setLoading({
+                //     isLoading: false
+                // })
             } else if (error.response.status === 500) {
                 alert("Opps something went wrong")
-                setLoading({
-                    isLoading: false
-                })
+                // setLoading({
+                //     isLoading: false
+                // })
             }
         }
+    }
+    else{
+        alert("Please Enter the Email id")
+    }
 
     }
 

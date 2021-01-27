@@ -2,7 +2,7 @@ import React from 'react'
 import {
 
 } from 'react-native'
-
+import {Icon} from 'native-base'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -15,6 +15,7 @@ import Home from '../src/Home'
 import Daily from '../src/Daily'
 import Screen1 from '../src/Screen1'
 import { createDrawerNavigator } from '@react-navigation/drawer'
+import Sidebar from './customDrawer'
 // import { Tabs } from 'native-base'
 const HomeStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -34,8 +35,14 @@ const Screen1StackScreen = () =>(
 )
 const HomeDrawer = () =>{
   return(
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeStackScreen} />
+      <Drawer.Navigator drawerContent={props => <Sidebar {...props} />}>
+        <Drawer.Screen name="Home" component={HomeStackScreen}
+          options={{
+            drawerIcon: ({color,size}) => (
+              <Icon name="home" style={{fontSize: size, color:color}} />
+  )
+          }}
+        />
         <Drawer.Screen name="Screen1" component={Screen1StackScreen} />
       </Drawer.Navigator>
   )
@@ -46,6 +53,7 @@ const RootStackScreen = () => {
       <Stack.Navigator headerMode='none'>
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Home" component={HomeDrawer} />
+        <Stack.Screen name="Daily" component={Daily} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
         <Stack.Screen name="NewPass" component={NewPass} />

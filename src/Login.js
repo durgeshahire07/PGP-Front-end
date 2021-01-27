@@ -51,6 +51,7 @@ const Login = ({ navigation }) => {
         });
     }
     async function submitHandler() {
+        if(data.userEmailId && data.password){
         try {
             var config = {
                 method: 'post',
@@ -61,7 +62,10 @@ const Login = ({ navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-                navigation.navigate('Home')
+                // console.log(response.data.data.firstName)
+                navigation.navigate('Home',{
+                    userData: response.data.data.firstName
+                })
             }
             else {
                 alert("Incorrect username or password")
@@ -74,6 +78,10 @@ const Login = ({ navigation }) => {
                   alert("Opps something went wrong")
               }
         }
+    }
+    else{
+        alert("Please Enter the required fields")
+    }
 
     }
 

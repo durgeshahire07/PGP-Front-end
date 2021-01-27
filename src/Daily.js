@@ -25,7 +25,7 @@ import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
 import SelectMultiple from 'react-native-select-multiple'
 import Textarea from 'react-native-textarea';
 
-const Daily = () => {
+const Daily = ({navigation}) => {
 
     const [state, setState] = useState({
         data: '',
@@ -210,7 +210,7 @@ const Daily = () => {
             <View style={{ flex: 1 }}>
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
                             <Feather
                                 name="arrow-left"
                                 size={25}

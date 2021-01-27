@@ -26,13 +26,12 @@ import { FlatList } from 'react-native-gesture-handler';
 const Drawer = createDrawerNavigator();
 
 
-const Home = ({ navigation }) => {
-
-
+const Home = ({navigation,route }) => {
+    console.log("hello")
+    // console.log(route.params.userData)
+    // const  userData  = route.params.userData;
+    // console.log(userData)
     return (
-
-        
-
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
@@ -57,7 +56,7 @@ const Home = ({ navigation }) => {
                 <View
                     style={styles.footer}
                 >
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={()=>navigation.navigate('Daily')} >
                         <View style={styles.box}>
                             <Text style={ {
                                 color: '#4700b3',
