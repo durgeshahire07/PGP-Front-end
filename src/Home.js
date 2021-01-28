@@ -12,6 +12,7 @@ import {
     StatusBar,
 
 } from 'react-native';
+import {Icon} from 'native-base'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,18 +21,17 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
 import {createDrawerNavigator} from '@react-navigation/drawer'
-
+import Sidebar from '../src/customDrawer'
 import Daily from './Daily';
 import { FlatList } from 'react-native-gesture-handler';
 const Drawer = createDrawerNavigator();
 
-
-const Home = ({navigation,route }) => {
-    console.log("hello")
-    // console.log(route.params.userData)
-    // const  userData  = route.params.userData;
-    // console.log(userData)
+const HomeContent = ({navigation }) => {
+    // console.log("hello")
+    // const  {info} = route.params;
+    // console.log(info)
     return (
+        
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
@@ -79,7 +79,58 @@ const Home = ({navigation,route }) => {
     );
 };
 
+const Screen1Content = ({navigation}) =>{
+    return(
+    <View style={{flex:1}}>
+        <View style={{flexDirection: 'row',
+        backgroundColor: "#4700b3",
+        height: 50,
+        elevation: 10,
+        paddingLeft: 10}}>
+                <View style={{ paddingTop: 13 }}>
+                        <TouchableOpacity onPress={()=> navigation.openDrawer()}>
+                            <Feather
+                                name="menu"
+                                size={24}
+                                color="#fff"
+                            />
+                            </TouchableOpacity>
+                            </View>
+                            <Text style={{
+                        fontFamily: 'nunito-bold',
+                        fontSize: 20,
+                        color: '#fff',
+                        paddingLeft: 15,
+                        paddingTop: 10
+                    }}>Screen1</Text>
+                </View>
+        <Text>SCREEN1</Text>
+    </View>
+    )
+}
+
+
+const Home = ({route}) => {
+    const { userData } = route.params;
+    return(
+        <Drawer.Navigator initialRouteName={'Home'} drawerContent={props => <Sidebar {...props} />}>
+        <Drawer.Screen name="Home" component={HomeContent}
+          options={{
+            drawerIcon: ({color,size}) => (
+              <Icon name="home" style={{fontSize: size, color:color}} />
+  )
+          }}
+        />
+        <Drawer.Screen name="Screen1" component={Screen1Content} />
+      </Drawer.Navigator>
+    )
+}
+
 export default Home;
+
+
+
+
 
 const styles = StyleSheet.create({
     container: {

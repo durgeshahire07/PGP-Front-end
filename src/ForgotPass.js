@@ -48,50 +48,50 @@ const ForgotPass = ({ navigation }) => {
         //     ...loading,
         //     isLoading: true
         // })
-        
+
         console.log(data)
-        if(data.userEmailId){
-        try {
-            var config = {
-                method: 'get',
-                url: `http://192.168.43.19:3000/api/v1/auth/otp?email=${data.userEmailId}`,
-                headers: {}
-            };
-            const response = await axios(config)
-            console.log(response)
-            if (response.data.success) {
-                // setLoading({
-                //     isLoading: false
-                // })
-                navigation.push('Otp', {
-                    UserId: response.data.data.id,
-                })
-            }
-            else {
-                // setLoading({
-                //     isLoading: false
-                // })
-                console.log("invalid email")
-                alert("Invalid User")
-            }
-        } catch (error) {
-            console.log(error)
-            if (error.response.status === 404) {
-                alert("User not found")
-                // setLoading({
-                //     isLoading: false
-                // })
-            } else if (error.response.status === 500) {
-                alert("Opps something went wrong")
-                // setLoading({
-                //     isLoading: false
-                // })
+        if (data.userEmailId) {
+            try {
+                var config = {
+                    method: 'get',
+                    url: `http://192.168.43.19:3000/api/v1/auth/otp?email=${data.userEmailId}`,
+                    headers: {}
+                };
+                const response = await axios(config)
+                console.log(response)
+                if (response.data.success) {
+                    // setLoading({
+                    //     isLoading: false
+                    // })
+                    navigation.push('Otp', {
+                        UserId: response.data.data.id,
+                    })
+                }
+                else {
+                    // setLoading({
+                    //     isLoading: false
+                    // })
+                    console.log("invalid email")
+                    alert("Invalid User")
+                }
+            } catch (error) {
+                console.log(error)
+                if (error.response.status === 404) {
+                    alert("User not found")
+                    // setLoading({
+                    //     isLoading: false
+                    // })
+                } else if (error.response.status === 500) {
+                    alert("Opps something went wrong")
+                    // setLoading({
+                    //     isLoading: false
+                    // })
+                }
             }
         }
-    }
-    else{
-        alert("Please Enter the Email id")
-    }
+        else {
+            alert("Please Enter the Email id")
+        }
 
     }
 
@@ -102,12 +102,12 @@ const ForgotPass = ({ navigation }) => {
 
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <Animatable.View
-                // animation="slideInUp" 
-                style={{flex:1,justifyContent:"center",alignItems:"center"}}
+                    // animation="slideInUp" 
+                    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Image
                         source={require('../assets/icons/f-p.png')}
-                        style={{height:190 , width:200,}}
+                        style={{ height: 190, width: 200, }}
 
                     />
                 </Animatable.View>

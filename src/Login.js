@@ -12,13 +12,15 @@ import {
     StatusBar,
     SafeAreaView
 } from 'react-native';
-
+// import customDrawer from '../src/customDrawer'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import axios from 'axios'
+
+// const UserContext = React.createContext()
 
 const Login = ({ navigation }) => {
 
@@ -62,9 +64,13 @@ const Login = ({ navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
+                // <UserContext.Provider value={response.data.data}>
+                //     <customDrawer />
+                // </UserContext.Provider>
+                
                 // console.log(response.data.data.firstName)
                 navigation.navigate('Home',{
-                    userData: response.data.data.firstName
+                    userData: response.data.data,
                 })
             }
             else {
