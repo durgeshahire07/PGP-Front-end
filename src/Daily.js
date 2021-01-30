@@ -30,9 +30,19 @@ const Daily = ({ navigation: { goBack } }) => {
     const [state, setState] = useState({
         data: '',
         isLoading: true,
+        
     });
 
-    getSurvey = () => {
+    const [res,setRes] = useState({
+        ans: {
+            userID: '',
+            surveyType: "daily",
+            response: []
+        }
+    })
+
+
+    const getSurvey = () => {
         var config = {
             method: 'get',
             url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
@@ -61,18 +71,18 @@ const Daily = ({ navigation: { goBack } }) => {
         getSurvey()
     }, [])
 
-    const onChoiceChange = (selectedChoice,index) => {
+    const onChoiceChange = (selectedChoice, index) => {
         var tmp = state.data
         // if(tmp[index].answer){
         //     // tmp[index].answer = selectedChoice
         //     // selectedChoice = selectedChoice.splice(0,1);
         //     // tmp[index].answer = selectedChoice
         //     console.log(tmp[index])
-            
+
         // }
-        
+
         tmp[index].answer = selectedChoice
-        if(tmp[index].answer.length>=2){
+        if (tmp[index].answer.length >= 2) {
             tmp[index].answer.shift();
         }
         console.log(tmp[index])
@@ -80,7 +90,7 @@ const Daily = ({ navigation: { goBack } }) => {
             data: tmp
         })
     }
-    
+
     const onSelectionsChange = (selectedItems, key) => {
         var tmp = state.data
         tmp[key].answer = selectedItems
@@ -88,44 +98,71 @@ const Daily = ({ navigation: { goBack } }) => {
             ...state,
             data: tmp
         })
-        console.log(state.data)
+        // console.log(state.data)
     }
 
-    const changeParagraph = (value,key) => {
+    const changeParagraph = (value, key) => {
         var temp = state.data
         temp[key].answer = value
         setState({
             ...state,
             data: temp
         })
-        
+
     }
 
-    const changeLongPara = (value,key) => {
+    const changeLongPara = (value, key) => {
         var tmp = state.data
         tmp[key].answer = value
         setState({
             ...state,
             data: tmp
         })
-        console.log(state.data)
+    }
+    
+
+    const changeRes = (que,index) => {
+        var temp = res.ans;
+        
+        temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
+        
+        // console.log(temp)
+        setRes({
+            ans:temp
+        })
+        // console.log(state.ans);
     }
 
-    // const submitHandler = () => {
-    //     let res = state.data.map((val)=>{
-    //         {questionID: val._id
-    //         answer:val.answer
-    //         questionType=val.type}
-    //     })
-    //     console.log(res)
-    //     const response ={
-    //         userID:"",
-    //         surveyType:"",
-    //         surveyNumber:"",
-    //         response:res
-    //     }
-    //     console.log(response)
-    // }
+    async function submitHandler(){
+        let response = state.data.map((val, key)=>{
+            changeRes(val,key)
+        })
+        console.log(res.ans)
+        try {
+            var config = {
+                method: 'post',
+                url: 'http://192.168.43.19:3000/api/v1/auth/saveResponse',
+                headers: {},
+                data: res.ans
+            };
+            const response = await axios(config)
+            console.log(response)
+            if (response.success) {
+                navigation.navigate('Home')
+            }
+            else {
+                alert("something went wrong!")
+            }
+        } catch (error) {
+            console.log(error)
+                if (error.response.status === 404) {
+                  alert("User not found")
+              } else if (error.response.status === 500) {
+                  alert("Opps something went wrong")
+              }
+        }
+
+    }
 
 
     if (state.isLoading) {
@@ -142,17 +179,17 @@ const Daily = ({ navigation: { goBack } }) => {
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
-                         items={val.options}
-                         selectedItems={val.answer}
-                         onSelectionsChange={choice=> onChoiceChange(choice,key)} 
-                         />
+                            items={val.options}
+                            selectedItems={val.answer}
+                            onSelectionsChange={choice => onChoiceChange(choice, key)}
+                        />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
             }
             else if (val.type == "text") {
-                return  <View key={key}>
-                    
+                return <View key={key}>
+
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <View style={{
@@ -167,8 +204,8 @@ const Daily = ({ navigation: { goBack } }) => {
                             <TextInput
                                 multiline
                                 style={styles.textInput}
-                                onChangeText={(value) => changeParagraph(value,key)}
-                            />    
+                                onChangeText={(value) => changeParagraph(value, key)}
+                            />
                         </View>
 
                     </View>
@@ -181,10 +218,10 @@ const Daily = ({ navigation: { goBack } }) => {
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
-                         items={val.options}
-                         selectedItems={val.answer}
-                         onSelectionsChange={list=> onSelectionsChange(list,key)} 
-                         />
+                            items={val.options}
+                            selectedItems={val.answer}
+                            onSelectionsChange={list => onSelectionsChange(list, key)}
+                        />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
@@ -193,10 +230,10 @@ const Daily = ({ navigation: { goBack } }) => {
                 return <View key={key}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
-                        <Textarea 
-                        containerStyle={styles.textareaContainer}
-                        style={styles.textarea}
-                        onChangeText={(value) => changeLongPara(value,key)}
+                        <Textarea
+                            containerStyle={styles.textareaContainer}
+                            style={styles.textarea}
+                            onChangeText={(value) => changeLongPara(value, key)}
                         />
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
@@ -210,7 +247,7 @@ const Daily = ({ navigation: { goBack } }) => {
             <View style={{ flex: 1 }}>
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={()=>goBack()}>
+                        <TouchableOpacity onPress={() => goBack()}>
                             <Feather
                                 name="arrow-left"
                                 size={25}
@@ -249,9 +286,9 @@ const Daily = ({ navigation: { goBack } }) => {
                                 flexDirection: 'row',
                                 justifyContent: "center",
                                 alignItems: "center",
-                               
-                            }} 
-                            // onPress={submitHandler}
+
+                            }}
+                            onPress={submitHandler}
                             >
                                 <LinearGradient
                                     colors={['#4700b3', '#4700b3']}
@@ -306,14 +343,14 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-      },
+    },
     textarea: {
-        textAlignVertical: 'top',  
+        textAlignVertical: 'top',
         height: 170,
         fontSize: 14,
         color: '#333',
         fontFamily: 'nunito-regular'
-      },
+    },
     Questions: {
         paddingTop: 10,
         paddingBottom: 10,

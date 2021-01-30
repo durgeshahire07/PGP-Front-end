@@ -37,13 +37,13 @@ const HomeContent = ({navigation }) => {
                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
                 <View style={styles.header}>
                 <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={()=> navigation.openDrawer()}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
                             <Feather
                                 name="menu"
                                 size={24}
                                 color="#fff"
                             />
-                            </TouchableOpacity>
+                        </TouchableOpacity>
                             </View>
                             <Text style={{
                         fontFamily: 'nunito-bold',
@@ -56,8 +56,9 @@ const HomeContent = ({navigation }) => {
                 <View
                     style={styles.footer}
                 >
-                    <TouchableOpacity onPress={()=>navigation.navigate('Daily')} >
+                    
                         <View style={styles.box}>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Daily')} >
                             <Text style={ {
                                 color: '#4700b3',
                                 textAlign: 'center',
@@ -65,8 +66,9 @@ const HomeContent = ({navigation }) => {
                                 fontSize: 20,
                                 paddingVertical: 25
                             }}>Take your Daily Survey!</Text>
+                            </ TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
+                    
 
                       
 
@@ -110,8 +112,7 @@ const Screen1Content = ({navigation}) =>{
 }
 
 
-const Home = ({route}) => {
-    const { userData } = route.params;
+const Home = () => {
     return(
         <Drawer.Navigator initialRouteName={'Home'} drawerContent={props => <Sidebar {...props} />}>
         <Drawer.Screen name="Home" component={HomeContent}
@@ -144,14 +145,15 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     box:{ 
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        backgroundColor: '#fff',
-        borderColor: '#b3b3b3',
-        borderWidth: 2,
-        elevation: 7
+        backgroundColor: "#fff",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        paddingLeft: 20,
+        paddingBottom: 20,
+        paddingRight: 20,
+        elevation: 15
     },
     footer: {
         flex: 1,
