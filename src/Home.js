@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useContext } from 'react';
 import {
     View,
     Text,
@@ -24,12 +24,18 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import Sidebar from '../src/customDrawer'
 import Daily from './Daily';
 import { FlatList } from 'react-native-gesture-handler';
+import { UserContext } from '../userContext'
 const Drawer = createDrawerNavigator();
 
 const HomeContent = ({navigation }) => {
-    // console.log("hello")
-    // const  {info} = route.params;
-    // console.log(info)
+    const user = useContext(UserContext);
+    console.log("home")
+    console.log(user)
+    console.log(user.userData.userID)
+    // const [userData,setUserData] = useContext(UserContext);
+    
+    // console.log(userData)
+    
     return (
         
         <View style={styles.container}>

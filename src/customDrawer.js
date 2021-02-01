@@ -1,13 +1,16 @@
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import React from 'react'
+import React,{ useContext }from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
 import { Drawer } from 'react-native-paper';
 import { color } from 'react-native-reanimated';
 import { Icon, Container, Body, H3, Header, Content, Thumbnail, ListItem, Left, Right, List, Footer, FooterTab } from 'native-base'
 import { Switch } from 'react-native-gesture-handler';
-import { UserContext } from '../src/Login'
+
+import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
+    const user = useContext(UserContext);
+    console.log(user.userData.firstName)
     return (
         <Container>
             <Header androidStatusBarColor="#310080" style={{ backgroundColor: '#4700b3', height: 84 }}>
@@ -21,8 +24,8 @@ function Sidebar({ ...props }) {
                             />
                         </Left>
                         <Body>
-                        <H3 style={{ color: "#fff" }}>Hey, firstName</H3>
-                                            <Text style={{ color: '#fff' }}>email@gamil.com</Text>
+                        <H3 style={{ color: "#fff" }}>{user.userData.firstName} {user.userData.lastName}</H3>
+                                            <Text style={{ color: '#fff' }}>{user.userData.emailID}</Text>
                             {/* <UserContext.Consumer>
                                 {
                                     user => {

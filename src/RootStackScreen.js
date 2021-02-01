@@ -24,9 +24,9 @@ const RootStackScreen = () => {
     <NavigationContainer>
       <Stack.Navigator headerMode='none'>
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Daily" component={Daily} />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
         <Stack.Screen name="NewPass" component={NewPass} />
         <Stack.Screen name="Otp" component={Otp} />

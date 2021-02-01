@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -19,11 +19,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
-
+import { UserContext } from '../userContext';
 
 
 const SignUp = ({ navigation }) => {
-
+    const user = useContext(UserContext);
+   
     const [data, setData] = React.useState({
         firstName: '',
         lastName: '',
@@ -113,7 +114,12 @@ const SignUp = ({ navigation }) => {
         })
        
         if (data.password != secureEntry.confirm_password) {
+            
             alert("password don't match")
+            setSecureEntry({
+                ...secureEntry,
+                isLoading: false
+            })
         }
         else if(data.password && data.firstName && data.lastName && data.userEmailId) {
             try {
@@ -124,13 +130,20 @@ const SignUp = ({ navigation }) => {
                     data: data
                 };
                 const response = await axios(config)
-                console.log(response)
+                console.log(data.userEmailId)
                 if (response.data.success) {
+                    user.setUserData({
+                        emailID: data.userEmailId,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        userID: "ubsi"
+                    })
+                    console.log(user)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
                     })
-                    navigation.push('Home')
+                    navigation.navigate('Home')
                 }
                 else {
                     alert("Sign Up failed")
@@ -150,7 +163,12 @@ const SignUp = ({ navigation }) => {
             }
         }
         else{
+            
             alert("Please fill all the information")
+            setSecureEntry({
+                ...secureEntry,
+                isLoading: false
+            })
         }
     }
     return (

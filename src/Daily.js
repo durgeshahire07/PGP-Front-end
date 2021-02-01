@@ -25,7 +25,7 @@ import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
 import SelectMultiple from 'react-native-select-multiple'
 import Textarea from 'react-native-textarea';
 
-const Daily = ({ navigation: { goBack } }) => {
+const Daily = ({ navigation: { goBack },navigation }) => {
 
     const [state, setState] = useState({
         data: '',
@@ -35,22 +35,27 @@ const Daily = ({ navigation: { goBack } }) => {
 
     const [res,setRes] = useState({
         ans: {
-            userID: '',
-            surveyType: "daily",
+            userID: '5fd23a3019084e0e543afac9',
+            surveyType: "monthly",
             response: []
         }
     })
 
+    const request = {
+        "surveyType": "daily"
+    }
+
 
     const getSurvey = () => {
         var config = {
-            method: 'get',
-            url: 'http://192.168.43.19:3000/api/v1/auth/getDailySurvey',
-            headers: {}
+            method: 'post',
+            url: 'http://192.168.43.19:3000/api/v1/survey/getSurvey',
+            headers: {},
+            data : request
         };
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                console.log(JSON.stringify(response));
 
                 if (response.data.success) {
                     setState({
@@ -124,8 +129,17 @@ const Daily = ({ navigation: { goBack } }) => {
     const changeRes = (que,index) => {
         var temp = res.ans;
         
-        temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
+        // if(que.type ==="text" || que.type ==="check box"){
+        //     // let option = que.answer.map((opt,key)=>{
+        //     //     // temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer.}
+        //     //     console.log(opt)
+        //     // })
+    
+            
+        // }
         
+            temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
+       
         // console.log(temp)
         setRes({
             ans:temp
@@ -137,17 +151,19 @@ const Daily = ({ navigation: { goBack } }) => {
         let response = state.data.map((val, key)=>{
             changeRes(val,key)
         })
-        console.log(res.ans)
+        // console.log(res.ans)
+        const resJson = JSON.stringify(res.ans)
+        console.log(resJson)
         try {
             var config = {
                 method: 'post',
-                url: 'http://192.168.43.19:3000/api/v1/auth/saveResponse',
+                url: 'http://192.168.43.19:3000/api/v1/survey/saveResponse',
                 headers: {},
-                data: res.ans
+                data: JSON.stringify(res.ans)
             };
             const response = await axios(config)
             console.log(response)
-            if (response.success) {
+            if (response.data.success) {
                 navigation.navigate('Home')
             }
             else {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -13,6 +13,7 @@ import {
     SafeAreaView
 } from 'react-native';
 // import customDrawer from '../src/customDrawer'
+import { UserContext } from '../userContext';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,7 +25,9 @@ import axios from 'axios'
 
 const Login = ({ navigation }) => {
 
-
+    const user = useContext(UserContext);
+    // console.log(user)
+    // const [userData,setUserData] = useContext(UserContext)
     const [data, setData] = React.useState({
         userEmailId: '',
         password: '',
@@ -53,41 +56,41 @@ const Login = ({ navigation }) => {
         });
     }
     async function submitHandler() {
-        if(data.userEmailId && data.password){
-        try {
-            var config = {
-                method: 'post',
-                url: 'http://192.168.43.19:3000/api/v1/auth/login',
-                headers: {},
-                data: data
-            };
-            const response = await axios(config)
-            console.log(response)
-            if (response.data.success) {
-                // <UserContext.Provider value={response.data.data}>
-                //     <customDrawer />
-                // </UserContext.Provider>
-                
-                // console.log(response.data.data.firstName)
-                navigation.navigate('Home',{
-                    userData: response.data.data,
-                })
-            }
-            else {
-                alert("Incorrect username or password")
-            }
-        } catch (error) {
-            console.log(error)
+        if (data.userEmailId && data.password) {
+            try {
+                var config = {
+                    method: 'post',
+                    url: 'http://192.168.43.19:3000/api/v1/auth/login',
+                    headers: {},
+                    data: data
+                };
+                const response = await axios(config)
+                console.log(response)
+                if (response.data.success) {
+                    console.log("login")
+                    user.setUserData({
+                        emailID: response.data.data.userEmailId,
+                        firstName: response.data.data.firstName,
+                        lastName: response.data.data.lastName,
+                        userID: response.data.data._id
+                    })
+                    navigation.navigate('Home')
+                }
+                else {
+                    alert("Incorrect username or password")
+                }
+            } catch (error) {
+                console.log(error)
                 if (error.response.status === 404) {
-                  alert("User not found")
-              } else if (error.response.status === 500) {
-                  alert("Opps something went wrong")
-              }
+                    alert("User not found")
+                } else if (error.response.status === 500) {
+                    alert("Opps something went wrong")
+                }
+            }
         }
-    }
-    else{
-        alert("Please Enter the required fields")
-    }
+        else {
+            alert("Please Enter the required fields")
+        }
 
     }
 

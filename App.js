@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-
+import ReactDOM from 'react-dom';
+import { UserProvider } from './userContext';
 import * as Font from 'expo-font'
 import { AppLoading } from 'expo';
 import RootStackScreen from './src/RootStackScreen'
@@ -22,15 +23,10 @@ const YourApp = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
   if(fontsLoaded){
     return(
+      // <Daily />
+      <UserProvider>
         <RootStackScreen />
-        // <NewPass />
-        //  <Otp />
-        // <ForgotPass />
-        // <Home />
-        // <Daily />
-        // <Weekly />
-        // <Monthly />
-        // <Weekly />
+       </UserProvider>
     )
   } else {
     return(
@@ -41,5 +37,14 @@ const YourApp = () => {
     )
   }
 }
+
+// const rootElement = document.getElementById('root');
+// ReactDOM.render(
+//   // wrap root element with context
+//   <UserProvider>
+//     <App />
+//   </UserProvider>,
+//   rootElement
+// );
 
 export default YourApp;
