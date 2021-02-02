@@ -10,32 +10,13 @@ import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
     const user = useContext(UserContext);
-    console.log(user.userData.firstName)
     return (
         <Container>
-            <Header androidStatusBarColor="#310080" style={{ backgroundColor: '#4700b3', height: 84 }}>
+            <Header androidStatusBarColor="#310080" style={{ backgroundColor: '#4700b3', height: 74 }}>
                 <View style={{ flex: 1 }}>
-                    <ListItem thumbnail>
-                        <Left>
-                            <Thumbnail
-                                source={{
-                                    uri: 'https://i.stack.imgur.com/34AD2.jpg'
-                                }}
-                            />
-                        </Left>
+                    <ListItem >
                         <Body>
-                        <H3 style={{ color: "#fff" }}>{user.userData.firstName} {user.userData.lastName}</H3>
-                                            <Text style={{ color: '#fff' }}>{user.userData.emailID}</Text>
-                            {/* <UserContext.Consumer>
-                                {
-                                    user => {
-                                        return (<View>
-                                            <H3 style={{ color: "#fff" }}>{user.firstName}</H3>
-                                            <Text style={{ color: '#fff' }}>email@gamil.com</Text>
-                                        </View>)
-                                    }
-                                }
-                            </UserContext.Consumer> */}
+                        <H3 style={{ fontFamily:'nunito-regular',color: "#fff" }}>Hey, {user.userData.firstName} {user.userData.lastName}</H3>
                         </Body>
                     </ListItem>
                 </View>

@@ -128,19 +128,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
     const changeRes = (que,index) => {
         var temp = res.ans;
-        
-        // if(que.type ==="text" || que.type ==="check box"){
-        //     // let option = que.answer.map((opt,key)=>{
-        //     //     // temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer.}
-        //     //     console.log(opt)
-        //     // })
-    
-            
-        // }
-        
-            temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
-       
-        // console.log(temp)
+        temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
         setRes({
             ans:temp
         })
@@ -152,14 +140,13 @@ const Daily = ({ navigation: { goBack },navigation }) => {
             changeRes(val,key)
         })
         // console.log(res.ans)
-        const resJson = JSON.stringify(res.ans)
-        console.log(resJson)
+        
         try {
             var config = {
                 method: 'post',
                 url: 'http://192.168.43.19:3000/api/v1/survey/saveResponse',
                 headers: {},
-                data: JSON.stringify(res.ans)
+                data: res.ans
             };
             const response = await axios(config)
             console.log(response)

@@ -138,7 +138,6 @@ const SignUp = ({ navigation }) => {
                         lastName: data.lastName,
                         userID: "ubsi"
                     })
-                    console.log(user)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
