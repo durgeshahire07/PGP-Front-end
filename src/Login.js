@@ -10,38 +10,35 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
-    SafeAreaView
+    SafeAreaView,
+    ToastAndroid
 } from 'react-native';
-// import customDrawer from '../src/customDrawer'
 import { UserContext } from '../userContext';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import { BorderlessButton } from 'react-native-gesture-handler';
 import axios from 'axios'
-
-// const UserContext = React.createContext()
 
 const Login = ({ navigation }) => {
 
     const user = useContext(UserContext);
-    // console.log(user)
-    // const [userData,setUserData] = useContext(UserContext)
     const [data, setData] = React.useState({
         userEmailId: '',
         password: '',
 
     });
+
     const [secureEntry, setSecureEntry] = React.useState({
         secureTextEntry: true
     })
+
     const textInput = (user) => {
         setData({
             ...data,
             userEmailId: user,
         });
     }
+
     const handlePasswordChange = (pass) => {
         setData({
             ...data,
@@ -55,6 +52,7 @@ const Login = ({ navigation }) => {
             secureTextEntry: !secureEntry.secureTextEntry
         });
     }
+
     async function submitHandler() {
         if (data.userEmailId && data.password) {
             try {
@@ -67,7 +65,6 @@ const Login = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
-                    console.log("login")
                     user.setUserData({
                         emailID: response.data.data.userEmailId,
                         firstName: response.data.data.firstName,
@@ -77,36 +74,38 @@ const Login = ({ navigation }) => {
                     navigation.navigate('Home')
                 }
                 else {
-                    alert("Incorrect username or password")
+                    ToastAndroid.show("Login Failed!",
+                        ToastAndroid.SHORT)
                 }
             } catch (error) {
                 console.log(error)
                 if (error.response.status === 404) {
-                    alert("User not found")
+                    ToastAndroid.show("User not found!",
+                        ToastAndroid.SHORT)
                 } else if (error.response.status === 500) {
-                    alert("Opps something went wrong")
+                    ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.SHORT)
+                }
+                else {
+                    ToastAndroid.show(error,
+                        ToastAndroid.SHORT)
                 }
             }
         }
         else {
-            alert("Please Enter the required fields")
+            ToastAndroid.show("Please fill the Required fields!",
+                ToastAndroid.SHORT)
         }
-
     }
 
-
     return (
-
-
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <View style={styles.header} />
                 <Animatable.View
-                    // animation="fadeInUp"
                     style={styles.footer}
                 >
-
                     <Text style={{
                         fontFamily: 'nunito-bold',
                         fontSize: 28,
@@ -117,10 +116,8 @@ const Login = ({ navigation }) => {
                         fontSize: 18,
                         paddingBottom: 10,
                         color: 'grey',
-
                     }}>Login to continue</Text>
                     <View style={styles.action}>
-
                         <TextInput
                             placeholder="Email Address"
                             style={styles.textInput}
@@ -161,11 +158,9 @@ const Login = ({ navigation }) => {
                             <Text style={[{ fontFamily: 'nunito-bold' }, { color: '#4700b3' }]}>Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>
-
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
-
                             onPress={submitHandler}
                         >
                             <LinearGradient
@@ -180,7 +175,7 @@ const Login = ({ navigation }) => {
                         <View style={styles.textPrivate}>
                             <Text style={[{ fontFamily: 'nunito-semi' }, { color: 'grey' }]}>
                                 Don't have an Account?
-                </Text>
+                            </Text>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('SignUp')}
                             >
@@ -188,14 +183,11 @@ const Login = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 </Animatable.View>
             </ScrollView>
         </View>
-
-
-    );
-};
+    )
+}
 
 export default Login;
 
@@ -204,7 +196,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#4700b3'
     },
-
     safeArea: {
         flex: 1,
         marginTop: StatusBar.currentHeight + 10,
@@ -228,21 +219,17 @@ const styles = StyleSheet.create({
     text_footer: {
         color: '#05375a',
         fontSize: 18,
-
     },
     action: {
         flexDirection: 'row',
         marginTop: 15,
-
         borderBottomColor: '#b380ff',
         borderBottomWidth: 2,
     },
     textInput: {
         flex: 1,
-
         fontFamily: 'nunito-regular',
         color: '#000000',
-
     },
     button: {
         alignItems: 'center',

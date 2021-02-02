@@ -10,7 +10,8 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
-    ActivityIndicator
+    ActivityIndicator,
+    ToastAndroid
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -115,7 +116,8 @@ const SignUp = ({ navigation }) => {
        
         if (data.password != secureEntry.confirm_password) {
             
-            alert("password don't match")
+            ToastAndroid.show("Password don't match!",
+            ToastAndroid.SHORT)
             setSecureEntry({
                 ...secureEntry,
                 isLoading: false
@@ -145,7 +147,8 @@ const SignUp = ({ navigation }) => {
                     navigation.navigate('Home')
                 }
                 else {
-                    alert("Sign Up failed")
+                    ToastAndroid.show("Sign up Failed!",
+                    ToastAndroid.SHORT)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
@@ -157,13 +160,14 @@ const SignUp = ({ navigation }) => {
                     isLoading: false
                 })
                 console.log(error)
-                alert(error)
+                ToastAndroid.show(error,
+                ToastAndroid.SHORT)
                 
             }
         }
-        else{
-            
-            alert("Please fill all the information")
+        else{ 
+            ToastAndroid.show("Please fill the Required fields!",
+            ToastAndroid.SHORT)
             setSecureEntry({
                 ...secureEntry,
                 isLoading: false

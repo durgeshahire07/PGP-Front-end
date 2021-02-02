@@ -11,7 +11,8 @@ import {
     StatusBar,
     SafeAreaView,
     ActivityIndicator,
-    Image
+    Image,
+    ToastAndroid
 
 } from 'react-native';
 
@@ -72,17 +73,20 @@ const ForgotPass = ({ navigation }) => {
                     //     isLoading: false
                     // })
                     console.log("invalid email")
-                    alert("Invalid User")
+                    ToastAndroid.show("Invalid email!",
+                    ToastAndroid.SHORT)
                 }
             } catch (error) {
                 console.log(error)
                 if (error.response.status === 404) {
-                    alert("User not found")
+                    ToastAndroid.show("User not found!",
+                    ToastAndroid.SHORT)
                     // setLoading({
                     //     isLoading: false
                     // })
                 } else if (error.response.status === 500) {
-                    alert("Opps something went wrong")
+                    ToastAndroid.show("Oops...something went wrong!",
+                    ToastAndroid.SHORT)
                     // setLoading({
                     //     isLoading: false
                     // })
@@ -90,7 +94,8 @@ const ForgotPass = ({ navigation }) => {
             }
         }
         else {
-            alert("Please Enter the Email id")
+            ToastAndroid.show("Please fill the Required field",
+            ToastAndroid.SHORT)
         }
 
     }

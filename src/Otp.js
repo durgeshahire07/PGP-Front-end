@@ -2,28 +2,19 @@ import React, { useRef, useEffect, useState } from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
-    Dimensions,
     TextInput,
     Platform,
     StyleSheet,
     ScrollView,
     StatusBar,
     SafeAreaView,
-    Keyboard,
-    RefreshControl
+    ToastAndroid
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
-import { BorderlessButton } from 'react-native-gesture-handler';
-
 import axios from 'axios'
-
-
 
 const Otp = ({ route, navigation }) => {
     // let clockCall = null
@@ -89,33 +80,29 @@ const Otp = ({ route, navigation }) => {
                 navigation.push('NewPass', { UserId })
             }
             else {
-                alert("Invalid code")
+                ToastAndroid.show("Invalid Code!",
+                ToastAndroid.SHORT)
             }
         } catch (error) {
             console.log(error)
                 if (error.response.status == 404) {
-                  alert("User not found")
+                    ToastAndroid.show("User not found!",
+                    ToastAndroid.SHORT)
               } else if (error.response.status === 500) {
-                  alert("Opps something went wrong")
+                ToastAndroid.show("Oops...something went wrong!",
+                ToastAndroid.SHORT)
               }
               else if (error.response.status === 400) {
-                  alert("Wrong OTP code entered")
+                ToastAndroid.show("Invalid Code!",
+                ToastAndroid.SHORT)
               }
         }
-
-
     }
 
-
-
     return (
-
-
-        <View style={styles.container}>
+      <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
-
-
                 <View style={styles.header} />
                 <Animatable.View
                     // animation="fadeInUp"
@@ -125,86 +112,63 @@ const Otp = ({ route, navigation }) => {
                         fontFamily: 'nunito-bold',
                         fontSize: 28,
                         color: '#4700b3',
-
-
-
                     }}>Verification Code</Text>
                     <Text style={{
                         fontFamily: 'nunito-semi',
                         fontSize: 15,
                         paddingBottom: 30,
                         color: 'grey',
-
                     }}>Enter the OTP code sent to your email</Text>
-
                     <View style={styles.containerInput}>
-
                         <TextInput
                             ref={pin1Ref}
                             onChangeText={(pin1) => {
                                 setPin({ ...pin, pin1: pin1 })
                                 if (pin1 != '') {
                                     pin2Ref.current.focus()
-
                                 }
-
                             }}
                             value={pin1}
                             keyboardType="numeric"
                             maxLength={1}
                             style={styles.cellInput}
-
                         />
-
-
                         <TextInput
                             ref={pin2Ref}
                             onChangeText={(pin2) => {
                                 setPin({ ...pin, pin2: pin2 })
                                 if (pin2 != '') {
                                     pin3Ref.current.focus()
-
                                 }
-
                             }}
                             value={pin2}
                             keyboardType="numeric"
                             maxLength={1}
-                            style={styles.cellInput}
-                        ></TextInput>
-
-
+                            style={styles.cellInput}>
+                        </TextInput>
                         <TextInput
                             ref={pin3Ref}
                             onChangeText={(pin3) => {
                                 setPin({ ...pin, pin3: pin3 })
-
                                 if (pin3 != '') {
-
                                     pin4Ref.current.focus()
                                 }
                             }}
                             value={pin3}
                             keyboardType="numeric"
                             maxLength={1}
-                            style={styles.cellInput}
-                        ></TextInput>
-
+                            style={styles.cellInput}>
+                        </TextInput>
                         <TextInput
                             ref={pin4Ref}
-
                             onChangeText={(pin4) => {
-
                                 setPin({ ...pin, pin4: pin4 })
-
                             }}
-
                             value={pin4}
                             keyboardType="numeric"
                             maxLength={1}
-                            style={styles.cellInput}
-                        ></TextInput>
-
+                            style={styles.cellInput}>
+                        </TextInput>
                     </View>
                     <View style={styles.button}>
                         <TouchableOpacity
@@ -221,7 +185,6 @@ const Otp = ({ route, navigation }) => {
                             </LinearGradient>
                         </TouchableOpacity>
                     </View>
-
                     <View style={styles.textPrivate}>
                         <Text style={
                             [{ fontFamily: 'nunito-semi' },
@@ -237,14 +200,10 @@ const Otp = ({ route, navigation }) => {
                             // >{" "}Resend OTP({countdown})</Text>
                             >{" "}Resend OTP</Text>
                         </TouchableOpacity>
-
                     </View>
-
                 </Animatable.View>
             </ScrollView>
         </View>
-
-
     );
 };
 
@@ -255,7 +214,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#4700b3'
     },
-
     header: {
         flex: 5,
         justifyContent: 'flex-end',
@@ -273,7 +231,6 @@ const styles = StyleSheet.create({
     text_footer: {
         color: '#05375a',
         fontSize: 18,
-
     },
     action: {
         flexDirection: 'row',
@@ -311,11 +268,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly'
     },
-
     cellInput: {
         textAlign: "center",
         fontSize: 25,
-
         paddingVertical: 11,
         width: 40,
         margin: 5,
@@ -323,7 +278,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 2,
         borderBottomColor: '#4700b3'
-
-
     }
 });

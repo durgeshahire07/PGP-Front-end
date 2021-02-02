@@ -32,9 +32,6 @@ const HomeContent = ({navigation }) => {
     console.log("home")
     console.log(user)
     console.log(user.userData.userID)
-    // const [userData,setUserData] = useContext(UserContext);
-    
-    // console.log(userData)
     
     return (
         
@@ -110,9 +107,9 @@ const Screen1Content = ({navigation}) =>{
                         color: '#fff',
                         paddingLeft: 15,
                         paddingTop: 10
-                    }}>Screen1</Text>
+                    }}>User Profile</Text>
                 </View>
-        <Text>SCREEN1</Text>
+        <Text>Profile</Text>
     </View>
     )
 }
@@ -128,7 +125,14 @@ const Home = () => {
   )
           }}
         />
-        <Drawer.Screen name="Screen1" component={Screen1Content} />
+        <Drawer.Screen name="Profile" component={Screen1Content} 
+         options={{
+            drawerIcon: ({color,size}) => (
+              <Icon name="person" style={{fontSize: size, color:color}} />
+  )
+          }}
+        
+        />
       </Drawer.Navigator>
     )
 }

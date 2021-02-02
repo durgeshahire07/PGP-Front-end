@@ -11,7 +11,8 @@ import {
     ScrollView,
     StatusBar,
     SafeAreaView,
-    ActivityIndicator
+    ActivityIndicator,
+    ToastAndroid
 
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -64,12 +65,14 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                     })
                 }
                 else {
-                    alert("Oops..something went wrong")
+                    ToastAndroid.show("Oops...something went wrong!",
+                    ToastAndroid.SHORT)
                 }
             })
             .catch(function (error) {
                 console.log(error);
-                alert(error)
+                ToastAndroid.show(error,
+                ToastAndroid.SHORT)
             });
     }
     useEffect(() => {
@@ -139,8 +142,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
         let response = state.data.map((val, key)=>{
             changeRes(val,key)
         })
-        // console.log(res.ans)
-        
+        // console.log(res.ans)       
         try {
             var config = {
                 method: 'post',
@@ -154,14 +156,14 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                 navigation.navigate('Home')
             }
             else {
-                alert("something went wrong!")
+                ToastAndroid.show("Oops...something went wrong!",
+                ToastAndroid.SHORT)
             }
         } catch (error) {
             console.log(error)
-                if (error.response.status === 404) {
-                  alert("User not found")
-              } else if (error.response.status === 500) {
-                  alert("Opps something went wrong")
+             if (error.response.status === 500) {
+                ToastAndroid.show("Oops...something went wrong!",
+                ToastAndroid.SHORT)
               }
         }
 

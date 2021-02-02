@@ -2,21 +2,16 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
-    Dimensions,
     TextInput,
-    Platform,
     StyleSheet,
     ScrollView,
+    ToastAndroid,
     StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
 
 const NewPass = ({ route, navigation }) => {
@@ -64,9 +59,9 @@ const NewPass = ({ route, navigation }) => {
 
     async function submitHandler() {
         console.log(data)
-
         if (secureEntry.confirm_password != data.password) {
-            alert("Password don't match")
+            ToastAndroid.show("Password don't match!",
+            ToastAndroid.SHORT)
         }
         else {
             try {
@@ -83,22 +78,19 @@ const NewPass = ({ route, navigation }) => {
                 }
             } catch (error) {
                 console.log(error)
-                  if (error.response.status == 404) {
-                    alert("User not found")
-                } else if (error.response.status === 500) {
-                    alert("Opps something went wrong")
+                 if (error.response.status === 500) {
+                    ToastAndroid.show("Oops...something went wrong!",
+                    ToastAndroid.SHORT)
                 }
             }
         }
     }
 
     return (
-
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <View style={styles.header} />
-
                 <Animatable.View
                     // animation="fadeInUp"
                     style={styles.footer}
@@ -115,7 +107,6 @@ const NewPass = ({ route, navigation }) => {
                         paddingBottom: 10,
                         color: 'grey'
                     }}>Please enter your new password</Text>
-
                     <View style={styles.action}>
                         <TextInput
                             placeholder="Your New Password"
@@ -168,7 +159,6 @@ const NewPass = ({ route, navigation }) => {
                             }
                         </TouchableOpacity>
                     </View>
-
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
@@ -183,14 +173,12 @@ const NewPass = ({ route, navigation }) => {
                                 }]}>Reset Password</Text>
                             </LinearGradient>
                         </TouchableOpacity>
-
                     </View>
                 </Animatable.View>
             </ScrollView>
         </View>
-
-    );
-};
+    )
+}
 
 export default NewPass;
 
