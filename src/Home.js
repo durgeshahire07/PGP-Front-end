@@ -25,13 +25,12 @@ import Sidebar from '../src/customDrawer'
 import Daily from './Daily';
 import { FlatList } from 'react-native-gesture-handler';
 import { UserContext } from '../userContext'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Drawer = createDrawerNavigator();
 
 const HomeContent = ({navigation }) => {
     const user = useContext(UserContext);
     console.log("home")
-    console.log(user)
-    console.log(user.userData.userID)
     
     return (
         
@@ -109,7 +108,9 @@ const Screen1Content = ({navigation}) =>{
                         paddingTop: 10
                     }}>User Profile</Text>
                 </View>
-        <Text>Profile</Text>
+        <View style={{ }}>
+
+        </View>
     </View>
     )
 }

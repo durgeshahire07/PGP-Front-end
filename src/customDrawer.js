@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import React,{ useContext }from 'react'
+import React, { useContext } from 'react'
 import { Text, View, StyleSheet, Button, Linking } from 'react-native'
 import { Drawer } from 'react-native-paper';
 import { color } from 'react-native-reanimated';
@@ -10,34 +10,51 @@ import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
     const user = useContext(UserContext);
+    let name = Array.from(user.userData.firstName)+','+' '+","+Array.from(user.userData.lastName)
+    let email = Array.from(user.userData.emailID)
+    name = name.split(',')
+    let userName=[],emailId=[];
+    if(name.length>13){
+        userName[13] = "..."
+    }
+    console.log(emailId.length)
+    if(email.length>24){
+        emailId[24] 
+        = "..."
+    }
+    for(var i=0;i<24;i++){
+        emailId[i]= email[i];
+    }
+    for(var i=0;i<13;i++){
+        userName[i] = name[i]
+    }
+
+    
+
     return (
         <Container>
-            <Header androidStatusBarColor="#310080" style={{ backgroundColor: '#4700b3', height: 65 }}>
-                <View style={{ flex: 1,justifyContent:'flex-start',paddingTop:15 }}>
-                    <ListItem thumbnail>
-                        {/* <Left>
-                            <Thumbnail
-                                source={{
-                                    uri: 'https://i.stack.imgur.com/34AD2.jpg'
-                                }}
-                            />
-                        </Left> */}
-                        <Left>
-                        <H3 style={{ fontFamily:'nunito-regular',color: "#fff" }}>Hey, {user.userData.firstName} {user.userData.lastName}</H3>
-                                            {/* <Text style={{ color: '#fff' }}>{user.userData.emailID}</Text> */}
-                            {/* <UserContext.Consumer>
-                                {
-                                    user => {
-                                        return (<View>
-                                            <H3 style={{ color: "#fff" }}>{user.firstName}</H3>
-                                            <Text style={{ color: '#fff' }}>email@gamil.com</Text>
-                                        </View>)
-                                    }
-                                }
-                            </UserContext.Consumer> */}
-                        </Left>
-                    </ListItem>
-                </View>
+            <Header androidStatusBarColor="#310080" style={{ backgroundColor: '#4700b3', height: 80 }}>
+                
+                <ListItem thumbnail>
+                    <View style={{}}>
+                    <Left style={{flex:1, paddingHorizontal:35, paddingVertical: 10 }}>
+                        <Thumbnail
+                            source={{
+                                uri: 'https://i.stack.imgur.com/34AD2.jpg'
+                            }}
+                        />
+                        <View style={{paddingLeft:10,paddingVertical:5}}>
+                            <H3 style={{
+                                fontFamily: 'nunito-regular',
+                                color: "#fff"
+                            }}
+                            >Hey, {userName}</H3>
+                            <Text style={{ color: '#fff' }}>{emailId}</Text>
+                        </View>
+                    </Left>
+                    </View>
+                </ListItem>
+
             </Header>
             <Content>
 
@@ -48,13 +65,13 @@ function Sidebar({ ...props }) {
                         label="Rate Us"
                         icon={({ color, size }) => <Icon name="star"
                             style={{ fontSize: size, color: color }} />}
-                        onPress={() => props.navigation.navigate('Home')}
+                        onPress={() =>Linking.openURL('https://google.com') }
                     />
                     <DrawerItem
                         label="Log Out"
                         icon={({ color, size }) => <Icon name="log-out"
                             style={{ fontSize: size, color: color }} />}
-                            onPress={ ()=>{ Linking.openURL('https://google.com')}}
+                        onPress={() => { props.navigation.navigate('Home') }}
                     />
 
                 </DrawerContentScrollView>

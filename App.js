@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { UserProvider } from './userContext';
 import * as Font from 'expo-font'
 import { AppLoading } from 'expo';
 import RootStackScreen from './src/RootStackScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 
 import Otp from './src/Otp'
@@ -12,38 +13,43 @@ import ForgotPass from './src/ForgotPass';
 import Home from './src/Home'
 import NewPass from './src/NewPass';
 import Daily from './src/Daily'
+
 const getFonts = () => Font.loadAsync({
-    'nunito-regular' : require('./assets/fonts/Nunito-Regular.ttf'),
-    'nunito-bold' : require('./assets/fonts/Nunito-Bold.ttf'),
-    'nunito-semi' : require('./assets/fonts/Nunito-SemiBold.ttf'),
+  'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
+  'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+  'nunito-semi': require('./assets/fonts/Nunito-SemiBold.ttf'),
 })
-  
+
 const YourApp = () => {
+
+ 
+
+  // useEffect(()=>{
+  //     try {
+  //       const isLoggedIn = AsyncStorage.getItem('isLoggedIn')
+  //       console.log(isLoggedIn)
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  // })
+
+  
+
   const [fontsLoaded, setFontsLoaded] = useState(false)
-  if(fontsLoaded){
-    return(
-      
+  if (fontsLoaded) {
+    return (
       <UserProvider>
         <RootStackScreen />
-       </UserProvider>
+      </UserProvider>
     )
   } else {
-    return(
+    return (
       <AppLoading
-       startAsync={getFonts}
-       onFinish={()=> setFontsLoaded(true)}
-       />
+        startAsync={getFonts}
+        onFinish={() => setFontsLoaded(true)}
+      />
     )
   }
 }
-
-// const rootElement = document.getElementById('root');
-// ReactDOM.render(
-//   // wrap root element with context
-//   <UserProvider>
-//     <App />
-//   </UserProvider>,
-//   rootElement
-// );
 
 export default YourApp;

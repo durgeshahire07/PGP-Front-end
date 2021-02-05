@@ -15,6 +15,7 @@ import {
     ToastAndroid
 
 } from 'react-native';
+import LottieView from 'lottie-react-native';
 import CheckBox from '@react-native-community/checkbox';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -171,9 +172,32 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
 
     if (state.isLoading) {
-        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color="#0000ff" />
-        </View>)
+        return (
+            <View style={{ flex: 1 }}>
+            <View style={styles.header}>
+            <View style={{ paddingTop: 13 }}>
+                       
+                            <Feather
+                                name="arrow-left"
+                                size={25}
+                                color="#fff"
+                            />
+                        
+                    </View>
+
+                    <Text style={{
+                        fontFamily: 'nunito-semi',
+                        fontSize: 20,
+                        color: '#fff',
+                        paddingLeft: 10,
+                        paddingTop: 10
+                    }}>Daily Personal Growth Planner</Text>
+  </View>
+       
+         <LottieView 
+         source={require("../assets/gif/6551-loading-39-hourglass.json")} autoPlay loop />
+        </View>
+        )
     }
     else {
 
@@ -250,6 +274,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
         return (
 
             <View style={{ flex: 1 }}>
+                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
                         <TouchableOpacity onPress={() => goBack()}>
@@ -271,7 +296,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                    <StatusBar backgroundColor='#310080' barStyle="light-content" />
+                   
 
                     <View style={styles.container}>
 
@@ -282,7 +307,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                             textAlign: 'center',
                             paddingTop: 15,
                             paddingBottom: 10
-                        }}>17/01/2021</Text>
+                        }}>date</Text>
 
                         {question}
 

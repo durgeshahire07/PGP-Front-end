@@ -74,19 +74,19 @@ const ForgotPass = ({ navigation }) => {
                     // })
                     console.log("invalid email")
                     ToastAndroid.show("Invalid email!",
-                    ToastAndroid.SHORT)
+                    ToastAndroid.LONG)
                 }
             } catch (error) {
                 console.log(error)
                 if (error.response.status === 404) {
                     ToastAndroid.show("User not found!",
-                    ToastAndroid.SHORT)
+                    ToastAndroid.LONG)
                     // setLoading({
                     //     isLoading: false
                     // })
                 } else if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.SHORT)
+                    ToastAndroid.LONG)
                     // setLoading({
                     //     isLoading: false
                     // })
@@ -95,7 +95,7 @@ const ForgotPass = ({ navigation }) => {
         }
         else {
             ToastAndroid.show("Please fill the Required field",
-            ToastAndroid.SHORT)
+            ToastAndroid.LONG)
         }
 
     }

@@ -85,16 +85,13 @@ const Otp = ({ route, navigation }) => {
             }
         } catch (error) {
             console.log(error)
-                if (error.response.status == 404) {
-                    ToastAndroid.show("User not found!",
-                    ToastAndroid.SHORT)
-              } else if (error.response.status === 500) {
+                if (error.response.status === 500) {
                 ToastAndroid.show("Oops...something went wrong!",
-                ToastAndroid.SHORT)
+                ToastAndroid.LONG)
               }
               else if (error.response.status === 400) {
                 ToastAndroid.show("Invalid Code!",
-                ToastAndroid.SHORT)
+                ToastAndroid.LONG)
               }
         }
     }

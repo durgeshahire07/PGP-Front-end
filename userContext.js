@@ -20,25 +20,5 @@ export const UserProvider = ({ children }) => {
     >
       {children}
     </UserContext.Provider>
-  );
-};
-
-// const UserContext = createContext([{},()=>{}]);
-
-// const UserProvider = (props) => {
-//     const [userData, setUserData] = useState({
-//               emailID: '',
-//               firstName: '',
-//               lastName: '',
-//               userID: ''
-//           });
-//     return(
-//         <UserContext.Provider
-//           value={[userData,setUserData]}
-//         >
-//             {props.children}
-//         </UserContext.Provider>
-//     )
-// }
-
-// export {UserContext, UserProvider}
+  )
+}

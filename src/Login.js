@@ -18,6 +18,7 @@ import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
 
@@ -65,6 +66,7 @@ const Login = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
+                   await AsyncStorage.setItem('isLoggedIn','1')
                     user.setUserData({
                         emailID: response.data.data.userEmailId,
                         firstName: response.data.data.firstName,
@@ -74,7 +76,7 @@ const Login = ({ navigation }) => {
                     navigation.navigate('Home')
                 }
                 else {
-                    ToastAndroid.show("Login Failed!",
+                    ToastAndroid.show("Incorrect email id or password!",
                         ToastAndroid.SHORT)
                 }
             } catch (error) {
