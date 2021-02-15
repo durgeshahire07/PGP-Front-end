@@ -13,19 +13,18 @@ function Sidebar({ ...props }) {
     let name = Array.from(user.userData.firstName)+','+' '+","+Array.from(user.userData.lastName)
     let email = Array.from(user.userData.emailID)
     name = name.split(',')
+    console.log(name)
     let userName=[],emailId=[];
-    if(name.length>13){
-        userName[13] = "..."
+    if(name.length>10){
+        userName[10] = "..."
     }
-    console.log(emailId.length)
     if(email.length>24){
-        emailId[24] 
-        = "..."
+        emailId[24] = "..."
     }
     for(var i=0;i<24;i++){
         emailId[i]= email[i];
     }
-    for(var i=0;i<13;i++){
+    for(var i=0;i<10;i++){
         userName[i] = name[i]
     }
 

@@ -82,14 +82,6 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
     const onChoiceChange = (selectedChoice, index) => {
         var tmp = state.data
-        // if(tmp[index].answer){
-        //     // tmp[index].answer = selectedChoice
-        //     // selectedChoice = selectedChoice.splice(0,1);
-        //     // tmp[index].answer = selectedChoice
-        //     console.log(tmp[index])
-
-        // }
-
         tmp[index].answer = selectedChoice
         if (tmp[index].answer.length >= 2) {
             tmp[index].answer.shift();
@@ -194,8 +186,11 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                     }}>Daily Personal Growth Planner</Text>
   </View>
        
-         <LottieView 
-         source={require("../assets/gif/6551-loading-39-hourglass.json")} autoPlay loop />
+         {/* <LottieView 
+         source={require("../assets/gif/6551-loading-39-hourglass.json")} autoPlay loop /> */}
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>
         </View>
         )
     }
@@ -296,18 +291,18 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                   
-
+                   <View style={{ paddingTop: 15,
+                            paddingBottom: 10}}>
                     <View style={styles.container}>
 
-                        <Text style={{
+                        {/* <Text style={{
                             fontFamily: 'nunito-semi',
                             fontSize: 15,
                             color: '#a6a6a6',
                             textAlign: 'center',
                             paddingTop: 15,
                             paddingBottom: 10
-                        }}>date</Text>
+                        }}>date</Text> */}
 
                         {question}
 
@@ -330,6 +325,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                                 </LinearGradient>
                             </TouchableOpacity>
                         </View>
+                    </View>
                     </View>
                 </ScrollView>
             </View>
