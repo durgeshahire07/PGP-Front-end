@@ -10,10 +10,10 @@ import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
     const user = useContext(UserContext);
-    let name = Array.from(user.userData.firstName)+','+' '+","+Array.from(user.userData.lastName)
+    let name = Array.from(user.userData.firstName)+','+Array.from(user.userData.lastName)
     let email = Array.from(user.userData.emailID)
     name = name.split(',')
-    console.log(name)
+    // console.log(name)
     let userName=[],emailId=[];
     if(name.length>10){
         userName[10] = "..."
@@ -43,11 +43,12 @@ function Sidebar({ ...props }) {
                             }}
                         />
                         <View style={{paddingLeft:10,paddingVertical:5}}>
-                            <H3 style={{
+                            <Text style={{
                                 fontFamily: 'nunito-regular',
-                                color: "#fff"
+                                color: "#fff",
+                                fontSize: 22
                             }}
-                            >Hey, {userName}</H3>
+                            >Hey, {userName}</Text>
                             <Text style={{ color: '#fff' }}>{emailId}</Text>
                         </View>
                     </Left>

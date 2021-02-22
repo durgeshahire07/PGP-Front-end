@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -16,7 +16,7 @@ import {
 
 } from 'react-native';
 import LottieView from 'lottie-react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { UserContext } from '../userContext'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -27,8 +27,10 @@ import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
 import SelectMultiple from 'react-native-select-multiple'
 import Textarea from 'react-native-textarea';
 
-const Daily = ({ navigation: { goBack },navigation }) => {
-
+const Daily = ({ navigation,route }) => {
+    const user = useContext(UserContext);
+    console.log(user.userData)
+    const {type} = route.params
     const [state, setState] = useState({
         data: '',
         isLoading: true,
@@ -37,14 +39,14 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
     const [res,setRes] = useState({
         ans: {
-            userID: '5fd23a3019084e0e543afac9',
-            surveyType: "monthly",
+            userID: user.userData.userID,
+            surveyType: type,
             response: []
         }
     })
-
+console.log(res)
     const request = {
-        "surveyType": "daily"
+        "surveyType": type
     }
 
 
@@ -67,7 +69,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                 }
                 else {
                     ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.SHORT)
+                    ToastAndroid.LONG)
                 }
             })
             .catch(function (error) {
@@ -146,21 +148,22 @@ const Daily = ({ navigation: { goBack },navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-                navigation.navigate('Home')
+                navigation.push('Home')
             }
             else {
                 ToastAndroid.show("Oops...something went wrong!",
-                ToastAndroid.SHORT)
+                ToastAndroid.LONG)
             }
         } catch (error) {
             console.log(error)
              if (error.response.status === 500) {
-                ToastAndroid.show("Oops...something went wrong!",
-                ToastAndroid.SHORT)
+                ToastAndroid.show(error,
+                ToastAndroid.LONG)
               }
         }
 
     }
+
 
 
     if (state.isLoading) {
@@ -199,7 +202,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
         let question = state.data.map((val, key) => {
             if (val.type == "radio button") {
 
-                return <View key={key}>
+                return <View key={key} style={{paddingHorizontal:15}}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
@@ -212,7 +215,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                 </View>
             }
             else if (val.type == "text") {
-                return <View key={key}>
+                return <View key={key} style={{paddingHorizontal:15}}>
 
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
@@ -238,7 +241,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
             }
             else if (val.type == "check box") {
-                return <View key={key}>
+                return <View key={key} style={{paddingHorizontal:15}}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
@@ -251,7 +254,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                 </View>
             }
             else if (val.type == "text fields") {
-                return <View key={key}>
+                return <View key={key} style={{paddingHorizontal:15}}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <Textarea
@@ -268,11 +271,12 @@ const Daily = ({ navigation: { goBack },navigation }) => {
 
         return (
 
-            <View style={{ flex: 1 }}>
+            <SafeAreaView style={styles.container}>
                  <StatusBar backgroundColor='#310080' barStyle="light-content" />
+                 
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={() => goBack()}>
+                        <TouchableOpacity onPress={() =>navigation.push('Home')}>
                             <Feather
                                 name="arrow-left"
                                 size={25}
@@ -328,7 +332,7 @@ const Daily = ({ navigation: { goBack },navigation }) => {
                     </View>
                     </View>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -337,8 +341,7 @@ export default Daily;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingHorizontal: 20,
+        flex:1,
         backgroundColor: "#fff"
     },
     header: {

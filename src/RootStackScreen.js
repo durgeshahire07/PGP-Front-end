@@ -5,7 +5,7 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import SignUp from '../src/SignUp'
 import Login from '../src/Login'
 import ForgotPass from '../src/ForgotPass'
@@ -15,12 +15,39 @@ import Home from '../src/Home'
 import Daily from '../src/Daily'
 
 // import { Tabs } from 'native-base'
-
 const Stack = createStackNavigator();
+// const AppDrawer = createStackNavigator();
+// const AuthStack = createStackNavigator();
 
+// const AuthStackScreen = () => {
+//   return(
+//   <AuthStack.Navigator headerMode='none'>
+//     <AuthStack.Screen name="SignUp" component={SignUp} />
+//     <AuthStack.Screen name="Login" component={Login} />
+//     <AuthStack.Screen name="ForgotPass" component={ForgotPass} />
+//     <AuthStack.Screen name="NewPass" component={NewPass} />
+//     <AuthStack.Screen name="Otp" component={Otp} />
+//   </AuthStack.Navigator>
+//   )
+// }
+
+// const AppDrawerScreen = () => {
+//   return(
+//   <AppDrawer.Navigator headerMode='none'>
+//     <AppDrawer.Screen name="Home" component={Home} />
+//     <AppDrawer.Screen name="Daily" component={Daily} />
+//   </AppDrawer.Navigator>
+//   )
+// }
 
 const RootStackScreen = () => {
-  return (
+  // return (
+  //   <NavigationContainer>
+  //     <AuthStackScreen />
+  //     <AppDrawerScreen />
+  //   </NavigationContainer>
+  // )
+  return(
     <NavigationContainer>
       <Stack.Navigator headerMode='none'>
         <Stack.Screen name="SignUp" component={SignUp} />

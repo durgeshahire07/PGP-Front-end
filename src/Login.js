@@ -66,7 +66,6 @@ const Login = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
-                   await AsyncStorage.setItem('isLoggedIn','1')
                     user.setUserData({
                         emailID: response.data.data.userEmailId,
                         firstName: response.data.data.firstName,

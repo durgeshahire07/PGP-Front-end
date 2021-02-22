@@ -132,14 +132,16 @@ const SignUp = ({ navigation }) => {
                     data: data
                 };
                 const response = await axios(config)
-                console.log(data.userEmailId)
+
                 if (response.data.success) {
                     user.setUserData({
                         emailID: data.userEmailId,
                         firstName: data.firstName,
                         lastName: data.lastName,
-                        userID: "ubsi"
+                        userID: response.data.userID
                     })
+                    console.log(response)
+                    console.log(user.userData)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
@@ -148,7 +150,7 @@ const SignUp = ({ navigation }) => {
                 }
                 else {
                     ToastAndroid.show("Sign up Failed!",
-                    ToastAndroid.SHORT)
+                    ToastAndroid.LONG)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
