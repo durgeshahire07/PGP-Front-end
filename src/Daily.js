@@ -29,7 +29,7 @@ import Textarea from 'react-native-textarea';
 
 const Daily = ({ navigation,route }) => {
     const user = useContext(UserContext);
-    console.log(user.userData)
+    // console.log(user.userData)
     const {type} = route.params
     const [state, setState] = useState({
         data: '',
@@ -44,7 +44,7 @@ const Daily = ({ navigation,route }) => {
             response: []
         }
     })
-console.log(res)
+// console.log(res)
     const request = {
         "surveyType": type
     }
@@ -88,7 +88,7 @@ console.log(res)
         if (tmp[index].answer.length >= 2) {
             tmp[index].answer.shift();
         }
-        console.log(tmp[index])
+        // console.log(tmp[index])
         setState({
             data: tmp
         })
@@ -266,6 +266,23 @@ console.log(res)
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
             }
+            else if(val.type == "option table") {
+            let subques = val.options.map((ques,index)=>{
+                return <View key={index} style={{flex:1,borderBottomWidth:2,borderBottomColor:'#b3b3b3'}}>
+                     <Text style={{fontFamily:'nunito-semi',fontSize:16,color:'#006699'}}>{ques[0]}</Text>
+                     <Text>{ques[1]}</Text>
+                     <Text>{ques[2]}</Text>
+                     {/* use SelectMultiple  */}
+                </View>
+            })
+               return <View key={key} style={{paddingHorizontal:15}}>
+                   <View style={styles.QuestionContainer}>
+                   <Text style={styles.Questions}>{val.question}</Text>
+                   {subques} 
+                   </View>
+                   <View style={{ paddingBottom: 20 }}></View>
+               </View>
+            }
 
         })
 
@@ -276,7 +293,7 @@ console.log(res)
                  
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={() =>navigation.push('Home')}>
+                        <TouchableOpacity onPress={() =>navigation.pop()}>
                             <Feather
                                 name="arrow-left"
                                 size={25}

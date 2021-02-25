@@ -12,7 +12,11 @@ import {
     StatusBar,
     ToastAndroid,
     ActivityIndicator,
-    SafeAreaView
+    SafeAreaView,
+    Image,
+    ImageBackground,
+    Pressable,
+
 
 } from 'react-native';
 import { Icon } from 'native-base'
@@ -29,6 +33,7 @@ import Daily from './Daily';
 import { FlatList } from 'react-native-gesture-handler';
 import { UserContext } from '../userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { color } from 'react-native-reanimated';
 const Drawer = createDrawerNavigator();
 
 const HomeContent = ({ navigation }) => {
@@ -105,38 +110,56 @@ const HomeContent = ({ navigation }) => {
         )
     }
     else {
-        
-        let surveyUpdate = surveyList.data.surveys.map((val, key) => {
-            return (
-                <View key={key} style={{paddingVertical: 4}}>
-                    <View style={styles.box}>   
-                    <TouchableOpacity onPress={() => navigation.push('Daily',{type:val.surveyType})} >
-                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                        <View style={{paddingRight:5}}>
-                    <Feather
-                            name="calendar"
-                            size={23}
-                            color="#e60000"
-                        />
-                        </View>
-                        <Text style={{
-                            color: '#e60000',
-                            fontFamily: 'nunito-semi',
-                            fontSize: 20,
-                           
-                        }}>{val.surveyType} survey update !</Text>
-                    </View>
-                    </ TouchableOpacity>
-                    </View>
-                </View>
-                
-            )
-        })
-        return (
 
+        const display = () => {
+            if (surveyList.data.surveys.length) {
+                console.log(surveyList.data.surveys)
+                return (
+                   
+                    <Pressable style={styles.box}
+                        android_ripple={{ color: '#fff' }}
+                        onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
+                    >
+
+
+
+                        {/* <TouchableOpacity onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })} > */}
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ paddingHorizontal:5,paddingVertical:10 }}>
+                                        <Feather
+                                            name="alert-circle"
+                                            size={55}
+                                            color="#fff"
+                                        />
+                                    </View>
+                                    <View >
+                            <Text style={{
+                                color: '#fff',
+                                fontFamily: 'nunito-semi',
+                                fontSize: 22,
+                                marginTop:10
+                            }}>{surveyList.data.surveys.length} Survey pending!</Text>
+                          
+                           <Text style={{fontFamily:'nunito-semi',color:'#fff',fontSize:15}}>
+                              Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
+                           </Text>
+                           </View>
+                        </View>
+                        
+                    </ Pressable>
+                  
+                    )
+            }
+        }
+
+        let surveyUpdate = display();
+
+        console.log(surveyList.data.surveys.length)
+        return (
             <SafeAreaView style={styles.container}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                    <StatusBar backgroundColor='#310080' barStyle="light-content" />
+                    <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
                     <View style={styles.header}>
                         <View style={{ paddingTop: 13 }}>
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -154,7 +177,7 @@ const HomeContent = ({ navigation }) => {
                     >
 
                         {surveyUpdate}
-
+                        <Text>DASHBOARD</Text>
                     </View>
 
                 </ScrollView>
@@ -165,23 +188,82 @@ const HomeContent = ({ navigation }) => {
 
 const Screen1Content = ({ navigation }) => {
     return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.header}>
-                <View style={{ paddingTop: 13 }}>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Feather
-                            name="menu"
-                            size={24}
-                            color="#fff"
-                        />
-                    </TouchableOpacity>
+        <SafeAreaView >
+            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <View style={styles.header}>
+                    <View style={{ paddingTop: 13 }}>
+                        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                            <Feather
+                                name="menu"
+                                size={24}
+                                color="#fff"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.headerText}>User Profile</Text>
                 </View>
-                <Text style={styles.headerText}>User Profile</Text>
-            </View>
-            <View style={styles.container}>
+                <View style={{ alignItems: 'center', }}>
+                    <ImageBackground source={require('../assets/icons/violet-back.jpg')}
+                        style={{
 
-            </View>
-        </View>
+                            height: 200,
+                            width: 200,
+                            borderBottomRightRadius: 30
+                        }}>
+                        {/* <View style={{flex:1,alignItems:'center',paddingTop:20}}>
+                <Image
+                style={{width:100,height:100,borderRadius:50}}
+                source={{uri:'https://i.stack.imgur.com/34AD2.jpg'}}
+                />
+            </View> */}
+                    </ImageBackground>
+                </View>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 20 }}>
+                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>FIRST NAME</Text>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <TextInput
+                                placeholder='firstname'
+                                style={styles.textInput}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
+                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <TextInput
+                                placeholder='firstname'
+                                style={styles.textInput}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
+                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <TextInput
+                                placeholder='firstname'
+                                style={styles.textInput}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
+                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <TextInput
+                                placeholder='firstname'
+                                style={styles.textInput}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -234,13 +316,11 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     box: {
-        backgroundColor: "#fff",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        elevation: 8,
-        paddingVertical:20
+        
+        backgroundColor: "#ffb31a",
+        borderRadius: 10,
+        elevation: 10,
+        
     },
     footer: {
         flex: 1,
@@ -260,8 +340,9 @@ const styles = StyleSheet.create({
     },
     textInput: {
         fontFamily: 'nunito-regular',
-        flex: 1,
         color: '#000000',
+        paddingHorizontal: 20,
+        fontSize: 18
     },
     button: {
         alignItems: 'center',

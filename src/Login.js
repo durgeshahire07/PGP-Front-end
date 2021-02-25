@@ -11,7 +11,9 @@ import {
     ScrollView,
     StatusBar,
     SafeAreaView,
-    ToastAndroid
+    ToastAndroid,
+    Image,
+    ImageBackground
 } from 'react-native';
 import { UserContext } from '../userContext';
 import * as Animatable from 'react-native-animatable';
@@ -19,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Login = ({ navigation }) => {
 
@@ -76,7 +79,7 @@ const Login = ({ navigation }) => {
                 }
                 else {
                     ToastAndroid.show("Incorrect email id or password!",
-                        ToastAndroid.SHORT)
+                        ToastAndroid.LONG)
                 }
             } catch (error) {
                 console.log(error)
@@ -85,7 +88,7 @@ const Login = ({ navigation }) => {
                         ToastAndroid.SHORT)
                 } else if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.SHORT)
+                        ToastAndroid.LONG)
                 }
                 else {
                     ToastAndroid.show(error,
@@ -100,10 +103,25 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+           
+            <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+                <LinearGradient
+                 style={{ flex: 1 }}
+                 colors={['#4700b3', '#a366ff']}
+                >
+                
                 <View style={styles.header} />
+                
+                <View style={{alignItems:'center',paddingVertical:40}}>
+                <Image
+                        source={require('../assets/icons/password.png')}
+                        style={{  height: 100, width: 100, }}
+
+                    />
+                    </View>
+                   
                 <Animatable.View
                     style={styles.footer}
                 >
@@ -160,19 +178,26 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.button}>
-                        <TouchableOpacity
+                        <View
                             style={styles.signIn}
-                            onPress={submitHandler}
+                            
                         >
-                            <LinearGradient
-                                colors={['#4700b3', '#4700b3']}
-                                style={styles.signIn}
-                            >
+                             <LinearGradient
+                                     colors={['#8533ff', '#4700b3']}
+                                     start={[1,0]}
+                                    style={styles.signIn}
+                                >
+                                    <TouchableOpacity
+                                    onPress={submitHandler}
+                                    >
+
+                                    
                                 <Text style={[styles.textSign, {
                                     color: '#fff',
                                 }]}>Login</Text>
+                                </TouchableOpacity>
                             </LinearGradient>
-                        </TouchableOpacity>
+                        </View>
                         <View style={styles.textPrivate}>
                             <Text style={[{ fontFamily: 'nunito-semi' }, { color: 'grey' }]}>
                                 Don't have an Account?
@@ -185,8 +210,10 @@ const Login = ({ navigation }) => {
                         </View>
                     </View>
                 </Animatable.View>
+               
+                </LinearGradient>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -224,7 +251,7 @@ const styles = StyleSheet.create({
     action: {
         flexDirection: 'row',
         marginTop: 15,
-        borderBottomColor: '#b380ff',
+        borderBottomColor: '#c299ff',
         borderBottomWidth: 2,
     },
     textInput: {

@@ -10,7 +10,7 @@ import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
     const user = useContext(UserContext);
-    let name = Array.from(user.userData.firstName)+','+Array.from(user.userData.lastName)
+    let name = Array.from(user.userData.firstName)+','+' '+','+Array.from(user.userData.lastName)
     let email = Array.from(user.userData.emailID)
     name = name.split(',')
     // console.log(name)
