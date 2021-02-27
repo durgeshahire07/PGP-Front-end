@@ -142,6 +142,7 @@ const Login = ({ navigation }) => {
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(user) => textInput(user)}
+                            keyboardType="email-address"
                         />
                     </View>
                     <View style={styles.action}>

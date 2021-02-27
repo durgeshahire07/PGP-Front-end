@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
     Dimensions,
     TextInput,
@@ -16,8 +15,8 @@ import {
     Image,
     ImageBackground,
     Pressable,
-
-
+    Button,
+    Modal
 } from 'react-native';
 import { Icon } from 'native-base'
 import * as Animatable from 'react-native-animatable';
@@ -38,7 +37,7 @@ const Drawer = createDrawerNavigator();
 
 const HomeContent = ({ navigation }) => {
     const user = useContext(UserContext);
-    console.log(user.userData)
+    // console.log(user.userData)
     const [surveyList, setSurveyList] = useState({
         data: '',
         isLoading: true
@@ -67,12 +66,20 @@ const HomeContent = ({ navigation }) => {
                 else {
                     ToastAndroid.show("Oops...something went wrong!",
                         ToastAndroid.LONG)
+                        setSurveyList({
+                            ...surveyList,
+                            isLoading: false
+                        })
                 }
             })
             .catch(function (error) {
                 console.log(error);
                 ToastAndroid.show(error,
                     ToastAndroid.SHORT)
+                    setSurveyList({
+                        ...surveyList,
+                        isLoading: false
+                    })
             });
     }
 
@@ -84,7 +91,7 @@ const HomeContent = ({ navigation }) => {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.header}>
-                    <View style={{ paddingTop: 13 }}>
+                    <View style={{ paddingVertical: 14 }}>
 
                         <Feather
                             name="menu"
@@ -94,13 +101,7 @@ const HomeContent = ({ navigation }) => {
 
                     </View>
 
-                    <Text style={{
-                        fontFamily: 'nunito-semi',
-                        fontSize: 20,
-                        color: '#fff',
-                        paddingLeft: 10,
-                        paddingTop: 10
-                    }}>Personal Growth Planner</Text>
+                    <Text style={styles.headerText}>Personal Growth Planner</Text>
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -113,43 +114,39 @@ const HomeContent = ({ navigation }) => {
 
         const display = () => {
             if (surveyList.data.surveys.length) {
-                console.log(surveyList.data.surveys)
+
                 return (
-                   
+
                     <Pressable style={styles.box}
                         android_ripple={{ color: '#fff' }}
-                        onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
+                        onPress={() => navigation.push('Daily', { type: "weekly" })}
                     >
-
-
-
                         {/* <TouchableOpacity onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })} > */}
-
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ paddingHorizontal:5,paddingVertical:10 }}>
-                                        <Feather
-                                            name="alert-circle"
-                                            size={55}
-                                            color="#fff"
-                                        />
-                                    </View>
-                                    <View >
-                            <Text style={{
-                                color: '#fff',
-                                fontFamily: 'nunito-semi',
-                                fontSize: 22,
-                                marginTop:10
-                            }}>{surveyList.data.surveys.length} Survey pending!</Text>
-                          
-                           <Text style={{fontFamily:'nunito-semi',color:'#fff',fontSize:15}}>
-                              Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
+                            <View style={{ paddingHorizontal: 5, paddingVertical: 10 }}>
+                                <Feather
+                                    name="alert-circle"
+                                    size={55}
+                                    color="#fff"
+                                />
+                            </View>
+                            <View >
+                                <Text style={{
+                                    color: '#fff',
+                                    fontFamily: 'nunito-semi',
+                                    fontSize: 22,
+                                    marginTop: 10
+                                }}>{surveyList.data.surveys.length} Survey pending!</Text>
+
+                                <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 15 }}>
+                                    Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
                            </Text>
-                           </View>
+                            </View>
                         </View>
-                        
+
                     </ Pressable>
-                  
-                    )
+
+                )
             }
         }
 
@@ -161,7 +158,7 @@ const HomeContent = ({ navigation }) => {
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                     <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
                     <View style={styles.header}>
-                        <View style={{ paddingTop: 13 }}>
+                        <View style={{ paddingVertical: 14 }}>
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <Feather
                                     name="menu"
@@ -187,86 +184,264 @@ const HomeContent = ({ navigation }) => {
 };
 
 const Screen1Content = ({ navigation }) => {
-    return (
-        <SafeAreaView >
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                <View style={styles.header}>
-                    <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                            <Feather
-                                name="menu"
-                                size={24}
-                                color="#fff"
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.headerText}>User Profile</Text>
-                </View>
-                <View style={{ alignItems: 'center', }}>
-                    <ImageBackground source={require('../assets/icons/violet-back.jpg')}
-                        style={{
 
-                            height: 200,
-                            width: 200,
-                            borderBottomRightRadius: 30
-                        }}>
-                        {/* <View style={{flex:1,alignItems:'center',paddingTop:20}}>
-                <Image
-                style={{width:100,height:100,borderRadius:50}}
-                source={{uri:'https://i.stack.imgur.com/34AD2.jpg'}}
-                />
-            </View> */}
-                    </ImageBackground>
+
+
+    const user = useContext(UserContext);
+
+    const [data, setData] = useState({
+        firstName: user.userData.firstName,
+        lastName: user.userData.lastName,
+        userEmailId: user.userData.emailID
+    })
+
+    const [loading, setLoading] = useState(false)
+    const [button, setButton] = useState(false)
+
+    const textInputFirstName = (first) => {
+        if (first != user.userData.firstName) {
+            setButton(true)
+        }
+        if (first == "" || data.lastName == "") {
+            setButton(false)
+        }
+
+        setData({
+            ...data,
+            firstName: first
+        })
+    }
+
+    const textInputLastName = (last) => {
+        if (last != user.userData.lastName) {
+            setButton(true)
+        }
+        if (last == "" || data.firstName == "") {
+            setButton(false)
+        }
+
+        setData({
+            ...data,
+            lastName: last
+        })
+    }
+
+    const textInputEmail = (email) => {
+
+        setData({
+            ...data,
+            userEmailId: email
+        })
+    }
+
+    const UpdateHandler = () => {
+        setLoading(true)
+            if (data.lastName == user.userData.lastName && data.firstName == user.userData.firstName) {
+                setLoading(false)
+                setButton(false)
+                ToastAndroid.show("No change!",
+                    ToastAndroid.LONG)
+            }
+            else {
+                updateInfo();
+            }
+    }
+
+    async function updateInfo() {
+        try {
+            var config = {
+                method: 'patch',
+                url: 'http://192.168.43.19:3000/api/v1/auth/updateInfo',
+                headers: {},
+                data: {
+                    userID: user.userData.userID,
+                    update: {
+                        "firstName": data.firstName,
+                        "lastName": data.lastName
+                    }
+                }
+            };
+            const response = await axios(config)
+            console.log(response)
+            if (response.data.success) {
+                setLoading(false)
+                user.setUserData({
+                    ...user.userData,
+                    lastName: data.lastName,
+                    firstName: data.firstName
+                })
+                ToastAndroid.show("Profile Updated 👍",
+                    ToastAndroid.LONG)
+            }
+            else {
+                setLoading(false)
+                ToastAndroid.show("Something went wrong...",
+                    ToastAndroid.LONG)
+
+            }
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+            ToastAndroid.show(error,
+                ToastAndroid.LONG)
+
+        }
+    }
+
+
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.header}>
+                <View style={{ paddingVertical: 14 }}>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <Feather
+                            name="menu"
+                            size={24}
+                            color="#fff"
+                        />
+                    </TouchableOpacity>
                 </View>
-                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 20 }}>
-                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>FIRST NAME</Text>
-                        <View style={{ paddingHorizontal: 10 }}>
+                <Text style={styles.headerText}>User Profile</Text>
+            </View>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <Modal transparent={true} visible={loading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    </View>
+                </Modal>
+                <View style={{ flex: 1, paddingHorizontal: 20 }}>
+
+                    <View style={{ alignItems: 'center' }}>
+                        <Image
+                            style={{ width: 100, height: 100, borderRadius: 50 }}
+                            // source={{ uri: 'https://i.stack.imgur.com/34AD2.jpg' }}
+                            source={require('../assets/icons/user.png')}
+                        />
+                    </View>
+                    <View style={{ marginTop: 10 }}>
+                        <View style={{ paddingVertical: 10 }}>
+                            <Text
+                                style={{
+                                    fontFamily: 'nunito-semi',
+                                    fontSize: 15,
+                                    color: 'grey'
+
+                                }}
+                            >First Name</Text>
+                        </View>
+                        <View style={styles.inputContainer}>
                             <TextInput
-                                placeholder='firstname'
-                                style={styles.textInput}
+                                // placeholder="First Name"
+                                placeholder={user.userData.firstName}
+                                defaultValue={user.userData.firstName}
+                                onChangeText={(first) => textInputFirstName(first)}
                             />
                         </View>
                     </View>
-                </View>
-                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
-                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
-                        <View style={{ paddingHorizontal: 10 }}>
+                    <View style={{ marginTop: 10 }}>
+                        <View style={{ paddingVertical: 10 }}>
+                            <Text
+                                style={{
+                                    fontFamily: 'nunito-semi',
+                                    fontSize: 15,
+                                    color: 'grey'
+                                }}
+                            >Last Name</Text>
+                        </View>
+                        <View style={styles.inputContainer}>
                             <TextInput
-                                placeholder='firstname'
-                                style={styles.textInput}
+                                placeholder={user.userData.lastName}
+                                defaultValue={user.userData.lastName}
+                                onChangeText={(last) => textInputLastName(last)}
                             />
+
                         </View>
                     </View>
-                </View>
-                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
-                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
-                        <View style={{ paddingHorizontal: 10 }}>
+                    <View style={{ marginTop: 10 }}>
+                        <View style={{ paddingVertical: 10 }}>
+                            <Text
+                                style={{
+                                    fontFamily: 'nunito-semi',
+                                    fontSize: 15,
+                                    color: 'grey'
+                                }}
+                            >Email Id</Text>
+                        </View>
+                        <View style={[styles.inputContainer, { flexDirection: 'row' }]}>
                             <TextInput
-                                placeholder='firstname'
-                                style={styles.textInput}
+                                placeholder="Email Id"
+                                defaultValue={user.userData.emailID}
+                                keyboardType="email-address"
+                                onChangeText={(email) => textInputEmail(email)}
+                                editable={false}
                             />
+                            <View style={{ marginLeft: 'auto', justifyContent: 'center' }}>
+                                <TouchableOpacity 
+                                onPress={() => navigation.push('emailUpdate')}
+                                >
+                                    <Text style={{ color: '#006699' }}>change</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <View style={{ paddingVertical: 20, paddingHorizontal: 20, paddingTop: 5 }}>
-                    <View style={{ borderBottomWidth: 2, flexDirection: 'row', borderBottomColor: '#b380ff', paddingBottom: 20, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontFamily: 'nunito-bold', fontSize: 18, color: '#4700b3' }}>LAST NAME</Text>
-                        <View style={{ paddingHorizontal: 10 }}>
+                    <View style={{ marginTop: 10 }}>
+                        <View style={{ paddingVertical: 10 }}>
+                            <Text
+                                style={{
+                                    fontFamily: 'nunito-semi',
+                                    fontSize: 15,
+                                    color: 'grey'
+                                }}
+                            >Password</Text>
+                        </View>
+                        <View style={[styles.inputContainer, { flexDirection: 'row' }]}>
+
                             <TextInput
-                                placeholder='firstname'
-                                style={styles.textInput}
+                                editable={false}
+                                value="●●●●●●●●"
                             />
+
+                            <View style={{ marginLeft: 'auto', justifyContent: 'center' }}>
+                                <TouchableOpacity>
+                                    <Text style={{ color: '#006699' }}>change</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
+
+                    {button ?
+                        <View style={{ alignItems: 'center' }}>
+
+                            <View style={{ paddingVertical: 10, paddingTop: 20 }}>
+
+                                <Pressable onPress={UpdateHandler}
+                                    android_ripple={{ color: '#fff' }}
+                                    style={{
+                                        borderRadius: 20,
+                                        backgroundColor: '#006699',
+                                        paddingHorizontal: 70,
+                                        paddingVertical: 15,
+                                        backgroundColor: '#4700b3'
+                                    }} >
+
+                                    <Text style={{
+                                        fontFamily: 'nunito-bold',
+                                        fontSize: 17,
+                                        color: '#fff'
+                                    }}>Update Profile!</Text>
+
+                                </Pressable>
+
+                            </View>
+                        </View>
+                        : null}
                 </View>
+
+
             </ScrollView>
         </SafeAreaView>
     )
 }
-
 
 const Home = () => {
     return (
@@ -307,6 +482,7 @@ const styles = StyleSheet.create({
         elevation: 10,
         paddingLeft: 10
     },
+
     headerText:
     {
         fontFamily: 'nunito-bold',
@@ -315,12 +491,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingTop: 10
     },
+    inputContainer: {
+        paddingTop: 10,
+        borderWidth: 1.3,
+        borderColor: '#bfbfbf',
+        borderRadius: 10,
+        // backgroundColor: '#e6e6ff',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+    },
     box: {
-        
+
         backgroundColor: "#ffb31a",
         borderRadius: 10,
         elevation: 10,
-        
+
     },
     footer: {
         flex: 1,
@@ -345,9 +530,11 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     button: {
+        width: '70%',
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50,
-        paddingBottom: 10,
+        borderRadius: 30
     },
     signIn: {
         width: '100%',

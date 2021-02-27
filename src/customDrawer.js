@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Text, View, StyleSheet, Button, Linking } from 'react-native'
 import { Drawer } from 'react-native-paper';
 import { color } from 'react-native-reanimated';
@@ -10,6 +10,9 @@ import { UserContext } from '../userContext'
 
 function Sidebar({ ...props }) {
     const user = useContext(UserContext);
+    // useEffect(() => {
+    // }, [])
+    
     let name = Array.from(user.userData.firstName)+','+' '+','+Array.from(user.userData.lastName)
     let email = Array.from(user.userData.emailID)
     name = name.split(',')
@@ -38,9 +41,8 @@ function Sidebar({ ...props }) {
                     <View style={{}}>
                     <Left style={{flex:1, paddingHorizontal:35, paddingVertical: 10 }}>
                         <Thumbnail
-                            source={{
-                                uri: 'https://i.stack.imgur.com/34AD2.jpg'
-                            }}
+                         style={{width:60,height:60}}
+                            source={require('../assets/icons/user.png')}
                         />
                         <View style={{paddingLeft:10,paddingVertical:5}}>
                             <Text style={{

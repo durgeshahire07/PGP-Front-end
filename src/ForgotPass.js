@@ -142,6 +142,7 @@ const ForgotPass = ({ navigation }) => {
                             placeholder="Email Address"
                             style={styles.textInput}
                             autoCapitalize="none"
+                            keyboardType="email-address"
                             onChangeText={(email) => handleInputChange(email)}
                         />
                     </View>

@@ -1,4 +1,4 @@
-import React, { useContext,useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -12,10 +12,12 @@ import {
     StatusBar,
     SafeAreaView,
     ActivityIndicator,
-    ToastAndroid
+    ToastAndroid,
+    FlatList
 
 } from 'react-native';
-import LottieView from 'lottie-react-native';
+
+import Slider from '@react-native-community/slider';
 import { UserContext } from '../userContext'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -27,24 +29,24 @@ import { getAppLoadingLifecycleEmitter } from 'expo/build/launch/AppLoading';
 import SelectMultiple from 'react-native-select-multiple'
 import Textarea from 'react-native-textarea';
 
-const Daily = ({ navigation,route }) => {
+const Daily = ({ navigation, route }) => {
     const user = useContext(UserContext);
     // console.log(user.userData)
-    const {type} = route.params
+    const { type } = route.params
     const [state, setState] = useState({
         data: '',
         isLoading: true,
-        
+
     });
 
-    const [res,setRes] = useState({
+    const [res, setRes] = useState({
         ans: {
             userID: user.userData.userID,
             surveyType: type,
             response: []
         }
     })
-// console.log(res)
+    // console.log(res)
     const request = {
         "surveyType": type
     }
@@ -55,7 +57,7 @@ const Daily = ({ navigation,route }) => {
             method: 'post',
             url: 'http://192.168.43.19:3000/api/v1/survey/getSurvey',
             headers: {},
-            data : request
+            data: request
         };
         axios(config)
             .then(function (response) {
@@ -69,13 +71,13 @@ const Daily = ({ navigation,route }) => {
                 }
                 else {
                     ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.LONG)
+                        ToastAndroid.LONG)
                 }
             })
             .catch(function (error) {
                 console.log(error);
                 ToastAndroid.show(error,
-                ToastAndroid.SHORT)
+                    ToastAndroid.SHORT)
             });
     }
     useEffect(() => {
@@ -122,22 +124,46 @@ const Daily = ({ navigation,route }) => {
             data: tmp
         })
     }
-    
 
-    const changeRes = (que,index) => {
+
+    const changeRes = (que, index) => {
         var temp = res.ans;
-        temp.response[index] = {questionID:que._id,questionType:que.type,answer:que.answer}
+        if(que.type=="slider"){
+            // console.log(que.options)
+            temp.response[index] = {questionID: que._id, questionType:que.type, answer: que.options}
+        }
+        else{
+        temp.response[index] = { questionID: que._id, questionType: que.type, answer: que.answer }
+        }
         setRes({
-            ans:temp
+            ans: temp
         })
-        // console.log(state.ans);
+        console.log(res.ans);
     }
 
-    async function submitHandler(){
-        let response = state.data.map((val, key)=>{
-            changeRes(val,key)
+    // const handleSliderChange = (val,index,subIndex) => {
+    //     // console.log("value",val)
+    //     // console.log("index",index)
+    //     // console.log("subindex",subIndex)
+    //     var temp = state.data
+    //     temp[index].answer = [];
+    //     temp[index].answer[subIndex] = val;
+    //     console.log(temp[index].answer) 
+    //     setState({
+    //         ...state,
+    //         data:temp
+    //     })
+    //     console.log("state.data=",state.data[index].answer)
+    // }
+
+    async function submitHandler() {
+
+
+
+        let response = state.data.map((val, key) => {
+            changeRes(val, key)
         })
-        // console.log(res.ans)       
+        console.log(res.ans)       
         try {
             var config = {
                 method: 'post',
@@ -152,16 +178,36 @@ const Daily = ({ navigation,route }) => {
             }
             else {
                 ToastAndroid.show("Oops...something went wrong!",
-                ToastAndroid.LONG)
+                    ToastAndroid.LONG)
             }
         } catch (error) {
             console.log(error)
-             if (error.response.status === 500) {
+            if (error.response.status === 500) {
                 ToastAndroid.show(error,
-                ToastAndroid.LONG)
-              }
+                    ToastAndroid.LONG)
+            }
         }
 
+    }
+
+    const handleSliderChange = (val, que, subQue) => {
+        // var tmp = value.arr;
+        // tmp = {
+        //     "subQue": que,
+        //     "value": val
+        // }
+        // var temp = data.data;
+        // temp[index] = tmp;
+
+        // var app = state.data;
+
+        // app[key].answer[index] = temp[index]
+        // console.log(app[key])
+        var temp = state.data;
+        temp[que].options[subQue].value = val;
+        setState({
+            data:temp
+        })
     }
 
 
@@ -169,15 +215,15 @@ const Daily = ({ navigation,route }) => {
     if (state.isLoading) {
         return (
             <View style={{ flex: 1 }}>
-            <View style={styles.header}>
-            <View style={{ paddingTop: 13 }}>
-                       
-                            <Feather
-                                name="arrow-left"
-                                size={25}
-                                color="#fff"
-                            />
-                        
+                <View style={styles.header}>
+                    <View style={{ paddingTop: 13 }}>
+
+                        <Feather
+                            name="arrow-left"
+                            size={25}
+                            color="#fff"
+                        />
+
                     </View>
 
                     <Text style={{
@@ -187,14 +233,14 @@ const Daily = ({ navigation,route }) => {
                         paddingLeft: 10,
                         paddingTop: 10
                     }}>Daily Personal Growth Planner</Text>
-  </View>
-       
-         {/* <LottieView 
+                </View>
+
+                {/* <LottieView 
          source={require("../assets/gif/6551-loading-39-hourglass.json")} autoPlay loop /> */}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-        </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            </View>
         )
     }
     else {
@@ -202,7 +248,7 @@ const Daily = ({ navigation,route }) => {
         let question = state.data.map((val, key) => {
             if (val.type == "radio button") {
 
-                return <View key={key} style={{paddingHorizontal:15}}>
+                return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
@@ -215,7 +261,7 @@ const Daily = ({ navigation,route }) => {
                 </View>
             }
             else if (val.type == "text") {
-                return <View key={key} style={{paddingHorizontal:15}}>
+                return <View key={key} style={{ paddingHorizontal: 15 }}>
 
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
@@ -241,7 +287,7 @@ const Daily = ({ navigation,route }) => {
 
             }
             else if (val.type == "check box") {
-                return <View key={key} style={{paddingHorizontal:15}}>
+                return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <SelectMultiple
@@ -254,7 +300,7 @@ const Daily = ({ navigation,route }) => {
                 </View>
             }
             else if (val.type == "text fields") {
-                return <View key={key} style={{paddingHorizontal:15}}>
+                return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
                         <Textarea
@@ -266,22 +312,51 @@ const Daily = ({ navigation,route }) => {
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
             }
-            else if(val.type == "option table") {
-            let subques = val.options.map((ques,index)=>{
-                return <View key={index} style={{flex:1,borderBottomWidth:2,borderBottomColor:'#b3b3b3'}}>
-                     <Text style={{fontFamily:'nunito-semi',fontSize:16,color:'#006699'}}>{ques[0]}</Text>
-                     <Text>{ques[1]}</Text>
-                     <Text>{ques[2]}</Text>
-                     {/* use SelectMultiple  */}
+            else if (val.type == "slider") {
+                let subques = val.options.map((ques, index) => {
+
+                    return <View key={index} style={{ flex: 1, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#bfbfbf' }}>
+                        <Text style={{ fontFamily: 'nunito-semi', fontSize: 16, color: '#006699' }}>{ques.subQues}</Text>
+
+                        <View style={{ flex: 1, paddingVertical: 20 }} >
+                            <Slider
+                                style={{ width: 290 }}
+                                minimumValue={0}
+                                maximumValue={ques.maxValue}
+                                minimumTrackTintColor="#5200cc"
+                                maximumTrackTintColor="#944dff"
+                                thumbTintColor="#5200cc"
+                                value={ques.value}
+                               
+                                step={1}
+                                
+                                // onSlidingComplete={(value) => setSlider(value)}
+                                onSlidingComplete={(value) => handleSliderChange(value, key, index)}
+                                // onValueChange={(value) => handleSliderChange(value, key, index)}
+                            />
+
+                            <View style={{
+                                width: 290,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
+                                <Text style={{color: '#c299ff',fontFamily:'nunito-semi'}}>0</Text>
+                               
+                                <Text style={{color: '#5200cc',fontFamily:'nunito-semi',fontSize:18}}>{ques.value}</Text>
+                               
+                                <Text style={{color: '#c299ff',fontFamily:'nunito-semi'}}>{ques.maxValue}</Text>
+                            </View>
+                        </View>
+
+                    </View>
+                })
+                return <View key={key} style={{ paddingHorizontal: 15 }}>
+                    <View style={styles.QuestionContainer}>
+                        <Text style={styles.Questions}>{val.question}</Text>
+                        {subques}
+                    </View>
+                    <View style={{ paddingBottom: 20 }}></View>
                 </View>
-            })
-               return <View key={key} style={{paddingHorizontal:15}}>
-                   <View style={styles.QuestionContainer}>
-                   <Text style={styles.Questions}>{val.question}</Text>
-                   {subques} 
-                   </View>
-                   <View style={{ paddingBottom: 20 }}></View>
-               </View>
             }
 
         })
@@ -289,11 +364,11 @@ const Daily = ({ navigation,route }) => {
         return (
 
             <SafeAreaView style={styles.container}>
-                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
-                 
+                <StatusBar backgroundColor='#310080' barStyle="light-content" />
+
                 <View style={styles.header}>
-                    <View style={{ paddingTop: 13 }}>
-                        <TouchableOpacity onPress={() =>navigation.pop()}>
+                    <View style={{ paddingVertical:14 }}>
+                        <TouchableOpacity onPress={() => navigation.pop()}>
                             <Feather
                                 name="arrow-left"
                                 size={25}
@@ -312,11 +387,13 @@ const Daily = ({ navigation,route }) => {
 
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                   <View style={{ paddingTop: 15,
-                            paddingBottom: 10}}>
-                    <View style={styles.container}>
+                    <View style={{
+                        paddingTop: 15,
+                        paddingBottom: 10
+                    }}>
+                        <View style={styles.container}>
 
-                        {/* <Text style={{
+                            {/* <Text style={{
                             fontFamily: 'nunito-semi',
                             fontSize: 15,
                             color: '#a6a6a6',
@@ -325,28 +402,28 @@ const Daily = ({ navigation,route }) => {
                             paddingBottom: 10
                         }}>date</Text> */}
 
-                        {question}
+                            {question}
 
-                        <View style={{ paddingBottom: 20 }}>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                justifyContent: "center",
-                                alignItems: "center",
+                            <View style={{ paddingBottom: 20 }}>
+                                <TouchableOpacity style={{
+                                    flexDirection: 'row',
+                                    justifyContent: "center",
+                                    alignItems: "center",
 
-                            }}
-                            onPress={submitHandler}
-                            >
-                                <LinearGradient
-                                    colors={['#4700b3', '#4700b3']}
-                                    style={styles.button}
+                                }}
+                                    onPress={submitHandler}
                                 >
-                                    <Text style={[styles.textSign, {
-                                        color: '#fff',
-                                    }]}>Submit</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                                    <LinearGradient
+                                        colors={['#4700b3', '#4700b3']}
+                                        style={styles.button}
+                                    >
+                                        <Text style={[styles.textSign, {
+                                            color: '#fff',
+                                        }]}>Submit</Text>
+                                    </LinearGradient>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -358,7 +435,7 @@ export default Daily;
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         backgroundColor: "#fff"
     },
     header: {
