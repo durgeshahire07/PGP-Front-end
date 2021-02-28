@@ -22,7 +22,7 @@ const NewPass = ({ route, navigation }) => {
     const { UserId } = route.params;
     // const id = JSON.stringify(UserId)
     // console.log(UserId)
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [data, setData] = React.useState({
         password: '',
     });
@@ -63,24 +63,22 @@ const NewPass = ({ route, navigation }) => {
 
     async function submitHandler() {
         console.log(data)
-        if (secureEntry.confirm_password&&data.password) {
-            if(secureEntry.confirm_password != data.password){
+        if (secureEntry.confirm_password && data.password) {
+            if (secureEntry.confirm_password != data.password) {
                 ToastAndroid.show("Passwords don't match!",
-                ToastAndroid.SHORT)
+                    ToastAndroid.SHORT)
             }
-            else if(data.password.length>5){
+            else if (data.password.length > 5) {
                 setLoading(true)
                 try {
                     var config = {
                         method: 'patch',
-                        url: 'http://192.168.43.19:3000/api/v1/auth/updateInfo',
+                        url: 'http://192.168.43.19:3000/api/v1/auth/password',
                         headers: {},
-                        data: { 
-                            userID: UserId, 
-                            update:{
-                            password: data.password 
-                            }
-                        } 
+                        data: {
+                            userID: UserId,
+                            password: data.password
+                        }
                     };
                     const response = await axios(config)
                     console.log(response)
@@ -91,26 +89,26 @@ const NewPass = ({ route, navigation }) => {
                 } catch (error) {
                     setLoading(false)
                     console.log(error)
-                     if (error.response.status === 500) {
+                    if (error.response.status === 500) {
                         ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                            ToastAndroid.LONG)
                     }
-                    else{
+                    else {
                         ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                            ToastAndroid.LONG)
                     }
                 }
             }
-            else{
+            else {
                 ToastAndroid.show("Password must have at least 6 characters!",
-                ToastAndroid.SHORT)
+                    ToastAndroid.SHORT)
             }
         }
-        else{
+        else {
             ToastAndroid.show("Please enter all the information!",
-                    ToastAndroid.SHORT)
+                ToastAndroid.SHORT)
         }
-            
+
     }
 
     return (
@@ -180,16 +178,16 @@ const NewPass = ({ route, navigation }) => {
                         >
                             {secureEntry.confirm_secureTextEntry ?
                                 <Feather
-                                name="eye-off"
-                                color="#a6a6a6"
-                                size={17}
-                            />
-                            :
-                            <Feather
-                                name="eye"
-                                color="#8533ff"
-                                size={17}
-                            />
+                                    name="eye-off"
+                                    color="#a6a6a6"
+                                    size={17}
+                                />
+                                :
+                                <Feather
+                                    name="eye"
+                                    color="#8533ff"
+                                    size={17}
+                                />
                             }
                         </TouchableOpacity>
                     </View>

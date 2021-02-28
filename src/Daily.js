@@ -243,7 +243,7 @@ const Daily = ({ navigation, route }) => {
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
             }
-            else if (val.type == "text") {
+            else if (val.type == "short answer") {
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
 
                     <View style={styles.QuestionContainer}>
@@ -258,8 +258,14 @@ const Daily = ({ navigation, route }) => {
                             paddingVertical: 10,
                         }}>
                             <TextInput
-                                multiline
-                                style={styles.textInput}
+                                multiline={true}
+                                
+                                numberOfLines={4}
+                                style={{ fontFamily: 'nunito-regular',
+                                flex: 1,
+                                textAlignVertical: 'top',
+                                color: '#000000',
+                                height:70,}}
                                 onChangeText={(value) => changeParagraph(value, key)}
                             />
                         </View>
@@ -282,7 +288,7 @@ const Daily = ({ navigation, route }) => {
                     <View style={{ paddingBottom: 20 }}></View>
                 </View>
             }
-            else if (val.type == "text fields") {
+            else if (val.type == "long answer") {
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
                         <Text style={styles.Questions}>{val.question}</Text>
@@ -376,15 +382,6 @@ const Daily = ({ navigation, route }) => {
                     }}>
                         <View style={styles.container}>
 
-                            {/* <Text style={{
-                            fontFamily: 'nunito-semi',
-                            fontSize: 15,
-                            color: '#a6a6a6',
-                            textAlign: 'center',
-                            paddingTop: 15,
-                            paddingBottom: 10
-                        }}>date</Text> */}
-
                             {question}
 
                             <View style={{ paddingBottom: 20 }}>
@@ -441,16 +438,14 @@ const styles = StyleSheet.create({
 
     },
     textareaContainer: {
+        
+    },
+    textarea: {
         height: 180,
         padding: 5,
         borderWidth: 1,
         borderColor: 'grey',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    textarea: {
+        borderRadius:10,
         textAlignVertical: 'top',
         height: 170,
         fontSize: 14,
@@ -477,9 +472,7 @@ const styles = StyleSheet.create({
 
     },
     textInput: {
-        fontFamily: 'nunito-regular',
-        flex: 1,
-        color: '#000000',
+       
     },
     button: {
         width: '70%',
