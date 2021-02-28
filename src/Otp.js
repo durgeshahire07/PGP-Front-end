@@ -9,7 +9,9 @@ import {
     ScrollView,
     StatusBar,
     SafeAreaView,
-    ToastAndroid
+    ToastAndroid,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
@@ -17,9 +19,10 @@ import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 
 const Otp = ({ route, navigation }) => {
-    // let clockCall = null
+
     const { UserId } = route.params;
-    console.log(UserId)
+    const [loading, setLoading] = useState(false)
+    // console.log(UserId)
     const pin1Ref = React.useRef()
     const pin2Ref = React.useRef()
     const pin3Ref = React.useRef()
@@ -30,75 +33,67 @@ const Otp = ({ route, navigation }) => {
         pin3: '',
         pin4: ''
     });
-    // const [enableResend, setEnableResend] = useState(false)
-    // const defaultCountdown = 30
-    // const [countdown, setCountdown] = useState(defaultCountdown)
-    // useEffect(() => {
-    //     clockCall = setInterval(() => {
-    //         decrementClock();
-    //     }, 1000)
-    //     return () => {
-    //         clearInterval(clockCall)
-    //     }
-    // }, [])
-    // const onResendOTP = () => {
-    //     if (enableResend) {
-    //         setCountdown(defaultCountdown)
-    //         setEnableResend(false)
-    //         clearInterval(clockCall)
-    //         clockCall = setInterval(() => {
-    //             decrementClock(0)
-    //         }, 1000)
-    //     }
-    // }
-    // const decrementClock = () => {
-    //     if (countdown === 0) {
-    //         setEnableResend(true)
-    //         setCountdown(0)
-    //         clearInterval(clockCall)
-    //     } else {
-    //         setCountdown(countdown - 1)
-            
-    //     }
-       
-    // }
+
     const { pin1, pin2, pin3, pin4 } = pin
 
     async function submitHandler() {
         const otp = '' + pin1 + pin2 + pin3 + pin4;
         console.log(otp)
-        try {
-            var config = {
-                method: 'post',
-                url: 'http://192.168.43.19:3000/api/v1/auth/otp',
-                headers: {},
-                data: { id: UserId, otp }
-            };
-            const response = await axios(config)
-            console.log(response)
-            if (response.data.success) {
-                navigation.push('NewPass', { UserId })
-            }
-            else {
-                ToastAndroid.show("Invalid Code!",
-                ToastAndroid.SHORT)
-            }
-        } catch (error) {
-            console.log(error)
+        if (pin1 && pin2 && pin3 && pin4) {
+            setLoading(true)
+            try {
+                var config = {
+                    method: 'post',
+                    url: 'http://192.168.43.19:3000/api/v1/auth/otp',
+                    headers: {},
+                    data: { id: UserId, otp }
+                };
+                const response = await axios(config)
+                console.log(response)
+                if (response.data.success) {
+                    setLoading(false)
+                    navigation.replace('NewPass', { UserId })
+                }
+                else {
+                    setLoading(false)
+                    ToastAndroid.show("Invalid Code!",
+                        ToastAndroid.SHORT)
+                }
+            } catch (error) {
+                setLoading(false)
+                console.log(error)
                 if (error.response.status === 500) {
-                ToastAndroid.show("Oops...something went wrong!",
+                    ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                }
+                else if (error.response.status === 400) {
+                    ToastAndroid.show("Invalid Code!",
+                        ToastAndroid.LONG)
+                }
+                else {
+                    ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                }
+            }
+        }
+        else {
+
+            ToastAndroid.show("Please complete the otp!",
                 ToastAndroid.LONG)
-              }
-              else if (error.response.status === 400) {
-                ToastAndroid.show("Invalid Code!",
-                ToastAndroid.LONG)
-              }
+
         }
     }
 
     return (
-      <View style={styles.container}>
+        <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <Modal transparent={true} visible={loading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
+
+                        <ActivityIndicator size="large" color="#fff" />
+
+                    </View>
+                </Modal>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <View style={styles.header} />
                 <Animatable.View
@@ -170,7 +165,7 @@ const Otp = ({ route, navigation }) => {
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
-                        onPress={submitHandler}
+                            onPress={submitHandler}
                         >
                             <LinearGradient
                                 colors={['#4700b3', '#4700b3']}
@@ -189,7 +184,7 @@ const Otp = ({ route, navigation }) => {
                             Didn't get code?
                         </Text>
                         <TouchableOpacity >
-                        {/* onPress={onResendOTP} */}
+                            {/* onPress={onResendOTP} */}
                             <Text style={[
                                 { fontFamily: 'nunito-bold' },
                                 // { color: enableResend ? '#4700b3' : 'grey' }

@@ -7,18 +7,22 @@ import {
     StyleSheet,
     ScrollView,
     ToastAndroid,
-    StatusBar
+    StatusBar,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios'
+import { useState } from 'react/cjs/react.development';
 
 const NewPass = ({ route, navigation }) => {
 
     const { UserId } = route.params;
     // const id = JSON.stringify(UserId)
-    console.log(UserId)
+    // console.log(UserId)
+    const [loading,setLoading] = useState(false)
     const [data, setData] = React.useState({
         password: '',
     });
@@ -59,37 +63,67 @@ const NewPass = ({ route, navigation }) => {
 
     async function submitHandler() {
         console.log(data)
-        if (secureEntry.confirm_password != data.password) {
-            ToastAndroid.show("Password don't match!",
-            ToastAndroid.SHORT)
-        }
-        else {
-            try {
-                var config = {
-                    method: 'patch',
-                    url: 'http://192.168.43.19:3000/api/v1/auth/password',
-                    headers: {},
-                    data: { id: UserId, password: data.password } //id
-                };
-                const response = await axios(config)
-                console.log(response)
-                if (response.data.success) {
-                    navigation.push('Login')
-                }
-            } catch (error) {
-                console.log(error)
-                 if (error.response.status === 500) {
-                    ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.SHORT)
+        if (secureEntry.confirm_password&&data.password) {
+            if(secureEntry.confirm_password != data.password){
+                ToastAndroid.show("Passwords don't match!",
+                ToastAndroid.SHORT)
+            }
+            else if(data.password.length>5){
+                setLoading(true)
+                try {
+                    var config = {
+                        method: 'patch',
+                        url: 'http://192.168.43.19:3000/api/v1/auth/updateInfo',
+                        headers: {},
+                        data: { 
+                            userID: UserId, 
+                            update:{
+                            password: data.password 
+                            }
+                        } 
+                    };
+                    const response = await axios(config)
+                    console.log(response)
+                    if (response.data.success) {
+                        navigation.replace('Login')
+                        setLoading(false)
+                    }
+                } catch (error) {
+                    setLoading(false)
+                    console.log(error)
+                     if (error.response.status === 500) {
+                        ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                    }
+                    else{
+                        ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                    }
                 }
             }
+            else{
+                ToastAndroid.show("Password must have at least 6 characters!",
+                ToastAndroid.SHORT)
+            }
         }
+        else{
+            ToastAndroid.show("Please enter all the information!",
+                    ToastAndroid.SHORT)
+        }
+            
     }
 
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+                <Modal transparent={true} visible={loading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
+
+                        <ActivityIndicator size="large" color="#fff" />
+
+                    </View>
+                </Modal>
                 <View style={styles.header} />
                 <Animatable.View
                     // animation="fadeInUp"

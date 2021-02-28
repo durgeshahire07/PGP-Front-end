@@ -13,6 +13,8 @@ import {
     SafeAreaView,
     ToastAndroid,
     Image,
+    Modal,
+    ActivityIndicator,
     ImageBackground
 } from 'react-native';
 import { UserContext } from '../userContext';
@@ -33,7 +35,8 @@ const Login = ({ navigation }) => {
     });
 
     const [secureEntry, setSecureEntry] = React.useState({
-        secureTextEntry: true
+        secureTextEntry: true,
+        isLoading: false
     })
 
     const textInput = (user) => {
@@ -59,6 +62,11 @@ const Login = ({ navigation }) => {
 
     async function submitHandler() {
         if (data.userEmailId && data.password) {
+            if(data.password.length>5){
+            setSecureEntry({
+                ...secureEntry,
+                isLoading: true
+            })
             try {
                 var config = {
                     method: 'post',
@@ -75,31 +83,54 @@ const Login = ({ navigation }) => {
                         lastName: response.data.data.lastName,
                         userID: response.data.data._id
                     })
-                    navigation.navigate('Home')
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
+                    navigation.replace('Home')
                 }
                 else {
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
                     ToastAndroid.show("Incorrect email id or password!",
                         ToastAndroid.LONG)
                 }
             } catch (error) {
+                setSecureEntry({
+                    ...secureEntry,
+                    isLoading: false
+                })
                 console.log(error)
                 if (error.response.status === 404) {
                     ToastAndroid.show("User not found!",
-                        ToastAndroid.SHORT)
+                        ToastAndroid.LONG)
                 } else if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                } else if (error.response.status === 400) {
+                    ToastAndroid.show("Enter a valid email!",
                         ToastAndroid.LONG)
                 }
                 else {
                     ToastAndroid.show(error,
-                        ToastAndroid.SHORT)
+                        ToastAndroid.LONG)
                 }
             }
         }
-        else {
-            ToastAndroid.show("Please fill the Required fields!",
-                ToastAndroid.SHORT)
+        else{
+            ToastAndroid.show("User not found!",
+            ToastAndroid.SHORT)
         }
+        
+    }
+    else {
+            
+        ToastAndroid.show("Please fill the Required fields!",
+            ToastAndroid.SHORT)
+    }
+    
     }
 
     return (
@@ -107,6 +138,11 @@ const Login = ({ navigation }) => {
            
             <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+            <Modal transparent={true} visible={secureEntry.isLoading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </Modal>
                 <LinearGradient
                  style={{ flex: 1 }}
                  colors={['#4700b3', '#a366ff']}

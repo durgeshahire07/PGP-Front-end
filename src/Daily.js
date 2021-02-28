@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 
 import Slider from '@react-native-community/slider';
+
 import { UserContext } from '../userContext'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -31,7 +32,6 @@ import Textarea from 'react-native-textarea';
 
 const Daily = ({ navigation, route }) => {
     const user = useContext(UserContext);
-    // console.log(user.userData)
     const { type } = route.params
     const [state, setState] = useState({
         data: '',
@@ -46,7 +46,7 @@ const Daily = ({ navigation, route }) => {
             response: []
         }
     })
-    // console.log(res)
+    
     const request = {
         "surveyType": type
     }
@@ -90,7 +90,7 @@ const Daily = ({ navigation, route }) => {
         if (tmp[index].answer.length >= 2) {
             tmp[index].answer.shift();
         }
-        // console.log(tmp[index])
+        
         setState({
             data: tmp
         })
@@ -103,7 +103,7 @@ const Daily = ({ navigation, route }) => {
             ...state,
             data: tmp
         })
-        // console.log(state.data)
+        
     }
 
     const changeParagraph = (value, key) => {
@@ -129,7 +129,7 @@ const Daily = ({ navigation, route }) => {
     const changeRes = (que, index) => {
         var temp = res.ans;
         if(que.type=="slider"){
-            // console.log(que.options)
+           
             temp.response[index] = {questionID: que._id, questionType:que.type, answer: que.options}
         }
         else{
@@ -141,26 +141,15 @@ const Daily = ({ navigation, route }) => {
         console.log(res.ans);
     }
 
-    // const handleSliderChange = (val,index,subIndex) => {
-    //     // console.log("value",val)
-    //     // console.log("index",index)
-    //     // console.log("subindex",subIndex)
-    //     var temp = state.data
-    //     temp[index].answer = [];
-    //     temp[index].answer[subIndex] = val;
-    //     console.log(temp[index].answer) 
-    //     setState({
-    //         ...state,
-    //         data:temp
-    //     })
-    //     console.log("state.data=",state.data[index].answer)
-    // }
+   
+   
 
     async function submitHandler() {
+       
 
 
 
-        let response = state.data.map((val, key) => {
+        let dummy= state.data.map((val, key) => {
             changeRes(val, key)
         })
         console.log(res.ans)       
@@ -174,13 +163,18 @@ const Daily = ({ navigation, route }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
-                navigation.push('Home')
+                
+                navigation.replace('Home')
+                ToastAndroid.show("Response saved successfully!👍",
+                    ToastAndroid.LONG)
             }
             else {
+                
                 ToastAndroid.show("Oops...something went wrong!",
                     ToastAndroid.LONG)
             }
         } catch (error) {
+            
             console.log(error)
             if (error.response.status === 500) {
                 ToastAndroid.show(error,
@@ -191,18 +185,7 @@ const Daily = ({ navigation, route }) => {
     }
 
     const handleSliderChange = (val, que, subQue) => {
-        // var tmp = value.arr;
-        // tmp = {
-        //     "subQue": que,
-        //     "value": val
-        // }
-        // var temp = data.data;
-        // temp[index] = tmp;
-
-        // var app = state.data;
-
-        // app[key].answer[index] = temp[index]
-        // console.log(app[key])
+        
         var temp = state.data;
         temp[que].options[subQue].value = val;
         setState({
@@ -330,9 +313,9 @@ const Daily = ({ navigation, route }) => {
                                
                                 step={1}
                                 
-                                // onSlidingComplete={(value) => setSlider(value)}
+                               
                                 onSlidingComplete={(value) => handleSliderChange(value, key, index)}
-                                // onValueChange={(value) => handleSliderChange(value, key, index)}
+                                
                             />
 
                             <View style={{

@@ -305,8 +305,8 @@ const Screen1Content = ({ navigation }) => {
             </View>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <Modal transparent={true} visible={loading} >
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator size="large" color="#0000ff" />
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
+                        <ActivityIndicator size="large" color="#fff" />
                     </View>
                 </Modal>
                 <View style={{ flex: 1, paddingHorizontal: 20 }}>

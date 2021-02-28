@@ -12,13 +12,15 @@ import {
     SafeAreaView,
     ActivityIndicator,
     Image,
-    ToastAndroid
+    ToastAndroid,
+    Modal
 
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
+import { useState } from 'react/cjs/react.development';
 
 
 const ForgotPass = ({ navigation }) => {
@@ -34,9 +36,7 @@ const ForgotPass = ({ navigation }) => {
         });
     }
 
-    // const [loading, setLoading] = React.useState({
-    //     isLoading: false
-    // })
+    const [loading,setLoading] = useState(false);
 
     // if (loading.isLoading) {
     //     return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -52,6 +52,7 @@ const ForgotPass = ({ navigation }) => {
 
         console.log(data)
         if (data.userEmailId) {
+            setLoading(true);
             try {
                 var config = {
                     method: 'get',
@@ -61,41 +62,38 @@ const ForgotPass = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
-                    // setLoading({
-                    //     isLoading: false
-                    // })
+                   setLoading(false)
                     navigation.push('Otp', {
                         UserId: response.data.data.id,
                     })
                 }
                 else {
-                    // setLoading({
-                    //     isLoading: false
-                    // })
+                    setLoading(false)
                     console.log("invalid email")
                     ToastAndroid.show("Invalid email!",
                     ToastAndroid.LONG)
                 }
             } catch (error) {
                 console.log(error)
-                if (error.response.status === 404) {
-                    ToastAndroid.show("User not found!",
-                    ToastAndroid.LONG)
-                    // setLoading({
-                    //     isLoading: false
-                    // })
-                } else if (error.response.status === 500) {
+                setLoading(false)
+                if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
                     ToastAndroid.LONG)
-                    // setLoading({
-                    //     isLoading: false
-                    // })
+                    
+                }
+                else if(error.response.status === 404){
+                    ToastAndroid.show("User not found",
+                    ToastAndroid.LONG)
+                }
+                else{
+                    ToastAndroid.show(error,
+                    ToastAndroid.LONG)
                 }
             }
         }
         else {
-            ToastAndroid.show("Please fill the Required field",
-            ToastAndroid.LONG)
+            ToastAndroid.show("Please enter your email id",
+            ToastAndroid.SHORT)
         }
 
     }
@@ -104,8 +102,14 @@ const ForgotPass = ({ navigation }) => {
 
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+                <Modal transparent={true} visible={loading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa'}}>
+                       
+                        <ActivityIndicator size="large" color="#fff" />
+                        
+                    </View>
+                </Modal>
                 <Animatable.View
                     // animation="slideInUp" 
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}

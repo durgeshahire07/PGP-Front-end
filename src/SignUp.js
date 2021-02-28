@@ -12,7 +12,8 @@ import {
     StatusBar,
     ActivityIndicator,
     ToastAndroid,
-    SafeAreaView
+    SafeAreaView,
+    Modal
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -104,87 +105,95 @@ const SignUp = ({ navigation }) => {
             confirm_secureTextEntry: !secureEntry.confirm_secureTextEntry
         });
     }
-    if (secureEntry.isLoading) {
-        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color="#0000ff" />
-        </View>)
-    }
+
     async function submitHandler() {
-        setSecureEntry({
-            ...secureEntry,
-            isLoading: true
-        })
 
         if (data.password != secureEntry.confirm_password) {
-
             ToastAndroid.show("Password don't match!",
                 ToastAndroid.SHORT)
-            setSecureEntry({
-                ...secureEntry,
-                isLoading: false
-            })
         }
         else if (data.password && data.firstName && data.lastName && data.userEmailId) {
-            try {
-                var config = {
-                    method: 'post',
-                    url: 'http://192.168.43.19:3000/api/v1/auth/register',
-                    headers: {},
-                    data: data
-                };
-                const response = await axios(config)
-
-                if (response.data.success) {
-                    user.setUserData({
-                        emailID: data.userEmailId,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        userID: response.data.userID
-                    })
-                    console.log(response)
-                    console.log(user.userData)
-                    setSecureEntry({
-                        ...secureEntry,
-                        isLoading: false
-                    })
-                    navigation.navigate('Home')
-                }
-                else {
-                    ToastAndroid.show("Sign up Failed!",
-                        ToastAndroid.LONG)
-                    setSecureEntry({
-                        ...secureEntry,
-                        isLoading: false
-                    })
-                }
-            } catch (error) {
+            if (data.password.length > 5) {
                 setSecureEntry({
                     ...secureEntry,
-                    isLoading: false
+                    isLoading: true
                 })
-                console.log(error)
-                ToastAndroid.show(error,
-                    ToastAndroid.SHORT)
+                try {
+                    var config = {
+                        method: 'post',
+                        url: 'http://192.168.43.19:3000/api/v1/auth/register',
+                        headers: {},
+                        data: data
+                    };
+                    const response = await axios(config)
 
+                    if (response.data.success) {
+                        user.setUserData({
+                            emailID: data.userEmailId,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            userID: response.data.userID
+                        })
+                        console.log(response)
+                        console.log(user.userData)
+                        setSecureEntry({
+                            ...secureEntry,
+                            isLoading: false
+                        })
+                        navigation.navigate('Home')
+                    }
+                    else {
+                        ToastAndroid.show("Sign up Failed!",
+                            ToastAndroid.LONG)
+                        setSecureEntry({
+                            ...secureEntry,
+                            isLoading: false
+                        })
+                    }
+                } catch (error) { 
+                    console.log(error)
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
+                    if(error.response.status === 422){
+                        ToastAndroid.show("Enter a valid email address!",
+                            ToastAndroid.LONG)
+                    }
+                    else if(error.response.status === 500){
+                        ToastAndroid.show("Oops...something went wrong!",
+                            ToastAndroid.LONG)
+                    }
+                    else{
+                        ToastAndroid.show(error,
+                            ToastAndroid.LONG)
+                    }
+                   
+                }
+            }
+            else {
+                ToastAndroid.show("Password must have least 6 characters!",
+                    ToastAndroid.SHORT)
             }
         }
         else {
-            ToastAndroid.show("Please fill the Required fields!",
+            ToastAndroid.show("Please fill all the information!",
                 ToastAndroid.SHORT)
-            setSecureEntry({
-                ...secureEntry,
-                isLoading: false
-            })
         }
     }
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <Modal transparent={true} visible={secureEntry.isLoading} >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </Modal>
                 <LinearGradient
                     style={{ flex: 1 }}
                     colors={['#4700b3', '#a366ff']}
-                   
+
                 >
 
 
@@ -305,23 +314,23 @@ const SignUp = ({ navigation }) => {
                         <View style={styles.button}>
                             <View
                                 style={styles.signIn}
-                                
+
                             >
-                                
+
                                 <LinearGradient
-                                     colors={['#8533ff', '#4700b3']}
-                                     start={[1,0]}
+                                    colors={['#8533ff', '#4700b3']}
+                                    start={[1, 0]}
                                     style={styles.signIn}
                                 >
                                     <TouchableOpacity
-                                    onPress={submitHandler}
-                                >
-                                    <Text style={[styles.textSign, {
-                                        color: '#fff',
-                                    }]}>Sign Up</Text>
-                                     </TouchableOpacity>
+                                        onPress={submitHandler}
+                                    >
+                                        <Text style={[styles.textSign, {
+                                            color: '#fff',
+                                        }]}>Sign Up</Text>
+                                    </TouchableOpacity>
                                 </LinearGradient>
-                               
+
                             </View>
                             <View style={styles.textPrivate}>
                                 <Text style={styles.color_textPrivate}>
