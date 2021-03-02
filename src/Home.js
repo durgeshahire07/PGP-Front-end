@@ -105,8 +105,8 @@ const HomeContent = ({ navigation }) => {
                     <Text style={styles.headerText}>Personal Growth Planner</Text>
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#0000ff" />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#fff' }}>
+                <Image style={{width:300,height:300}}source={require('../assets/gif/cat.gif')} />
                 </View>
             </View>
         )
@@ -118,18 +118,21 @@ const HomeContent = ({ navigation }) => {
 
                 return (
 
-                    <Pressable style={styles.box}
-                        android_ripple={{ color: '#fff' }}
-                        onPress={() => navigation.push('Daily', { type: "weekly" })}
+                    <View style={styles.box}   
                     >
-                        {/* <TouchableOpacity onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })} > */}
+                       
+                        <TouchableOpacity 
+                        onPress={() => navigation.push('Daily', { type: "daily" })}
+                        // onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
+                        >
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ paddingHorizontal: 5, paddingVertical: 10 }}>
-                                <Feather
+                                {/* <Feather
                                     name="alert-circle"
                                     size={55}
                                     color="#fff"
-                                />
+                                /> */}
+                                <Image style={{width:60,height:50}}source={require('../assets/gif/alert.gif')} />
                             </View>
                             <View >
                                 <Text style={{
@@ -144,8 +147,8 @@ const HomeContent = ({ navigation }) => {
                            </Text>
                             </View>
                         </View>
-
-                    </ Pressable>
+                        </TouchableOpacity>
+                    </ View>
 
                 )
             }
@@ -153,7 +156,7 @@ const HomeContent = ({ navigation }) => {
 
         let surveyUpdate = display();
 
-        console.log(surveyList.data.surveys.length)
+        // console.log(surveyList.data.surveys.length)
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>

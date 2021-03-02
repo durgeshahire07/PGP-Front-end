@@ -37,7 +37,9 @@ const Daily = ({ navigation, route }) => {
         data: '',
         isLoading: true,
 
+
     });
+    const [submit, setSubmit] = useState(false)
 
     const [res, setRes] = useState({
         ans: {
@@ -46,7 +48,7 @@ const Daily = ({ navigation, route }) => {
             response: []
         }
     })
-    
+
     const request = {
         "surveyType": type
     }
@@ -90,10 +92,12 @@ const Daily = ({ navigation, route }) => {
         if (tmp[index].answer.length >= 2) {
             tmp[index].answer.shift();
         }
-        
+
         setState({
             data: tmp
         })
+        
+        
     }
 
     const onSelectionsChange = (selectedItems, key) => {
@@ -103,7 +107,7 @@ const Daily = ({ navigation, route }) => {
             ...state,
             data: tmp
         })
-        
+
     }
 
     const changeParagraph = (value, key) => {
@@ -128,68 +132,104 @@ const Daily = ({ navigation, route }) => {
 
     const changeRes = (que, index) => {
         var temp = res.ans;
-        if(que.type=="slider"){
-           
-            temp.response[index] = {questionID: que._id, questionType:que.type, answer: que.options}
+        
+        if (que.type == "slider") {
+
+            temp.response[index] = { questionID: que._id, questionType: que.type, answer: que.options }
+
         }
-        else{
-        temp.response[index] = { questionID: que._id, questionType: que.type, answer: que.answer }
+        else {
+            temp.response[index] = { questionID: que._id, questionType: que.type, answer: que.answer }
+
+
         }
         setRes({
             ans: temp
         })
-        console.log(res.ans);
+        // if(res.ans.answer)
+
+
     }
 
-   
-   
+
+
 
     async function submitHandler() {
-       
 
 
-
-        let dummy= state.data.map((val, key) => {
+        let dummy = state.data.map((val, key) => {
             changeRes(val, key)
         })
-        console.log(res.ans)       
-        try {
-            var config = {
-                method: 'post',
-                url: 'http://192.168.43.19:3000/api/v1/survey/saveResponse',
-                headers: {},
-                data: res.ans
-            };
-            const response = await axios(config)
-            console.log(response)
-            if (response.data.success) {
-                
-                navigation.replace('Home')
-                ToastAndroid.show("Response saved successfully!👍",
-                    ToastAndroid.LONG)
+
+        let enableButton = state.data.map((val,key)=>  {
+            console.log("okay")
+            if(val.required){
+                console.log("req")
+                if(val.type=="radio button"&&(val.answer!=undefined||val.answer.length!=0)){
+                    setSubmit(true)
+                    console.log("radio not")
+                }
+                else if(val.type=="short answer"&&(val.answer != undefined||val.answer != "")){
+                    setSubmit(true)
+                    console.log("short not")
+                }
+                else if(val.type=="long answer"&&(val.answer != undefined||val.answer != "")){
+                    setSubmit(true)
+                    console.log("long not")
+                }
+                else if(val.type=="check box"&&(val.answer != undefined||val.answer[0].value!=undefined)){
+                    setSubmit(true)
+                    console.log("chck not")
+                }
             }
-            else {
-                
-                ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.LONG)
-            }
-        } catch (error) {
-            
-            console.log(error)
-            if (error.response.status === 500) {
-                ToastAndroid.show(error,
-                    ToastAndroid.LONG)
+        })
+        // if (res.ans.answer === undefined) {
+        //     ToastAndroid.show("Required questions must be answered!",
+        //         ToastAndroid.LONG)
+        //         console.log(res.ans.answer);
+        // }
+        if(submit){
+       
+            try {
+                var config = {
+                    method: 'post',
+                    url: 'http://192.168.43.19:3000/api/v1/survey/saveResponse',
+                    headers: {},
+                    data: res.ans
+                };
+                const response = await axios(config)
+                console.log(response)
+                if (response.data.success) {
+
+                    navigation.replace('Home')
+                    ToastAndroid.show("Response saved successfully!👍",
+                        ToastAndroid.SHORT)
+                }
+                else {
+
+                    ToastAndroid.show("Oops...something went wrong!",
+                        ToastAndroid.LONG)
+                }
+            } catch (error) {
+
+                console.log(error)
+                if (error.response.status === 500) {
+                    ToastAndroid.show(error,
+                        ToastAndroid.LONG)
+                }
             }
         }
-
+       
     }
 
+
+
     const handleSliderChange = (val, que, subQue) => {
-        
+
         var temp = state.data;
         temp[que].options[subQue].value = val;
         setState({
-            data:temp
+            data: temp
         })
     }
 
@@ -228,12 +268,27 @@ const Daily = ({ navigation, route }) => {
     }
     else {
 
+        
+
         let question = state.data.map((val, key) => {
             if (val.type == "radio button") {
-
+                
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>{val.question}</Text>
+
+                        {val.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{val.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{val.question}</Text>
+
+                        }
+
+
                         <SelectMultiple
                             items={val.options}
                             selectedItems={val.answer}
@@ -247,7 +302,17 @@ const Daily = ({ navigation, route }) => {
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
 
                     <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>{val.question}</Text>
+                        {val.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{val.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{val.question}</Text>
+
+                        }
                         <View style={{
                             borderWidth: 1,
                             borderColor: 'grey',
@@ -259,13 +324,14 @@ const Daily = ({ navigation, route }) => {
                         }}>
                             <TextInput
                                 multiline={true}
-                                
                                 numberOfLines={4}
-                                style={{ fontFamily: 'nunito-regular',
-                                flex: 1,
-                                textAlignVertical: 'top',
-                                color: '#000000',
-                                height:70,}}
+                                style={{
+                                    fontFamily: 'nunito-regular',
+                                    flex: 1,
+                                    textAlignVertical: 'top',
+                                    color: '#000000',
+                                    height: 70,
+                                }}
                                 onChangeText={(value) => changeParagraph(value, key)}
                             />
                         </View>
@@ -278,7 +344,17 @@ const Daily = ({ navigation, route }) => {
             else if (val.type == "check box") {
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>{val.question}</Text>
+                        {val.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{val.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{val.question}</Text>
+
+                        }
                         <SelectMultiple
                             items={val.options}
                             selectedItems={val.answer}
@@ -291,7 +367,17 @@ const Daily = ({ navigation, route }) => {
             else if (val.type == "long answer") {
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>{val.question}</Text>
+                        {val.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{val.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{val.question}</Text>
+
+                        }
                         <Textarea
                             containerStyle={styles.textareaContainer}
                             style={styles.textarea}
@@ -316,12 +402,12 @@ const Daily = ({ navigation, route }) => {
                                 maximumTrackTintColor="#944dff"
                                 thumbTintColor="#5200cc"
                                 value={ques.value}
-                               
+
                                 step={1}
-                                
-                               
+
+
                                 onSlidingComplete={(value) => handleSliderChange(value, key, index)}
-                                
+
                             />
 
                             <View style={{
@@ -329,11 +415,11 @@ const Daily = ({ navigation, route }) => {
                                 flexDirection: 'row',
                                 justifyContent: 'space-between'
                             }}>
-                                <Text style={{color: '#c299ff',fontFamily:'nunito-semi'}}>0</Text>
-                               
-                                <Text style={{color: '#5200cc',fontFamily:'nunito-semi',fontSize:18}}>{ques.value}</Text>
-                               
-                                <Text style={{color: '#c299ff',fontFamily:'nunito-semi'}}>{ques.maxValue}</Text>
+                                <Text style={{ color: '#c299ff', fontFamily: 'nunito-semi' }}>0</Text>
+
+                                <Text style={{ color: '#5200cc', fontFamily: 'nunito-semi', fontSize: 18 }}>{ques.value}</Text>
+
+                                <Text style={{ color: '#c299ff', fontFamily: 'nunito-semi' }}>{ques.maxValue}</Text>
                             </View>
                         </View>
 
@@ -341,7 +427,17 @@ const Daily = ({ navigation, route }) => {
                 })
                 return <View key={key} style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
-                        <Text style={styles.Questions}>{val.question}</Text>
+                        {val.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{val.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{val.question}</Text>
+
+                        }
                         {subques}
                     </View>
                     <View style={{ paddingBottom: 20 }}></View>
@@ -356,7 +452,7 @@ const Daily = ({ navigation, route }) => {
                 <StatusBar backgroundColor='#310080' barStyle="light-content" />
 
                 <View style={styles.header}>
-                    <View style={{ paddingVertical:14 }}>
+                    <View style={{ paddingVertical: 14 }}>
                         <TouchableOpacity onPress={() => navigation.pop()}>
                             <Feather
                                 name="arrow-left"
@@ -381,10 +477,18 @@ const Daily = ({ navigation, route }) => {
                         paddingBottom: 10
                     }}>
                         <View style={styles.container}>
-
+                            <Text style={{
+                                paddingHorizontal: 20,
+                                paddingBottom: 10,
+                                fontFamily: 'nunito-semi',
+                                color: '#e60000'
+                            }}>* Required</Text>
                             {question}
+                            
 
-                            <View style={{ paddingBottom: 20 }}>
+                         
+                             
+                            <View style={{ paddingBottom: 10 }}>
                                 <TouchableOpacity style={{
                                     flexDirection: 'row',
                                     justifyContent: "center",
@@ -402,7 +506,10 @@ const Daily = ({ navigation, route }) => {
                                         }]}>Submit</Text>
                                     </LinearGradient>
                                 </TouchableOpacity>
+                               
                             </View>
+                              
+                              
                         </View>
                     </View>
                 </ScrollView>
@@ -417,6 +524,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff"
+    },
+    requiredText: {
+        fontFamily: 'nunito-bold',
+        color: '#e60000',
+        fontSize: 18
+
     },
     header: {
         flexDirection: 'row',
@@ -434,18 +547,17 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingBottom: 20,
         paddingRight: 20,
-        elevation: 7
+        elevation: 7,
+        paddingTop: 10
 
     },
-    textareaContainer: {
-        
-    },
+
     textarea: {
         height: 180,
         padding: 5,
         borderWidth: 1,
         borderColor: 'grey',
-        borderRadius:10,
+        borderRadius: 10,
         textAlignVertical: 'top',
         height: 170,
         fontSize: 14,
@@ -453,8 +565,7 @@ const styles = StyleSheet.create({
         fontFamily: 'nunito-regular'
     },
     Questions: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingVertical: 10,
         fontSize: 18,
         fontFamily: 'nunito-bold',
         color: '#666666'
@@ -472,7 +583,7 @@ const styles = StyleSheet.create({
 
     },
     textInput: {
-       
+
     },
     button: {
         width: '70%',

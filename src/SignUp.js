@@ -160,6 +160,10 @@ const SignUp = ({ navigation }) => {
                         ToastAndroid.show("Enter a valid email address!",
                             ToastAndroid.LONG)
                     }
+                    else if(error.response.status === 409){
+                        ToastAndroid.show("Email id is already in use!",
+                            ToastAndroid.LONG)
+                    }
                     else if(error.response.status === 500){
                         ToastAndroid.show("Oops...something went wrong!",
                             ToastAndroid.LONG)

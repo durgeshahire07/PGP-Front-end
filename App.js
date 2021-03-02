@@ -1,5 +1,6 @@
 import React, { useState,useEffect,useMemo } from 'react';
 import ReactDOM from 'react-dom';
+
 import { UserProvider } from './userContext';
 import * as Font from 'expo-font'
 import { AppLoading } from 'expo';
@@ -13,8 +14,8 @@ import ForgotPass from './src/ForgotPass';
 import Home from './src/Home'
 import NewPass from './src/NewPass';
 import Daily from './src/Daily'
-import { View } from 'react-native-animatable';
-import { ActivityIndicator } from 'react-native';
+import { } from 'react-native-animatable';
+import { ActivityIndicator,View,Image  } from 'react-native';
 
 const getFonts = () => Font.loadAsync({
   'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
@@ -43,14 +44,15 @@ const YourApp = () => {
  useEffect(()=>{
    setTimeout(()=>{
      setIsLoading(false)
-   },1000)
+   },4500)
  },[])
 
 
 if( isLoading ){
   return(
     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-      <ActivityIndicator size="large" color="#0000ff" />
+      {/* <ActivityIndicator size="large" color="#0000ff" /> */}
+      <Image source={require('./assets/gif/splash.gif')} />
     </View>
   )
 }
