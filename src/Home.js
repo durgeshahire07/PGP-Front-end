@@ -468,7 +468,11 @@ const Screen1Content = ({ navigation }) => {
                                 ToastAndroid.show("Incorrect password!",
                                     ToastAndroid.LONG)
                             }
-                            else {
+                            else if(error.response.status === 409) {
+                                ToastAndroid.show("New password must be different from old password!",
+                                    ToastAndroid.LONG)
+                            }
+                            else{
                                 ToastAndroid.show("Oops...something went wrong!",
                                     ToastAndroid.LONG)
                             }

@@ -102,21 +102,25 @@ const ForgotPass = ({ navigation }) => {
 
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
+            <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
                 <Modal transparent={true} visible={loading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa'}}>
                        
-                        <ActivityIndicator size="large" color="#fff" />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
                         
                     </View>
                 </Modal>
+                <LinearGradient
+                 style={{ flex: 1 }}
+                 colors={['#4700b3', '#a366ff']}
+                >
                 <Animatable.View
                     // animation="slideInUp" 
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Image
-                        source={require('../assets/icons/f-p.png')}
-                        style={{ height: 190, width: 200, }}
+                        source={require('../assets/icons/forgot.png')}
+                        style={{ height: 120, width: 120, }}
 
                     />
                 </Animatable.View>
@@ -159,7 +163,8 @@ const ForgotPass = ({ navigation }) => {
                             onPress={submitHandler}
                         >
                             <LinearGradient
-                                colors={['#4700b3', '#4700b3']}
+                                colors={['#8533ff', '#4700b3']}
+                                start={[1, 0]}
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, {
@@ -176,7 +181,7 @@ const ForgotPass = ({ navigation }) => {
                     </View>
 
                 </Animatable.View>
-
+                </LinearGradient>
             </ScrollView>
         </View>
 

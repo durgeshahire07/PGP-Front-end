@@ -11,6 +11,7 @@ import {
     SafeAreaView,
     ToastAndroid,
     Modal,
+    Image,
     ActivityIndicator
 } from 'react-native';
 
@@ -90,7 +91,7 @@ const Otp = ({ route, navigation }) => {
                 <Modal transparent={true} visible={loading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
 
-                        <ActivityIndicator size="large" color="#fff" />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
 
                     </View>
                 </Modal>

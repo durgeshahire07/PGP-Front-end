@@ -13,7 +13,7 @@ import Otp from '../src/Otp'
 import NewPass from '../src/NewPass'
 import Home from '../src/Home'
 import Daily from '../src/Daily'
-import emailUpdate from '../src/emailUpdate'
+
 // import { Tabs } from 'native-base'
 const Stack = createStackNavigator();
 // const AppDrawer = createStackNavigator();
@@ -53,7 +53,7 @@ const RootStackScreen = () => {
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="emailUpdate" component={emailUpdate} />
+       
         <Stack.Screen name="Daily" component={Daily} />
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
         <Stack.Screen name="NewPass" component={NewPass} />
