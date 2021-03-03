@@ -44,15 +44,15 @@ const YourApp = () => {
  useEffect(()=>{
    setTimeout(()=>{
      setIsLoading(false)
-   },4500)
+   },3000)
  },[])
-
+ 
 
 if( isLoading ){
   return(
     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
       {/* <ActivityIndicator size="large" color="#0000ff" /> */}
-      <Image source={require('./assets/gif/splash.gif')} />
+      <Image style={{width:400,height:400}} source={require('./assets/gif/welcome.gif')} />
     </View>
   )
 }

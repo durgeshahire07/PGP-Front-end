@@ -105,8 +105,8 @@ const HomeContent = ({ navigation }) => {
                     <Text style={styles.headerText}>Personal Growth Planner</Text>
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#fff' }}>
-                <Image style={{width:300,height:300}}source={require('../assets/gif/cat.gif')} />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+                    <Image style={{ width: 150, height: 150 }} source={require('../assets/gif/circle-2.gif')} />
                 </View>
             </View>
         )
@@ -120,13 +120,14 @@ const HomeContent = ({ navigation }) => {
 
                     <View style={styles.box}   
                     >
-                       
+
                         <TouchableOpacity 
-                        onPress={() => navigation.push('Daily', { type: "daily" })}
+                        onPress={() => navigation.push('Daily', { type: "weekly" })}
                         // onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
                         >
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ paddingHorizontal: 5, paddingVertical: 10 }}>
+                        <View style={{ paddingRight:10 }}>
+                            <View style={{flexDirection: 'row',paddingHorizontal:5,}}>
+                            <View style={{ paddingVertical: 10 }}>
                                 {/* <Feather
                                     name="alert-circle"
                                     size={55}
@@ -134,7 +135,7 @@ const HomeContent = ({ navigation }) => {
                                 /> */}
                                 <Image style={{width:60,height:50}}source={require('../assets/gif/alert.gif')} />
                             </View>
-                            <View >
+                            <View style={{paddingRight:5 }} >
                                 <Text style={{
                                     color: '#fff',
                                     fontFamily: 'nunito-semi',
@@ -146,9 +147,26 @@ const HomeContent = ({ navigation }) => {
                                     Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
                            </Text>
                             </View>
+                            </View>
                         </View>
                         </TouchableOpacity>
                     </ View>
+                    // <View style={[styles.box, { }]}>
+                    //    <View style={{flexDirection:'row'}}>
+                    //         {/* <Image style={{ width: 60, height: 50 }} source={require('../assets/gif/alert.gif')} /> */}
+                    //     <View style={{paddingRight:60}}>
+                    //         <Text style={{
+                    //             color: '#fff',
+                    //             fontFamily: 'nunito-semi',
+                    //             fontSize: 22
+                    //         }}>{surveyList.data.surveys.length} Survey pending!</Text>
+                            
+                    //         <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 15 }}>
+                    //           Tap to get your {surveyList.data.surveys[0].surveyType} survey done.</Text>
+                    //         </View>
+                    //         </View>
+                    // </View>
+
 
                 )
             }
@@ -305,7 +323,7 @@ const Screen1Content = ({ navigation }) => {
             updateInfo();
         }
     }
-   
+
     async function updateInfo() {
         try {
             var config = {
@@ -437,9 +455,9 @@ const Screen1Content = ({ navigation }) => {
                                     pass: ''
                                 }) //to reset the state of pass
                                 ToastAndroid.show("Password changed successfully 👍",
-                                ToastAndroid.LONG)
+                                    ToastAndroid.LONG)
                             }
-                            else{
+                            else {
                                 ToastAndroid.show("else",
                                     ToastAndroid.LONG)
                             }
@@ -491,10 +509,11 @@ const Screen1Content = ({ navigation }) => {
                             paddingHorizontal: 20,
                             paddingVertical: 20,
                             backgroundColor: '#000000aa',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+
                         }}>
 
-                        <Animatable.View animation="fadeInUp" style={{ paddingHorizontal: 20, paddingVertical: 20, backgroundColor: '#fff' }}>
+                        <Animatable.View animation="slideInUp" style={{ paddingHorizontal: 20, paddingVertical: 20, backgroundColor: '#fff', borderRadius: 10 }}>
                             {screenName == "EmailChange" ?
                                 <Text
                                     style={{
@@ -723,7 +742,7 @@ const Screen1Content = ({ navigation }) => {
                 <Modal transparent={true} visible={loading} >
 
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
-                        <ActivityIndicator size="large" color="#fff" />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
                     </View>
                 </Modal>
                 {screen == "EmailChange" || screen == "PassChange" ?
@@ -796,7 +815,7 @@ const Screen1Content = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => setScreen('EmailChange')}
                                     >
-                                        <Text style={{ fontFamily:'nunito-semi',color: '#4700b3' }}>change</Text>
+                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>change</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -822,7 +841,7 @@ const Screen1Content = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => setScreen('PassChange')}
                                     >
-                                        <Text style={{ fontFamily:'nunito-semi',color: '#4700b3' }}>change</Text>
+                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>change</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -928,6 +947,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffb31a",
         borderRadius: 10,
         elevation: 10,
+
 
     },
     footer: {

@@ -87,7 +87,7 @@ const Login = ({ navigation }) => {
                         ...secureEntry,
                         isLoading: false
                     })
-                    navigation.replace('Home')
+                    navigation.push('Home')
                 }
                 else {
                     setSecureEntry({
