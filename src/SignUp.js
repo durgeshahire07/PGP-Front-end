@@ -192,7 +192,7 @@ const SignUp = ({ navigation }) => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <Modal transparent={true} visible={secureEntry.isLoading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
                 </Modal>
                 <LinearGradient

@@ -120,14 +120,14 @@ const Login = ({ navigation }) => {
             }
         }
         else{
-            ToastAndroid.show("User not found!",
+            ToastAndroid.show("Incorrect email id or password!",
             ToastAndroid.SHORT)
         }
         
     }
     else {
             
-        ToastAndroid.show("Please fill the Required fields!",
+        ToastAndroid.show("Please fill the information!",
             ToastAndroid.SHORT)
     }
     
@@ -140,7 +140,7 @@ const Login = ({ navigation }) => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <Modal transparent={true} visible={secureEntry.isLoading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
                 </Modal>
                 <LinearGradient
@@ -148,16 +148,16 @@ const Login = ({ navigation }) => {
                  colors={['#4700b3', '#a366ff']}
                 >
                 
-                <View style={styles.header} />
-                
-                <View style={{alignItems:'center',paddingVertical:40}}>
-                <Image
+                <Animatable.View
+                    // animation="slideInUp" 
+                    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+                >
+                    <Image
                         source={require('../assets/icons/password.png')}
-                        style={{  height: 100, width: 100, }}
+                        style={{ height: 100, width: 100, }}
 
                     />
-                    </View>
-                   
+                </Animatable.View>
                 <Animatable.View
                     style={styles.footer}
                 >

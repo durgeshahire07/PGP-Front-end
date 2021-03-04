@@ -106,7 +106,7 @@ const HomeContent = ({ navigation }) => {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-                    <Image style={{ width: 150, height: 150 }} source={require('../assets/gif/circle-2.gif')} />
+                <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                 </View>
             </View>
         )
@@ -118,11 +118,13 @@ const HomeContent = ({ navigation }) => {
 
                 return (
 
-                    <View style={styles.box}   
+                    <Animatable.View
+                     animation="pulse"
+                    style={styles.box}   
                     >
 
                         <TouchableOpacity 
-                        onPress={() => navigation.push('Daily', { type: "weekly" })}
+                        onPress={() => navigation.push('Daily', { type: "daily" })}
                         // onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
                         >
                         <View style={{ paddingRight:10 }}>
@@ -139,7 +141,7 @@ const HomeContent = ({ navigation }) => {
                                 <Text style={{
                                     color: '#fff',
                                     fontFamily: 'nunito-semi',
-                                    fontSize: 22,
+                                    fontSize: 20,
                                     marginTop: 10
                                 }}>{surveyList.data.surveys.length} Survey pending!</Text>
 
@@ -150,7 +152,7 @@ const HomeContent = ({ navigation }) => {
                             </View>
                         </View>
                         </TouchableOpacity>
-                    </ View>
+                    </Animatable.View>
                     // <View style={[styles.box, { }]}>
                     //    <View style={{flexDirection:'row'}}>
                     //         {/* <Image style={{ width: 60, height: 50 }} source={require('../assets/gif/alert.gif')} /> */}
@@ -746,7 +748,7 @@ const Screen1Content = ({ navigation }) => {
                 <Modal transparent={true} visible={loading} >
 
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
                 </Modal>
                 {screen == "EmailChange" || screen == "PassChange" ?
@@ -775,7 +777,7 @@ const Screen1Content = ({ navigation }) => {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     // placeholder="First Name"
-                                    placeholder={user.userData.firstName}
+                                    placeholder="First Name"
                                     defaultValue={user.userData.firstName}
                                     onChangeText={(first) => textInputFirstName(first)}
                                 />
@@ -793,7 +795,7 @@ const Screen1Content = ({ navigation }) => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <TextInput
-                                    placeholder={user.userData.lastName}
+                                    placeholder="Last Name"
                                     defaultValue={user.userData.lastName}
                                     onChangeText={(last) => textInputLastName(last)}
                                 />

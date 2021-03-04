@@ -41,21 +41,21 @@ const YourApp = () => {
    },
  }));
 
- useEffect(()=>{
-   setTimeout(()=>{
-     setIsLoading(false)
-   },3000)
- },[])
+//  useEffect(()=>{
+//    setTimeout(()=>{
+//      setIsLoading(false)
+//    },3000)
+//  },[])
  
 
-if( isLoading ){
-  return(
-    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-      {/* <ActivityIndicator size="large" color="#0000ff" /> */}
-      <Image style={{width:400,height:400}} source={require('./assets/gif/welcome.gif')} />
-    </View>
-  )
-}
+// if( isLoading ){
+//   return(
+//     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+//       {/* <ActivityIndicator size="large" color="#0000ff" /> */}
+//       <Image style={{width:400,height:400}} source={require('./assets/gif/welcome.gif')} />
+//     </View>
+//   )
+// }
  
  
   if (fontsLoaded) {

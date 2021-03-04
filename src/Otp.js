@@ -88,29 +88,47 @@ const Otp = ({ route, navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+            <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
                 <Modal transparent={true} visible={loading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
 
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
 
                     </View>
                 </Modal>
-                <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
-                <View style={styles.header} />
+               
+                <LinearGradient
+                 style={{ flex: 1 }}
+                 colors={['#4700b3', '#a366ff']}
+                >
+                
+                <Animatable.View
+                    // animation="bounceIn" 
+                    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+                >
+                    <Image
+                        source={require('../assets/icons/otp-final.png')}
+                        style={{ height: 110, width: 110 }}
+
+                    />
+                </Animatable.View>
+                
+
                 <Animatable.View
                     // animation="fadeInUp"
                     style={styles.footer}
                 >
+
                     <Text style={{
                         fontFamily: 'nunito-bold',
                         fontSize: 28,
                         color: '#4700b3',
                     }}>Verification Code</Text>
                     <Text style={{
-                        fontFamily: 'nunito-semi',
+                        fontFamily: 'nunito-regular',
                         fontSize: 15,
-                        paddingBottom: 30,
                         color: 'grey',
+                        paddingBottom: 20
                     }}>Enter the OTP code sent to your email</Text>
                     <View style={styles.containerInput}>
                         <TextInput
@@ -169,7 +187,8 @@ const Otp = ({ route, navigation }) => {
                             onPress={submitHandler}
                         >
                             <LinearGradient
-                                colors={['#4700b3', '#4700b3']}
+                               colors={['#8533ff', '#4700b3']}
+                               start={[1, 0]}
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, {
@@ -195,6 +214,7 @@ const Otp = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </Animatable.View>
+               </LinearGradient>
             </ScrollView>
         </View>
     );
@@ -207,14 +227,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#4700b3'
     },
-    header: {
-        flex: 5,
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        paddingBottom: 50
-    },
     footer: {
-        flex: 1,
+        flex: 0.2,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,

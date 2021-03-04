@@ -106,7 +106,7 @@ const ForgotPass = ({ navigation }) => {
                 <Modal transparent={true} visible={loading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa'}}>
                        
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                         
                     </View>
                 </Modal>
@@ -120,7 +120,7 @@ const ForgotPass = ({ navigation }) => {
                 >
                     <Image
                         source={require('../assets/icons/forgot.png')}
-                        style={{ height: 120, width: 120, }}
+                        style={{ height: 110, width: 110, }}
 
                     />
                 </Animatable.View>

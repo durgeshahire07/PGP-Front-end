@@ -119,11 +119,25 @@ const NewPass = ({ route, navigation }) => {
                 <Modal transparent={true} visible={loading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
 
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/test.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
 
                     </View>
                 </Modal>
-                <View style={styles.header} />
+                
+                <LinearGradient
+                 style={{ flex: 1 }}
+                 colors={['#4700b3', '#a366ff']}
+                >
+                 <Animatable.View
+                    // animation="bounceIn" 
+                    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+                >
+                    <Image
+                        source={require('../assets/icons/settings.png')}
+                        style={{ height: 100, width: 100 }}
+
+                    />
+                </Animatable.View>
                 <Animatable.View
                     // animation="fadeInUp"
                     style={styles.footer}
@@ -131,15 +145,16 @@ const NewPass = ({ route, navigation }) => {
                     <Text style={{
                         fontFamily: 'nunito-bold',
                         fontSize: 28,
-                        color: '#blue',
-                        color: '#4700b3'
+                        color: '#4700b3',
+                        paddingBottom: 5
                     }}>Reset Password</Text>
                     <Text style={{
-                        fontFamily: 'nunito-semi',
-                        fontSize: 18,
-                        paddingBottom: 10,
-                        color: 'grey'
+                        fontFamily: 'nunito-regular',
+                        fontSize: 15,
+                        color: 'grey',
+                        paddingBottom: 20
                     }}>Please enter your new password</Text>
+                    
                     <View style={styles.action}>
                         <TextInput
                             placeholder="Your New Password"
@@ -198,7 +213,8 @@ const NewPass = ({ route, navigation }) => {
                             onPress={submitHandler}
                         >
                             <LinearGradient
-                                colors={['#4700b3', '#4700b3']}
+                                 colors={['#8533ff', '#4700b3']}
+                                 start={[1, 0]}
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, {
@@ -208,6 +224,7 @@ const NewPass = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </Animatable.View>
+                </LinearGradient>
             </ScrollView>
         </View>
     )
@@ -220,14 +237,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#4700b3'
     },
-    header: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        paddingBottom: 50
-    },
+   
     footer: {
-        flex: 0.1,
+        flex: 0.2,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
