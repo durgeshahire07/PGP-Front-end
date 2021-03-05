@@ -65,15 +65,15 @@ const Otp = ({ route, navigation }) => {
                 console.log(error)
                 if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
                 else if (error.response.status === 400) {
                     ToastAndroid.show("Invalid Code!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
                 else {
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             }
         }

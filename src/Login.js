@@ -95,7 +95,7 @@ const Login = ({ navigation }) => {
                         isLoading: false
                     })
                     ToastAndroid.show("Incorrect email id or password!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             } catch (error) {
                 setSecureEntry({
@@ -105,17 +105,17 @@ const Login = ({ navigation }) => {
                 console.log(error)
                 if (error.response.status === 404) {
                     ToastAndroid.show("User not found!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 } else if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 } else if (error.response.status === 400) {
                     ToastAndroid.show("Enter a valid email!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
                 else {
                     ToastAndroid.show(error,
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             }
         }
@@ -127,7 +127,7 @@ const Login = ({ navigation }) => {
     }
     else {
             
-        ToastAndroid.show("Please fill the information!",
+        ToastAndroid.show("Please fill all the information!",
             ToastAndroid.SHORT)
     }
     
@@ -167,7 +167,7 @@ const Login = ({ navigation }) => {
                         color: '#4700b3',
                     }}>Hello There!</Text>
                     <Text style={{
-                        fontFamily: 'nunito-semi',
+                        fontFamily: 'nunito-regular',
                         fontSize: 18,
                         paddingBottom: 10,
                         color: 'grey',
@@ -236,7 +236,7 @@ const Login = ({ navigation }) => {
                             </LinearGradient>
                         </View>
                         <View style={styles.textPrivate}>
-                            <Text style={[{ fontFamily: 'nunito-semi' }, { color: 'grey' }]}>
+                            <Text style={[{ fontFamily: 'nunito-regular' }, { color: 'grey' }]}>
                                 Don't have an Account?
                             </Text>
                             <TouchableOpacity

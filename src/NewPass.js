@@ -84,6 +84,8 @@ const NewPass = ({ route, navigation }) => {
                     const response = await axios(config)
                     console.log(response)
                     if (response.data.success) {
+                        ToastAndroid.show("Password successfully updated 👍",
+                            ToastAndroid.SHORT)
                         navigation.replace('Login')
                         setLoading(false)
                     }
@@ -92,11 +94,11 @@ const NewPass = ({ route, navigation }) => {
                     console.log(error)
                     if (error.response.status === 500) {
                         ToastAndroid.show("Oops...something went wrong!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                     else {
                         ToastAndroid.show("Oops...something went wrong!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                 }
             }

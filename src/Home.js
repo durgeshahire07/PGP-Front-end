@@ -113,7 +113,7 @@ const HomeContent = ({ navigation }) => {
     }
     else {
 
-        const display = () => {
+        const alertCard = () => {
             if (surveyList.data.surveys.length) {
 
                 return (
@@ -124,7 +124,7 @@ const HomeContent = ({ navigation }) => {
                     >
 
                         <TouchableOpacity 
-                        onPress={() => navigation.push('Daily', { type: "daily" })}
+                        onPress={() => navigation.push('Daily', { type: "weekly" })}
                         // onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
                         >
                         <View style={{ paddingRight:10 }}>
@@ -174,7 +174,7 @@ const HomeContent = ({ navigation }) => {
             }
         }
 
-        let surveyUpdate = display();
+        let surveyUpdate = alertCard();
 
         // console.log(surveyList.data.surveys.length)
         return (
@@ -207,7 +207,7 @@ const HomeContent = ({ navigation }) => {
     }
 };
 
-const Screen1Content = ({ navigation }) => {
+const ProfileScreen = ({ navigation }) => {
 
     const user = useContext(UserContext);
 
@@ -351,19 +351,19 @@ const Screen1Content = ({ navigation }) => {
                 })
                 setLoading(false)
                 ToastAndroid.show("Profile Updated 👍",
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
             }
             else {
                 setLoading(false)
                 ToastAndroid.show("Something went wrong...",
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
 
             }
         } catch (error) {
             setLoading(false)
             console.log(error)
             ToastAndroid.show(error,
-                ToastAndroid.LONG)
+                ToastAndroid.SHORT)
 
         }
     }
@@ -399,22 +399,22 @@ const Screen1Content = ({ navigation }) => {
                             })
                             setLoading(false)
                             ToastAndroid.show("Email successfully updated 👍",
-                                ToastAndroid.LONG)
+                                ToastAndroid.SHORT)
                         }
                     } catch (error) {
                         setLoading(false)
                         console.log(error)
                         if (error.response.status === 500) {
                             ToastAndroid.show("Incorrect Password!",
-                                ToastAndroid.LONG)
+                                ToastAndroid.SHORT)
                         }
                         else if (error.response.status === 404) {
                             ToastAndroid.show("Invalid email!",
-                                ToastAndroid.LONG)
+                                ToastAndroid.SHORT)
                         }
                         else {
                             ToastAndroid.show("Oops...something went wrong!",
-                                ToastAndroid.LONG)
+                                ToastAndroid.SHORT)
                         }
                     }
 
@@ -457,37 +457,37 @@ const Screen1Content = ({ navigation }) => {
                                     pass: ''
                                 }) //to reset the state of pass
                                 ToastAndroid.show("Password changed successfully 👍",
-                                    ToastAndroid.LONG)
+                                    ToastAndroid.SHORT)
                             }
                             else {
-                                ToastAndroid.show("else",
-                                    ToastAndroid.LONG)
+                                ToastAndroid.show("Oops...something went wrong!",
+                                    ToastAndroid.SHORT)
                             }
                         } catch (error) {
                             setLoading(false)
                             console.log(error)
                             if (error.response.status === 500) {
                                 ToastAndroid.show("Incorrect password!",
-                                    ToastAndroid.LONG)
+                                    ToastAndroid.SHORT)
                             }
                             else if(error.response.status === 409) {
                                 ToastAndroid.show("New password must be different from old password!",
-                                    ToastAndroid.LONG)
+                                    ToastAndroid.SHORT)
                             }
                             else{
                                 ToastAndroid.show("Oops...something went wrong!",
-                                    ToastAndroid.LONG)
+                                    ToastAndroid.SHORT)
                             }
                         }
                     }
                     else {
                         ToastAndroid.show("Passwords length must be 6 characters long!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                 }
                 else {
                     ToastAndroid.show("Passwords don't match!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
 
             }
@@ -896,7 +896,7 @@ const Home = () => {
                     )
                 }}
             />
-            <Drawer.Screen name="Profile" component={Screen1Content}
+            <Drawer.Screen name="Profile" component={ProfileScreen}
                 options={{
                     drawerIcon: ({ color, size }) => (
                         <Icon name="person" style={{ fontSize: size, color: color }} />

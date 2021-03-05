@@ -14,7 +14,8 @@ import {
     ToastAndroid,
     SafeAreaView,
     Modal,
-    Image
+    Image,
+    Pressable
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -145,7 +146,7 @@ const SignUp = ({ navigation }) => {
                     }
                     else {
                         ToastAndroid.show("Sign up Failed!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                         setSecureEntry({
                             ...secureEntry,
                             isLoading: false
@@ -159,19 +160,19 @@ const SignUp = ({ navigation }) => {
                     })
                     if(error.response.status === 422){
                         ToastAndroid.show("Enter a valid email address!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                     else if(error.response.status === 409){
                         ToastAndroid.show("Email id is already in use!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                     else if(error.response.status === 500){
                         ToastAndroid.show("Oops...something went wrong!",
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                     else{
                         ToastAndroid.show(error,
-                            ToastAndroid.LONG)
+                            ToastAndroid.SHORT)
                     }
                    
                 }
@@ -317,11 +318,13 @@ const SignUp = ({ navigation }) => {
                             <Text style={[{ color: '#595959' }, { fontFamily: 'nunito-bold' }]}>{" "}Privacy policy</Text>
                         </View>
                         <View style={styles.button}>
-                            <View
+                            <Pressable
+                              onPress={submitHandler}
+                              android_ripple={{ color: '#fff' }}
                                 style={styles.signIn}
-
+                                
                             >
-
+                                
                                 <LinearGradient
                                     colors={['#8533ff', '#4700b3']}
                                     start={[1, 0]}
@@ -335,8 +338,8 @@ const SignUp = ({ navigation }) => {
                                         }]}>Sign Up</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
-
-                            </View>
+                                
+                                </Pressable>
                             <View style={styles.textPrivate}>
                                 <Text style={styles.color_textPrivate}>
                                     Already have an Account?
@@ -404,7 +407,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 30,
         shadowColor: '#000',
-        elevation: 6,
+        elevation: 5,
     },
     textSign: {
         fontSize: 20,

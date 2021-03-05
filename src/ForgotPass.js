@@ -62,6 +62,8 @@ const ForgotPass = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
+                    ToastAndroid.show("OTP Code has been sent to",
+                            ToastAndroid.SHORT)
                    setLoading(false)
                     navigation.push('Otp', {
                         UserId: response.data.data.id,
@@ -71,23 +73,23 @@ const ForgotPass = ({ navigation }) => {
                     setLoading(false)
                     console.log("invalid email")
                     ToastAndroid.show("Invalid email!",
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
                 }
             } catch (error) {
                 console.log(error)
                 setLoading(false)
                 if (error.response.status === 500) {
                     ToastAndroid.show("Oops...something went wrong!",
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
                     
                 }
                 else if(error.response.status === 404){
                     ToastAndroid.show("User not found",
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
                 }
                 else{
                     ToastAndroid.show(error,
-                    ToastAndroid.LONG)
+                    ToastAndroid.SHORT)
                 }
             }
         }

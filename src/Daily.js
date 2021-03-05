@@ -77,7 +77,7 @@ const Daily = ({ navigation, route }) => {
                 }
                 else {
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             })
             .catch(function (error) {
@@ -90,12 +90,16 @@ const Daily = ({ navigation, route }) => {
         getSurvey()
     }, [])
 
-    const onChoiceChange = (selectedChoice, index) => {
+    const onChoiceChange = (selectedChoice, id) => {
         var tmp = state.data
-        tmp[index].answer = selectedChoice
-        if (tmp[index].answer.length > 1) {
-            tmp[index].answer.shift();
-        }
+        tmp.map((val) => {
+            if (val._id === id) {
+                val.answer = selectedChoice
+                if (val.answer.length > 1) {
+                    val.answer.shift();
+                }
+            }
+        })
 
         setState({
             data: tmp
@@ -104,32 +108,66 @@ const Daily = ({ navigation, route }) => {
 
     }
 
-    const onSelectionsChange = (selectedItems, key) => {
+    const onSelectionsChange = (selectedItems, id) => {
+
         var tmp = state.data
-        tmp[key].answer = selectedItems
+        tmp.map((val) => {
+            if (val._id === id) {
+                val.answer = selectedItems
+            }
+        })
         setState({
             ...state,
             data: tmp
         })
 
+
     }
 
-    const changeParagraph = (value, key) => {
+    const changeParagraph = (value, id) => {
         var temp = state.data
-        temp[key].answer = value
+        temp.map((val) => {
+            if (val._id === id) {
+                val.answer = value
+            }
+        })
         setState({
             ...state,
             data: temp
         })
 
+
     }
 
-    const changeLongPara = (value, key) => {
+    const changeLongPara = (value, id) => {
+
         var tmp = state.data
-        tmp[key].answer = value
+        tmp.map((val) => {
+
+            if (val._id === id) {
+
+                val.answer = value
+
+            }
+        })
         setState({
             ...state,
             data: tmp
+        })
+
+    }
+
+    const handleSliderChange = (val, id, subQue) => {
+
+        var temp = state.data;
+        temp.map((que) => {
+            if (que._id === id) {
+                que.options[subQue].value = val
+            }
+        })
+
+        setState({
+            data: temp
         })
     }
 
@@ -168,12 +206,6 @@ const Daily = ({ navigation, route }) => {
             ans: temp
         })
 
-
-
-
-
-
-
     }
 
 
@@ -181,42 +213,13 @@ const Daily = ({ navigation, route }) => {
 
     async function submitHandler() {
         console.log(submit)
-        let dummy = state.data.map((val, key) => {
+        state.data.map((val, key) => {
             changeRes(val, key)
 
         })
 
 
 
-
-
-        // let enableButton = state.data.map((val,key)=>  {
-
-        //     if(val.required){
-
-        //         if(val.type=="radio button"&&(val.answer!=undefined||val.answer.length!=0)){
-        //             setSubmit(true)
-        //             console.log("radio not")
-        //         }
-        //         else if(val.type=="short answer"&&(val.answer != undefined||val.answer != "")){
-        //             setSubmit(true)
-        //             console.log("short not")
-        //         }
-        //         else if(val.type=="long answer"&&(val.answer != undefined||val.answer != "")){
-        //             setSubmit(true)
-        //             console.log("long not")
-        //         }
-        //         else if(val.type=="check box"&&(val.answer != undefined||val.answer[0].value!=undefined)){
-        //             setSubmit(true)
-        //             console.log("chck not")
-        //         }
-        //     }
-        // })
-        // if (res.ans.answer === undefined) {
-        //     ToastAndroid.show("Required questions must be answered!",
-        //         ToastAndroid.LONG)
-        //         console.log(res.ans.answer);
-        // }
         if (submit) {
             setState({
                 ...state,
@@ -242,14 +245,14 @@ const Daily = ({ navigation, route }) => {
                 else {
 
                     ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             } catch (error) {
 
                 console.log(error)
                 if (error.response.status === 500) {
                     ToastAndroid.show(error,
-                        ToastAndroid.LONG)
+                        ToastAndroid.SHORT)
                 }
             }
         }
@@ -262,29 +265,17 @@ const Daily = ({ navigation, route }) => {
     }
 
 
-
-    const handleSliderChange = (val, que, subQue) => {
-
-        var temp = state.data;
-        temp[que].options[subQue].value = val;
-        setState({
-            data: temp
-        })
-    }
-
-
-
     if (state.isLoading) {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.header}>
                     <View style={{ paddingTop: 13 }}>
                         <TouchableOpacity onPress={() => navigation.pop()}>
-                        <Feather
-                            name="arrow-left"
-                            size={25}
-                            color="#fff"
-                        />
+                            <Feather
+                                name="arrow-left"
+                                size={25}
+                                color="#fff"
+                            />
                         </TouchableOpacity>
                     </View>
 
@@ -298,7 +289,7 @@ const Daily = ({ navigation, route }) => {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-                <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                 </View>
             </View>
         )
@@ -308,46 +299,94 @@ const Daily = ({ navigation, route }) => {
 
     else {
 
-        let question = state.data.map((val, key) => {
-            if (val.type == "radio button") {
+        const submitButton = () =>{
+            return (
+                <View style={{ paddingBottom: 10, paddingHorizontal: 50 }}>
+                <Pressable onPress={submitHandler}
+                    android_ripple={{ color: '#fff' }}
+                    style={{
+                        borderRadius: 20,
+                        backgroundColor: '#006699',
+                        paddingHorizontal: 70,
+                        paddingVertical: 15,
+                        backgroundColor: '#4700b3'
+                    }} >
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={{
+                            fontFamily: 'nunito-bold',
+                            fontSize: 17,
+                            color: '#fff',
 
-                return <View key={key} style={{ paddingHorizontal: 15 }}>
+                        }}>Submit</Text>
+                    </View>
+                </Pressable>
+            </View>
+            )
+        }
+
+        const display = (item, key) => {
+          
+            if (item.type == "radio button") {
+                return <View style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
 
-                        {val.required ?
+                        {item.required ?
 
                             <Text>
-                                <Text style={styles.Questions}>{val.question}</Text>
+                                <Text style={styles.Questions}>{item.question}</Text>
                                 <Text style={styles.requiredText}> *</Text>
                             </Text>
-
                             :
-                            <Text style={styles.Questions}>{val.question}</Text>
+                            <Text style={styles.Questions}>{item.question}</Text>
 
                         }
 
                         <SelectMultiple
-                            items={val.options}
-                            selectedItems={val.answer}
+                            items={item.options}
+                            selectedItems={item.answer}
                             onSelectionsChange={choice => onChoiceChange(choice, key)}
                         />
                     </View>
-                    <View style={{ paddingBottom: 20 }}></View>
+
                 </View>
             }
-            else if (val.type == "short answer") {
-                return <View key={key} style={{ paddingHorizontal: 15 }}>
-
+            else if (item.type == "check box") {
+                return <View style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
-                        {val.required ?
+                        {item.required ?
 
                             <Text>
-                                <Text style={styles.Questions}>{val.question}</Text>
+                                <Text style={styles.Questions}>{item.question}</Text>
                                 <Text style={styles.requiredText}> *</Text>
                             </Text>
 
                             :
-                            <Text style={styles.Questions}>{val.question}</Text>
+
+                            <Text style={styles.Questions}>{item.question}</Text>
+
+                        }
+                        <SelectMultiple
+                            items={item.options}
+                            selectedItems={item.answer}
+                            onSelectionsChange={list => onSelectionsChange(list, key)}
+                        />
+                    </View>
+
+                </View>
+            }
+            else if (item.type == "short answer") {
+                return <View style={{ paddingHorizontal: 15}}>
+
+                    <View style={styles.QuestionContainer}>
+                        {item.required ?
+
+                            <Text>
+                                <Text style={styles.Questions}>{item.question}</Text>
+                                <Text style={styles.requiredText}> *</Text>
+                            </Text>
+
+                            :
+                            <Text style={styles.Questions}>{item.question}</Text>
 
                         }
                         <View style={{ paddingTop: 10, paddingBottom: 10, paddingHorizontal: 10 }}>
@@ -378,53 +417,26 @@ const Daily = ({ navigation, route }) => {
                         </View>
 
                     </View>
-                    <View style={{ paddingBottom: 20 }}></View>
+
                 </View>
 
             }
-            else if (val.type == "check box") {
-                return <View key={key} style={{ paddingHorizontal: 15 }}>
+            else if (item.type == "long answer") {
+                return <View style={{ paddingHorizontal: 15}}>
                     <View style={styles.QuestionContainer}>
-                        {val.required ?
+                        {item.required ?
 
                             <Text>
-                                <Text style={styles.Questions}>{val.question}</Text>
+                                <Text style={styles.Questions}>{item.question}</Text>
                                 <Text style={styles.requiredText}> *</Text>
                             </Text>
 
                             :
-
-                            <Text style={styles.Questions}>{val.question}</Text>
-
-                        }
-                        <SelectMultiple
-                            items={val.options}
-                            selectedItems={val.answer}
-                            onSelectionsChange={list => onSelectionsChange(list, key)}
-                        />
-                    </View>
-                    <View style={{ paddingBottom: 20 }}></View>
-                </View>
-            }
-            else if (val.type == "long answer") {
-                return <View key={key} style={{ paddingHorizontal: 15 }}>
-                    <View style={styles.QuestionContainer}>
-                        {val.required ?
-
-                            <Text>
-                                <Text style={styles.Questions}>{val.question}</Text>
-                                <Text style={styles.requiredText}> *</Text>
-                            </Text>
-
-                            :
-                            <Text style={styles.Questions}>{val.question}</Text>
+                            <Text style={styles.Questions}>{item.question}</Text>
 
                         }
                         <View style={{ paddingTop: 10, paddingBottom: 10, paddingHorizontal: 10 }}>
-                            {/* <Textarea
-                                style={styles.textarea}
-                                onChangeText={(value) => changeLongPara(value, key)}
-                            /> */}
+
 
                             <View style={{
                                 borderWidth: 1,
@@ -447,21 +459,21 @@ const Daily = ({ navigation, route }) => {
                                     }}
                                     onChangeText={(value) => changeLongPara(value, key)}
                                 />
-                                </View>
                             </View>
                         </View>
-                        <View style={{ paddingBottom: 20 }}></View>
                     </View>
+
+                </View>
             }
-            else if (val.type == "slider") {
-                        let subques = val.options.map((ques, index) => {
+            else if (item.type == "slider") {
+                let subques = item.options.map((ques, index) => {
 
                     return <View key={index} style={{ flex: 1, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#bfbfbf' }}>
                         <Text style={{ fontFamily: 'nunito-semi', fontSize: 16, color: '#006699' }}>{ques.subQues}</Text>
 
                         <View style={{ flex: 1, paddingVertical: 20 }} >
                             <Slider
-                                style={{ width: 290 }}
+                                style={{ width: '100%' }}
                                 minimumValue={0}
                                 maximumValue={ques.maxValue}
                                 minimumTrackTintColor="#5200cc"
@@ -477,7 +489,7 @@ const Daily = ({ navigation, route }) => {
                             />
 
                             <View style={{
-                                width: 290,
+                                width: '100%',
                                 flexDirection: 'row',
                                 justifyContent: 'space-between'
                             }}>
@@ -491,122 +503,98 @@ const Daily = ({ navigation, route }) => {
 
                     </View>
                 })
-                return <View key={key} style={{ paddingHorizontal: 15 }}>
-                        <View style={styles.QuestionContainer}>
-                            {val.required ?
-                                <View style={{ paddingVertical: 10 }}>
-                                    <Text>
-                                        <Text style={styles.Questions}>{val.question}</Text>
-                                        <Text style={styles.requiredText}> *</Text>
-                                    </Text>
-                                </View>
-                                :
-                                <Text style={styles.Questions}>{val.question}</Text>
+                return <View style={{ paddingHorizontal: 15,}}>
+                    <View style={styles.QuestionContainer}>
+                        {item.required ?
+                            <View style={{ paddingVertical: 10 }}>
+                                <Text>
+                                    <Text style={styles.Questions}>{item.question}</Text>
+                                    <Text style={styles.requiredText}> *</Text>
+                                </Text>
+                            </View>
+                            :
+                            <Text style={styles.Questions}>{item.question}</Text>
 
-                            }
-                            {subques}
-                        </View>
-                        <View style={{ paddingBottom: 20 }}></View>
+                        }
+                        {subques}
                     </View>
+                   
+                </View>
             }
+            
+        }
 
-        })
-
+        
 
         return (
 
-            <SafeAreaView style={styles.container}>
-                        <StatusBar backgroundColor='#310080' barStyle="light-content" />
+            <View style={styles.container}>
 
-                        <View style={styles.header}>
-                            <View style={{ paddingVertical: 14 }}>
-                                <TouchableOpacity onPress={() => navigation.pop()}>
-                                    <Feather
-                                        name="arrow-left"
-                                        size={25}
-                                        color="#fff"
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                <StatusBar backgroundColor='#310080' barStyle="light-content" />
 
-                            <Text style={{
-                                fontFamily: 'nunito-semi',
-                                fontSize: 20,
-                                color: '#fff',
-                                paddingLeft: 10,
-                                paddingTop: 10
-                            }}>Daily Personal Growth Planner</Text>
+                <View style={styles.header}>
 
+                    <View style={{ paddingVertical: 14 }}>
+                        <TouchableOpacity onPress={() => navigation.pop()}>
+                            <Feather
+                                name="arrow-left"
+                                size={25}
+                                color="#fff"
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text style={{
+                        fontFamily: 'nunito-semi',
+                        fontSize: 20,
+                        color: '#fff',
+                        paddingLeft: 10,
+                        paddingTop: 10
+                    }}>Daily Personal Growth Planner</Text>
+
+                </View>
+              
+                <FlatList
+                    keyExtractor={(item) => item._id}
+                    data={state.data}
+                    ListFooterComponent={submitButton}
+                    renderItem={({ item }) => (
+                        <View style={{paddingVertical:10}} >
+                            {display(item, item._id)}
                         </View>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-
-                            <View style={{
-                                paddingTop: 15,
-                                paddingBottom: 10
-                            }}>
-                                <View style={styles.container}>
-                                    {state.isLoading ? null :
-                                        question
-                                    }
-
-
-                                    <View style={{ paddingBottom: 10, paddingHorizontal: 50 }}>
-                                        <Pressable onPress={submitHandler}
-                                            android_ripple={{ color: '#fff' }}
-                                            style={{
-                                                borderRadius: 20,
-                                                backgroundColor: '#006699',
-                                                paddingHorizontal: 70,
-                                                paddingVertical: 15,
-                                                backgroundColor: '#4700b3'
-                                            }} >
-                                            <View style={{ alignItems: 'center' }}>
-                                                <Text style={{
-                                                    fontFamily: 'nunito-bold',
-                                                    fontSize: 17,
-                                                    color: '#fff',
-
-                                                }}>Submit</Text>
-                                            </View>
-                                        </Pressable>
-
-                                    </View>
-
-                                </View>
-                            </View>
-                        </ScrollView>
-                    </SafeAreaView>
+                        
+                    )}
+                />
+                 
+            </View>
         );
 
-}
+    }
 }
 
 export default Daily;
 
 const styles = StyleSheet.create({
-                        container: {
-                        flex: 1,
+    container: {
+        flex: 1,
         backgroundColor: "#fff"
     },
     requiredText: {
-                        fontFamily: 'nunito-bold',
+        fontFamily: 'nunito-bold',
         color: '#e60000',
         fontSize: 18
 
     },
     header: {
-                        flexDirection: 'row',
+        flexDirection: 'row',
         backgroundColor: "#4700b3",
         height: 50,
         elevation: 10,
         paddingLeft: 10
     },
     QuestionContainer: {
-                        backgroundColor: "#fff",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        backgroundColor: "#fff",
+       borderRadius:20,
         padding: 20,
         elevation: 7,
 
@@ -614,7 +602,7 @@ const styles = StyleSheet.create({
     },
 
     textarea: {
-                        height: 180,
+        height: 180,
         padding: 10,
         borderWidth: 1,
         borderColor: 'grey',
@@ -625,42 +613,39 @@ const styles = StyleSheet.create({
         fontFamily: 'nunito-regular'
     },
     Questions: {
-                        fontSize: 18,
+        fontSize: 18,
         fontFamily: 'nunito-bold',
         color: '#666666'
     },
     Numbers: {
-                        fontFamily: 'nunito-regular',
+        fontFamily: 'nunito-regular',
         fontSize: 18,
 
     },
     text_options: {
-                        color: '#05375a',
+        color: '#05375a',
         fontSize: 17,
         fontFamily: 'nunito-semi',
         paddingHorizontal: 20
 
     },
-    textInput: {
-
-                    },
     button: {
-                        width: '70%',
+        width: '70%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30
     },
     textSign: {
-                        fontFamily: 'nunito-bold',
+        fontFamily: 'nunito-bold',
         fontSize: 20,
     },
     textPrivate: {
-                        flexDirection: 'row',
+        flexDirection: 'row',
         flexWrap: 'wrap',
         marginTop: 20
     },
     color_textPrivate: {
-                        color: 'grey'
+        color: 'grey'
     },
 });
