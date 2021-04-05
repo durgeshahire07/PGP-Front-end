@@ -20,10 +20,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 
 const Otp = ({ route, navigation }) => {
-
+    // const Otp = () => {
     const { UserId } = route.params;
+    // const { UserId } = 1;
     const [loading, setLoading] = useState(false)
-    // console.log(UserId)
+    console.log(UserId)
     const pin1Ref = React.useRef()
     const pin2Ref = React.useRef()
     const pin3Ref = React.useRef()
@@ -36,7 +37,26 @@ const Otp = ({ route, navigation }) => {
     });
 
     const { pin1, pin2, pin3, pin4 } = pin
-
+    
+    // const [state,setState] = useState({
+    //     sec: 0
+    // }
+    // );
+    // countDown=()=>{
+    //     if(state.sec===10){
+    //         console.log("reached")
+    //         clearInterval(myVar)
+    //     }
+    //     setState({
+    //         sec: state.sec +1
+    //     })
+    //     clearInterval(myVar)
+        
+    // }
+    // var myVar =  setInterval(
+    //     countDown()
+    //     , 1000);
+    
     async function submitHandler() {
         const otp = '' + pin1 + pin2 + pin3 + pin4;
         console.log(otp)
@@ -152,6 +172,12 @@ const Otp = ({ route, navigation }) => {
                                     pin3Ref.current.focus()
                                 }
                             }}
+                            onKeyPress={({ nativeEvent }) => {
+                                if (nativeEvent.key === 'Backspace'&&pin2 === '') {
+                                        pin1Ref.current.focus()
+                                        setPin({...pin,pin1: ''})
+                                }
+                            }}
                             value={pin2}
                             keyboardType="numeric"
                             maxLength={1}
@@ -164,6 +190,15 @@ const Otp = ({ route, navigation }) => {
                                 if (pin3 != '') {
                                     pin4Ref.current.focus()
                                 }
+                                
+                            }}
+                            onKeyPress={({ nativeEvent }) => {
+                                if (nativeEvent.key === 'Backspace'&&pin3 === '') {
+                                   
+                                        pin2Ref.current.focus()
+                                        setPin({...pin,pin2: ''})
+                                  
+                                }
                             }}
                             value={pin3}
                             keyboardType="numeric"
@@ -174,6 +209,15 @@ const Otp = ({ route, navigation }) => {
                             ref={pin4Ref}
                             onChangeText={(pin4) => {
                                 setPin({ ...pin, pin4: pin4 })
+                                
+                            }}
+                            onKeyPress={({ nativeEvent }) => {
+                                if (nativeEvent.key === 'Backspace'&&pin4 === '') {
+                                    
+                                        pin3Ref.current.focus()
+                                        setPin({...pin,pin3: ''})
+                                  
+                                }
                             }}
                             value={pin4}
                             keyboardType="numeric"
@@ -210,7 +254,7 @@ const Otp = ({ route, navigation }) => {
                                 // { color: enableResend ? '#4700b3' : 'grey' }
                                 { color: '#4700b3' }]}
                             // >{" "}Resend OTP({countdown})</Text>
-                            >{" "}Resend OTP</Text>
+                            >resend</Text>
                         </TouchableOpacity>
                     </View>
                 </Animatable.View>
@@ -225,7 +269,7 @@ export default Otp;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#4700b3'
+        backgroundColor: '#66ccff'
     },
     footer: {
         flex: 0.2,

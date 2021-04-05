@@ -43,48 +43,96 @@ const HomeContent = ({ navigation }) => {
         data: '',
         isLoading: true
     });
-    const userId = {
-        "userID": user.userData.userID
-    }
 
-    const getSurveyStatus = () => {
-        var config = {
-            method: 'post',
-            url: 'http://192.168.43.19:3000/api/v1/survey/surveyStatus',
-            headers: {},
-            data: userId
-        };
-        axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response));
-                if (response.data.success) {
-                    setSurveyList({
-                        data: response.data,
-                        isLoading: false
-                    })
+    const [userInfo, setUserInfo] = useState({
+        emailID: '',
+        lastName: '',
+        firstName: '',
+        userID: ''
+    })
+    // async function getItem() {
+    //     try{
+    //         const value = await AsyncStorage.getItem('userProfile');
+    //         const userProfile = JSON.parse(value)
+    //         if (value !== null) {
+    //           // We have data!!
+    //           user.setUserData({
+    //               emailID: userProfile.emailID,
+    //               firstName: userProfile.firstName,
+    //               lastName: userProfile.lastName,
+    //               userID: userProfile.userID
+    //           })
+    //           console.log("firstTime",user.userData)
+    //           console.log(userProfile.userID)
+    //           getSurveyStatus();
 
-                }
-                else {
-                    ToastAndroid.show("Oops...something went wrong!",
-                        ToastAndroid.LONG)
-                    setSurveyList({
-                        ...surveyList,
-                        isLoading: false
-                    })
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-                ToastAndroid.show(error,
-                    ToastAndroid.SHORT)
+    //         }
+    //     }
+    //     catch(error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    async function getSurveyStatus() {
+        try {
+            const val = await AsyncStorage.getItem('userProfile')
+
+            const userProfile = JSON.parse(val)
+
+            user.setUserData(userProfile)
+            console.log("home",user.userData)
+            // setUserInfo({
+            //     ...userInfo,
+            //     emailID: userProfile.emailID,
+            //     firstName: userProfile.firstName,
+            //     lastName: userProfile.lastName,
+            //     userID: userProfile.userID,
+            // })
+            // console.log("info",userInfo)
+            if (val) {
+
+                var config = {
+                    method: 'post',
+                    url: 'http://192.168.43.19:3000/api/v1/survey/surveyStatus',
+                    headers: {},
+                    data: {
+                        "userID": userProfile.userID
+                    }
+
+                };
+            }
+
+            const response = await axios(config)
+            if (response.data.success) {
+                setSurveyList({
+                    data: response.data,
+                    isLoading: false
+                })
+
+            }
+            else {
+                ToastAndroid.show("Oops...something went wrong!",
+                    ToastAndroid.LONG)
                 setSurveyList({
                     ...surveyList,
                     isLoading: false
                 })
-            });
+            }
+
+        }
+        catch (error) {
+            console.log(error);
+            ToastAndroid.show(error,
+                ToastAndroid.SHORT)
+            setSurveyList({
+                ...surveyList,
+                isLoading: false
+            })
+        }
     }
 
     useEffect(() => {
+        // getItem()
         getSurveyStatus()
     }, [])
 
@@ -106,7 +154,9 @@ const HomeContent = ({ navigation }) => {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-                <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
+
+                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
+
                 </View>
             </View>
         )
@@ -119,40 +169,67 @@ const HomeContent = ({ navigation }) => {
                 return (
 
                     <Animatable.View
-                     animation="pulse"
-                    style={styles.box}   
-                    >
+                        animation="pulse"
+                        style={styles.alertCard}>
+                        <TouchableOpacity
+                            onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
+                            style={{ flexDirection: 'row', }}>
 
-                        <TouchableOpacity 
-                        onPress={() => navigation.push('Daily', { type: "weekly" })}
-                        // onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
-                        >
-                        <View style={{ paddingRight:10 }}>
-                            <View style={{flexDirection: 'row',paddingHorizontal:5,}}>
-                            <View style={{ paddingVertical: 10 }}>
-                                {/* <Feather
-                                    name="alert-circle"
-                                    size={55}
-                                    color="#fff"
-                                /> */}
-                                <Image style={{width:60,height:50}}source={require('../assets/gif/alert.gif')} />
-                            </View>
-                            <View style={{paddingRight:5 }} >
+                            <Image style={{ width: 50, height: 50 }} source={require('../assets/gif/alert.gif')} />
+                            <View style={{ paddingEnd: 55 }}>
                                 <Text style={{
                                     color: '#fff',
-                                    fontFamily: 'nunito-semi',
-                                    fontSize: 20,
-                                    marginTop: 10
-                                }}>{surveyList.data.surveys.length} Survey pending!</Text>
+                                    fontFamily: 'nunito-semi', fontSize: 20
+                                }} >{surveyList.data.surveys.length} Survey pending!
 
-                                <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 15 }}>
-                                    Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
-                           </Text>
+                               </Text>
+                                <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 14 }}>
+                                    Tap to get your {surveyList.data.surveys[0].surveyType} survey done.</Text>
                             </View>
-                            </View>
-                        </View>
                         </TouchableOpacity>
+
                     </Animatable.View>
+
+
+
+
+                    // <View style={{paddingHorizontal:10}}>
+                    // <Animatable.View
+                    //  animation="pulse"
+                    // style={styles.box}   
+                    // >
+
+                    //     <TouchableOpacity 
+
+                    //     onPress={() => navigation.push('Daily', { type: surveyList.data.surveys[0].surveyType })}
+                    //     >
+                    //     <View style={{ paddingRight:10 }}>
+                    //         <View style={{flexDirection: 'row',paddingHorizontal:5,}}>
+                    //         <View style={{ paddingVertical: 10 }}>
+                    //             {/* <Feather
+                    //                 name="alert-circle"
+                    //                 size={55}
+                    //                 color="#fff"
+                    //             /> */}
+                    //             <Image style={{width:50,height:50}}source={require('../assets/gif/alert.gif')} />
+                    //         </View>
+                    //         <View style={{paddingRight:5 }} >
+                    //             <Text style={{
+                    //                 color: '#fff',
+                    //                 fontFamily: 'nunito-semi',
+                    //                 fontSize: 20,
+                    //                 marginTop: 10
+                    //             }}>{surveyList.data.surveys.length} Survey pending!</Text>
+
+                    //             <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 15 }}>
+                    //                 Tap to get your {surveyList.data.surveys[0].surveyType} survey done.
+                    //        </Text>
+                    //         </View>
+                    //         </View>
+                    //     </View>
+                    //     </TouchableOpacity>
+                    // </Animatable.View>
+                    // </View>
                     // <View style={[styles.box, { }]}>
                     //    <View style={{flexDirection:'row'}}>
                     //         {/* <Image style={{ width: 60, height: 50 }} source={require('../assets/gif/alert.gif')} /> */}
@@ -162,9 +239,7 @@ const HomeContent = ({ navigation }) => {
                     //             fontFamily: 'nunito-semi',
                     //             fontSize: 22
                     //         }}>{surveyList.data.surveys.length} Survey pending!</Text>
-                            
-                    //         <Text style={{ fontFamily: 'nunito-semi', color: '#fff', fontSize: 15 }}>
-                    //           Tap to get your {surveyList.data.surveys[0].surveyType} survey done.</Text>
+
                     //         </View>
                     //         </View>
                     // </View>
@@ -193,12 +268,12 @@ const HomeContent = ({ navigation }) => {
                         </View>
                         <Text style={styles.headerText}>Personal Growth Planner</Text>
                     </View>
+
                     <View
                         style={styles.footer}
                     >
-
                         {surveyUpdate}
-                        <Text>DASHBOARD</Text>
+
                     </View>
 
                 </ScrollView>
@@ -210,23 +285,46 @@ const HomeContent = ({ navigation }) => {
 const ProfileScreen = ({ navigation }) => {
 
     const user = useContext(UserContext);
-
     const [data, setData] = useState({
         firstName: user.userData.firstName,
         lastName: user.userData.lastName,
         userEmailId: user.userData.emailID
     })
+    // async function getItem() {
+    //     try {
+    //         const val = await AsyncStorage.getItem('userProfile')
+
+    //         const userProfile = JSON.parse(val)
+    //         setData({
+    //             firstName: userProfile.firstName,
+    //             lastName: userProfile.lastName,
+    //             userEmailId: userProfile.emailID,
+    //             userId: userProfile.userID,
+    //             token: '1'
+    //         })
+
+    //     }
+    //     catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     getItem()
+
+    // }, [])
 
     const [loading, setLoading] = useState(false)
     const [screen, setScreen] = useState('')
     const [button, setButton] = useState(false)
 
     const textInputFirstName = (first) => {
-        if (first != user.userData.firstName) {
-            setButton(true)
-        }
+
         if (first == "" || data.lastName == "") {
             setButton(false)
+        }
+        else {
+            setButton(true)
         }
         setData({
             ...data,
@@ -235,11 +333,11 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const textInputLastName = (last) => {
-        if (last != user.userData.lastName) {
-            setButton(true)
-        }
         if (last == "" || data.firstName == "") {
             setButton(false)
+        }
+        else {
+            setButton(true)
         }
         setData({
             ...data,
@@ -322,11 +420,13 @@ const ProfileScreen = ({ navigation }) => {
                 ToastAndroid.SHORT)
         }
         else {
+
             updateInfo();
         }
     }
 
     async function updateInfo() {
+        setLoading(true)
         try {
             var config = {
                 method: 'patch',
@@ -343,13 +443,17 @@ const ProfileScreen = ({ navigation }) => {
             const response = await axios(config)
             console.log(response)
             if (response.data.success) {
+                // await AsyncStorage.setItem('userProfile', JSON.stringify(data));
+                //    const val =  await AsyncStorage.getItem('userProfile');
 
                 user.setUserData({
                     ...user.userData,
                     lastName: data.lastName,
                     firstName: data.firstName
                 })
+
                 setLoading(false)
+                setButton(false)
                 ToastAndroid.show("Profile Updated 👍",
                     ToastAndroid.SHORT)
             }
@@ -412,6 +516,10 @@ const ProfileScreen = ({ navigation }) => {
                             ToastAndroid.show("Invalid email!",
                                 ToastAndroid.SHORT)
                         }
+                        else if (error.response.status === 409) {
+                            ToastAndroid.show("Email id is already in use. Use different email address",
+                                ToastAndroid.LONG)
+                        }
                         else {
                             ToastAndroid.show("Oops...something went wrong!",
                                 ToastAndroid.SHORT)
@@ -470,11 +578,11 @@ const ProfileScreen = ({ navigation }) => {
                                 ToastAndroid.show("Incorrect password!",
                                     ToastAndroid.SHORT)
                             }
-                            else if(error.response.status === 409) {
+                            else if (error.response.status === 409) {
                                 ToastAndroid.show("New password must be different from old password!",
                                     ToastAndroid.SHORT)
                             }
-                            else{
+                            else {
                                 ToastAndroid.show("Oops...something went wrong!",
                                     ToastAndroid.SHORT)
                             }
@@ -519,7 +627,13 @@ const ProfileScreen = ({ navigation }) => {
 
                         }}>
 
-                        <Animatable.View animation="slideInUp" style={{ paddingHorizontal: 20, paddingVertical: 20, backgroundColor: '#fff', borderRadius: 10 }}>
+                        <Animatable.View animation="slideInUp"
+                            style={{
+                                paddingHorizontal: 20,
+                                paddingVertical: 20,
+                                backgroundColor: '#fff',
+                                borderRadius: 10
+                            }}>
                             {screenName == "EmailChange" ?
                                 <Text
                                     style={{
@@ -748,7 +862,7 @@ const ProfileScreen = ({ navigation }) => {
                 <Modal transparent={true} visible={loading} >
 
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
+                        <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
                 </Modal>
                 {screen == "EmailChange" || screen == "PassChange" ?
@@ -778,7 +892,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <TextInput
                                     // placeholder="First Name"
                                     placeholder="First Name"
-                                    defaultValue={user.userData.firstName}
+                                    defaultValue={data.firstName}
                                     onChangeText={(first) => textInputFirstName(first)}
                                 />
                             </View>
@@ -796,7 +910,7 @@ const ProfileScreen = ({ navigation }) => {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     placeholder="Last Name"
-                                    defaultValue={user.userData.lastName}
+                                    defaultValue={data.lastName}
                                     onChangeText={(last) => textInputLastName(last)}
                                 />
 
@@ -810,7 +924,7 @@ const ProfileScreen = ({ navigation }) => {
                                         fontSize: 15,
                                         color: 'grey'
                                     }}
-                                >Email Id</Text>
+                                >Email Address</Text>
                             </View>
                             <View style={[styles.inputContainer, { flexDirection: 'row' }]}>
                                 <TextInput
@@ -821,7 +935,7 @@ const ProfileScreen = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => setScreen('EmailChange')}
                                     >
-                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>change</Text>
+                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>Change</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -847,7 +961,7 @@ const ProfileScreen = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => setScreen('PassChange')}
                                     >
-                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>change</Text>
+                                        <Text style={{ fontFamily: 'nunito-semi', color: '#4700b3' }}>Change</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -958,7 +1072,6 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 1,
-        backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingVertical: 20
     },
@@ -991,6 +1104,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30,
+    },
+    alertCard: {
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        padding: 10,
+        backgroundColor: "#ffb31a",
+        elevation: 5,
     },
     textSign: {
         fontSize: 20,

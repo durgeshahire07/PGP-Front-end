@@ -10,7 +10,8 @@ import {
     StatusBar,
     Modal,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    SafeAreaView
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -84,9 +85,10 @@ const NewPass = ({ route, navigation }) => {
                     const response = await axios(config)
                     console.log(response)
                     if (response.data.success) {
+                        navigation.replace('Login')
                         ToastAndroid.show("Password successfully updated 👍",
                             ToastAndroid.SHORT)
-                        navigation.replace('Login')
+                        
                         setLoading(false)
                     }
                 } catch (error) {
@@ -115,7 +117,7 @@ const NewPass = ({ route, navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <StatusBar backgroundColor='#4700b3' barStyle="light-content" />
                 <Modal transparent={true} visible={loading} >
@@ -228,7 +230,7 @@ const NewPass = ({ route, navigation }) => {
                 </Animatable.View>
                 </LinearGradient>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 

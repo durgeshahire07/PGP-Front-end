@@ -25,7 +25,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import axios from 'axios'
 import { UserContext } from '../userContext';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = ({ navigation }) => {
     const user = useContext(UserContext);
@@ -34,7 +34,7 @@ const SignUp = ({ navigation }) => {
         firstName: '',
         lastName: '',
         userEmailId: '',
-        password: ''
+        password: '',
     });
 
     const [secureEntry, setSecureEntry] = React.useState({
@@ -130,19 +130,18 @@ const SignUp = ({ navigation }) => {
                     const response = await axios(config)
 
                     if (response.data.success) {
-                        user.setUserData({
+                        await AsyncStorage.setItem('userProfile', JSON.stringify({
                             emailID: data.userEmailId,
                             firstName: data.firstName,
                             lastName: data.lastName,
-                            userID: response.data.userID
-                        })
-                        console.log(response)
-                        console.log(user.userData)
+                            userID: response.data.userID,
+                            token: '1'
+                        }));
                         setSecureEntry({
                             ...secureEntry,
                             isLoading: false
                         })
-                        navigation.navigate('Home')
+                        navigation.navigate('App', { screen: 'Home' })
                     }
                     else {
                         ToastAndroid.show("Sign up Failed!",
@@ -152,29 +151,29 @@ const SignUp = ({ navigation }) => {
                             isLoading: false
                         })
                     }
-                } catch (error) { 
+                } catch (error) {
                     console.log(error)
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
                     })
-                    if(error.response.status === 422){
+                    if (error.response.status === 422) {
                         ToastAndroid.show("Enter a valid email address!",
-                            ToastAndroid.SHORT)
+                            ToastAndroid.LONG)
                     }
-                    else if(error.response.status === 409){
-                        ToastAndroid.show("Email id is already in use!",
-                            ToastAndroid.SHORT)
+                    else if (error.response.status === 409) {
+                        ToastAndroid.show("Email id is already in use. Use different email address!",
+                            ToastAndroid.LONG)
                     }
-                    else if(error.response.status === 500){
+                    else if (error.response.status === 500) {
                         ToastAndroid.show("Oops...something went wrong!",
                             ToastAndroid.SHORT)
                     }
-                    else{
+                    else {
                         ToastAndroid.show(error,
                             ToastAndroid.SHORT)
                     }
-                   
+
                 }
             }
             else {
@@ -192,8 +191,8 @@ const SignUp = ({ navigation }) => {
             <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <Modal transparent={true} visible={secureEntry.isLoading} >
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'#000000aa' }}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
+                        <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
                 </Modal>
                 <LinearGradient
@@ -319,12 +318,12 @@ const SignUp = ({ navigation }) => {
                         </View>
                         <View style={styles.button}>
                             <Pressable
-                              onPress={submitHandler}
-                              android_ripple={{ color: '#fff' }}
+                                onPress={submitHandler}
+                                android_ripple={{ color: '#fff' }}
                                 style={styles.signIn}
-                                
+
                             >
-                                
+
                                 <LinearGradient
                                     colors={['#8533ff', '#4700b3']}
                                     start={[1, 0]}
@@ -338,8 +337,8 @@ const SignUp = ({ navigation }) => {
                                         }]}>Sign Up</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
-                                
-                                </Pressable>
+
+                            </Pressable>
                             <View style={styles.textPrivate}>
                                 <Text style={styles.color_textPrivate}>
                                     Already have an Account?

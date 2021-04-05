@@ -62,8 +62,8 @@ const ForgotPass = ({ navigation }) => {
                 const response = await axios(config)
                 console.log(response)
                 if (response.data.success) {
-                    ToastAndroid.show("OTP Code has been sent to",
-                            ToastAndroid.SHORT)
+                    ToastAndroid.show(`OTP code has been sent to ${data.userEmailId}`,
+                            ToastAndroid.LONG)
                    setLoading(false)
                     navigation.push('Otp', {
                         UserId: response.data.data.id,
@@ -102,7 +102,7 @@ const ForgotPass = ({ navigation }) => {
 
     return (
 
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
                 <Modal transparent={true} visible={loading} >
@@ -185,7 +185,7 @@ const ForgotPass = ({ navigation }) => {
                 </Animatable.View>
                 </LinearGradient>
             </ScrollView>
-        </View>
+        </SafeAreaView>
 
 
 

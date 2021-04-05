@@ -37,6 +37,7 @@ import { sub } from 'react-native-reanimated';
 const Daily = ({ navigation, route }) => {
     const user = useContext(UserContext);
     const { type } = route.params
+    console.log(type)
     const [state, setState] = useState({
         data: '',
         isLoading: true,
@@ -59,6 +60,7 @@ const Daily = ({ navigation, route }) => {
 
 
     const getSurvey = () => {
+       
         var config = {
             method: 'post',
             url: 'http://192.168.43.19:3000/api/v1/survey/getSurvey',
@@ -279,13 +281,31 @@ const Daily = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={{
-                        fontFamily: 'nunito-semi',
-                        fontSize: 20,
-                        color: '#fff',
-                        paddingLeft: 10,
-                        paddingTop: 10
-                    }}>Daily Personal Growth Planner</Text>
+                    {type === "daily" ?
+                        <Text style={{
+                            fontFamily: 'nunito-semi',
+                            fontSize: 20,
+                            color: '#fff',
+                            paddingLeft: 10,
+                            paddingTop: 10
+                        }}>Daily Survey</Text>
+                        :
+                        type === "weekly" ?
+                            <Text style={{
+                                fontFamily: 'nunito-semi',
+                                fontSize: 20,
+                                color: '#fff',
+                                paddingLeft: 10,
+                                paddingTop: 10
+                            }}>Weekly Survey</Text> :
+                            <Text style={{
+                                fontFamily: 'nunito-semi',
+                                fontSize: 20,
+                                color: '#fff',
+                                paddingLeft: 10,
+                                paddingTop: 10
+                            }}>Monthly Survey</Text>
+                    }
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
@@ -299,33 +319,33 @@ const Daily = ({ navigation, route }) => {
 
     else {
 
-        const submitButton = () =>{
+        const submitButton = () => {
             return (
                 <View style={{ paddingBottom: 10, paddingHorizontal: 50 }}>
-                <Pressable onPress={submitHandler}
-                    android_ripple={{ color: '#fff' }}
-                    style={{
-                        borderRadius: 20,
-                        backgroundColor: '#006699',
-                        paddingHorizontal: 70,
-                        paddingVertical: 15,
-                        backgroundColor: '#4700b3'
-                    }} >
-                    <View style={{ alignItems: 'center' }}>
-                        <Text style={{
-                            fontFamily: 'nunito-bold',
-                            fontSize: 17,
-                            color: '#fff',
+                    <Pressable onPress={submitHandler}
+                        android_ripple={{ color: '#fff' }}
+                        style={{
+                            borderRadius: 20,
+                            backgroundColor: '#006699',
+                            paddingHorizontal: 70,
+                            paddingVertical: 15,
+                            backgroundColor: '#4700b3'
+                        }} >
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={{
+                                fontFamily: 'nunito-bold',
+                                fontSize: 17,
+                                color: '#fff',
 
-                        }}>Submit</Text>
-                    </View>
-                </Pressable>
-            </View>
+                            }}>Submit</Text>
+                        </View>
+                    </Pressable>
+                </View>
             )
         }
 
         const display = (item, key) => {
-          
+ 
             if (item.type == "radio button") {
                 return <View style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
@@ -375,7 +395,7 @@ const Daily = ({ navigation, route }) => {
                 </View>
             }
             else if (item.type == "short answer") {
-                return <View style={{ paddingHorizontal: 15}}>
+                return <View style={{ paddingHorizontal: 15 }}>
 
                     <View style={styles.QuestionContainer}>
                         {item.required ?
@@ -422,7 +442,7 @@ const Daily = ({ navigation, route }) => {
 
             }
             else if (item.type == "long answer") {
-                return <View style={{ paddingHorizontal: 15}}>
+                return <View style={{ paddingHorizontal: 15 }}>
                     <View style={styles.QuestionContainer}>
                         {item.required ?
 
@@ -503,7 +523,7 @@ const Daily = ({ navigation, route }) => {
 
                     </View>
                 })
-                return <View style={{ paddingHorizontal: 15,}}>
+                return <View style={{ paddingHorizontal: 15, }}>
                     <View style={styles.QuestionContainer}>
                         {item.required ?
                             <View style={{ paddingVertical: 10 }}>
@@ -518,13 +538,13 @@ const Daily = ({ navigation, route }) => {
                         }
                         {subques}
                     </View>
-                   
+
                 </View>
             }
-            
+
         }
 
-        
+
 
         return (
 
@@ -543,29 +563,47 @@ const Daily = ({ navigation, route }) => {
                             />
                         </TouchableOpacity>
                     </View>
+                    {type === "daily" ?
+                        <Text style={{
+                            fontFamily: 'nunito-semi',
+                            fontSize: 20,
+                            color: '#fff',
+                            paddingLeft: 10,
+                            paddingTop: 10
+                        }}>Daily Survey</Text>
+                        :
+                        type === "weekly" ?
+                            <Text style={{
+                                fontFamily: 'nunito-semi',
+                                fontSize: 20,
+                                color: '#fff',
+                                paddingLeft: 10,
+                                paddingTop: 10
+                            }}>Weekly Survey</Text> :
+                            <Text style={{
+                                fontFamily: 'nunito-semi',
+                                fontSize: 20,
+                                color: '#fff',
+                                paddingLeft: 10,
+                                paddingTop: 10
+                            }}>Monthly Survey</Text>
+                    }
 
-                    <Text style={{
-                        fontFamily: 'nunito-semi',
-                        fontSize: 20,
-                        color: '#fff',
-                        paddingLeft: 10,
-                        paddingTop: 10
-                    }}>Daily Personal Growth Planner</Text>
 
                 </View>
-              
+
                 <FlatList
                     keyExtractor={(item) => item._id}
                     data={state.data}
                     ListFooterComponent={submitButton}
                     renderItem={({ item }) => (
-                        <View style={{paddingVertical:10}} >
+                        <View style={{ paddingVertical: 10 }} >
                             {display(item, item._id)}
                         </View>
-                        
+
                     )}
                 />
-                 
+
             </View>
         );
 
@@ -594,11 +632,9 @@ const styles = StyleSheet.create({
     },
     QuestionContainer: {
         backgroundColor: "#fff",
-       borderRadius:20,
+        borderRadius: 20,
         padding: 20,
         elevation: 7,
-
-
     },
 
     textarea: {

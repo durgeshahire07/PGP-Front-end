@@ -8,13 +8,6 @@ import RootStackScreen from './src/RootStackScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Otp from './src/Otp'
-import Newpass from './src/NewPass'
-import ForgotPass from './src/ForgotPass';
-import Home from './src/Home'
-import NewPass from './src/NewPass';
-import Daily from './src/Daily'
-import { } from 'react-native-animatable';
 import { ActivityIndicator,View,Image  } from 'react-native';
 
 const getFonts = () => Font.loadAsync({
@@ -24,22 +17,22 @@ const getFonts = () => Font.loadAsync({
 })
 
 const YourApp = () => {
-
+  
  const [isLoading, setIsLoading] = useState(true)
- const [userToken, setUserToken] = useState(null)
- const [fontsLoaded, setFontsLoaded] = useState(false)
  
- const authContext = useMemo(()=>({
-   signIn: ()=> {
-     setUserToken('hfe');
-   },
-   signOut: ()=> {
-    setUserToken(null);
-   },
-   signUp: ()=>{
-    setUserToken('hfe');
-   },
- }));
+ const [fontsLoaded, setFontsLoaded] = useState(false)
+//  const [userToken, setUserToken] = useState(null)
+//  const authContext = useMemo(()=>({
+//    signIn: ()=> {
+//      setUserToken('hfe');
+//    },
+//    signOut: ()=> {
+//     setUserToken(null);
+//    },
+//    signUp: ()=>{
+//     setUserToken('hfe');
+//    },
+//  }));
 
 //  useEffect(()=>{
 //    setTimeout(()=>{
@@ -47,7 +40,7 @@ const YourApp = () => {
 //    },3000)
 //  },[])
  
-
+ 
 // if( isLoading ){
 //   return(
 //     <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -66,7 +59,9 @@ const YourApp = () => {
     )
   } else {
     return (
+     
       <AppLoading
+        
         startAsync={getFonts}
         onFinish={() => setFontsLoaded(true)}
       />

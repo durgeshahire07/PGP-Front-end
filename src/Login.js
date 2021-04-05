@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
     const [data, setData] = React.useState({
         userEmailId: '',
         password: '',
-
+        admin: false
     });
 
     const [secureEntry, setSecureEntry] = React.useState({
@@ -75,19 +75,22 @@ const Login = ({ navigation }) => {
                     data: data
                 };
                 const response = await axios(config)
-                console.log(response)
+
                 if (response.data.success) {
-                    user.setUserData({
-                        emailID: response.data.data.userEmailId,
-                        firstName: response.data.data.firstName,
-                        lastName: response.data.data.lastName,
-                        userID: response.data.data._id
-                    })
+                   
+                    await AsyncStorage.setItem('userProfile', JSON.stringify({
+                     firstName: response.data.data.firstName,
+                         emailID: response.data.data.userEmailId,
+                          lastName: response.data.data.lastName,
+                        userID: response.data.data._id,
+                        token: '1'
+                    }));
+                    
                     setSecureEntry({
                         ...secureEntry,
                         isLoading: false
                     })
-                    navigation.push('Home')
+                    navigation.navigate('App', { screen: 'Home' })
                 }
                 else {
                     setSecureEntry({

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const UserContext = createContext();
 
 // This context provider is passed to any component requiring the context
@@ -8,7 +8,8 @@ export const UserProvider = ({ children }) => {
       emailID: '',
       firstName: '',
       lastName: '',
-      userID: ''
+      userID: '',
+      token: ''
   });
 
   return (
