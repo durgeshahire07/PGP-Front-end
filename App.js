@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { UserProvider } from './userContext';
 import * as Font from 'expo-font'
 import { AppLoading } from 'expo';
+
 import RootStackScreen from './src/RootStackScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,7 +18,6 @@ const getFonts = () => Font.loadAsync({
 })
 
 const YourApp = () => {
-  
  const [isLoading, setIsLoading] = useState(true)
  
  const [fontsLoaded, setFontsLoaded] = useState(false)

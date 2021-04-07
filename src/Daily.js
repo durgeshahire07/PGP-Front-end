@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 
 import Slider from '@react-native-community/slider';
-
+import config from '../config'
 import { UserContext } from '../userContext'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -35,6 +35,8 @@ import Textarea from 'react-native-textarea';
 import { sub } from 'react-native-reanimated';
 
 const Daily = ({ navigation, route }) => {
+    const getSurvey_URL = config.GET_SURVEY
+    const saveResponse_URL = config.SAVE_RESPONSE
     const user = useContext(UserContext);
     const { type } = route.params
     console.log(type)
@@ -63,7 +65,7 @@ const Daily = ({ navigation, route }) => {
        
         var config = {
             method: 'post',
-            url: 'http://192.168.43.19:3000/api/v1/survey/getSurvey',
+            url: getSurvey_URL,
             headers: {},
             data: request
         };
@@ -232,7 +234,7 @@ const Daily = ({ navigation, route }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: 'http://192.168.43.19:3000/api/v1/survey/saveResponse',
+                    url: saveResponse_URL,
                     headers: {},
                     data: res.ans
                 };

@@ -34,10 +34,12 @@ import { UserContext } from '../userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { color } from 'react-native-reanimated';
 import { back } from 'react-native/Libraries/Animated/src/Easing';
+import config from '../config'
 const Drawer = createDrawerNavigator();
 
 const HomeContent = ({ navigation }) => {
     const user = useContext(UserContext);
+    const surveyStatus_URL = config.SURVEY_STATUS;
     // console.log(user.userData)
     const [surveyList, setSurveyList] = useState({
         data: '',
@@ -93,7 +95,7 @@ const HomeContent = ({ navigation }) => {
 
                 var config = {
                     method: 'post',
-                    url: 'http://192.168.43.19:3000/api/v1/survey/surveyStatus',
+                    url: surveyStatus_URL,
                     headers: {},
                     data: {
                         "userID": userProfile.userID
@@ -283,7 +285,9 @@ const HomeContent = ({ navigation }) => {
 };
 
 const ProfileScreen = ({ navigation }) => {
-
+    const updateInfo_URL = config.UPDATE_INFO
+    const updateEmail_URL = config.UPDATE_EMAIL
+    const updatePass_URL = config.UPDATE_PASS
     const user = useContext(UserContext);
     const [data, setData] = useState({
         firstName: user.userData.firstName,
@@ -430,7 +434,7 @@ const ProfileScreen = ({ navigation }) => {
         try {
             var config = {
                 method: 'patch',
-                url: 'http://192.168.43.19:3000/api/v1/auth/updateInfo',
+                url: updateInfo_URL,
                 headers: {},
                 data: {
                     userID: user.userData.userID,
@@ -481,7 +485,7 @@ const ProfileScreen = ({ navigation }) => {
                     try {
                         var config = {
                             method: 'patch',
-                            url: 'http://192.168.43.19:3000/api/v1/auth/updateEmail',
+                            url: updateEmail_URL,
                             headers: {},
                             data: {
                                 userID: user.userData.userID,
@@ -547,7 +551,7 @@ const ProfileScreen = ({ navigation }) => {
                         try {
                             var config = {
                                 method: 'patch',
-                                url: 'http://192.168.43.19:3000/api/v1/auth/updatePassword',
+                                url: updatePass_URL,
                                 headers: {},
                                 data: {
                                     userID: user.userData.userID,

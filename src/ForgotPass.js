@@ -16,7 +16,7 @@ import {
     Modal
 
 } from 'react-native';
-
+import config from '../config'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
@@ -24,7 +24,7 @@ import { useState } from 'react/cjs/react.development';
 
 
 const ForgotPass = ({ navigation }) => {
-
+    
     const [data, setData] = React.useState({
         userEmailId: ''
     });
@@ -52,6 +52,7 @@ const ForgotPass = ({ navigation }) => {
 
         console.log(data)
         if (data.userEmailId) {
+            console.log(config.FORGET_PASS`${data.userEmailId}`)
             setLoading(true);
             try {
                 var config = {

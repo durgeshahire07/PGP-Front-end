@@ -23,10 +23,12 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import config from '../config'
+import { useScrollToTop } from '@react-navigation/native';
 
 const Login = ({ navigation }) => {
-
+  
+    const Login_URL = config.LOGIN;
     const user = useContext(UserContext);
     const [data, setData] = React.useState({
         userEmailId: '',
@@ -70,7 +72,7 @@ const Login = ({ navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: 'http://192.168.43.19:3000/api/v1/auth/login',
+                    url: Login_URL,
                     headers: {},
                     data: data
                 };
