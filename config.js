@@ -7,6 +7,9 @@ import {
     UPDATE_INFO,
     UPDATE_EMAIL,
     UPDATE_PASS,
+    FORGET_PASS,
+    OTP,
+    RESET_PASS,
 } from '@env'
 
 export default {
@@ -18,4 +21,7 @@ export default {
     UPDATE_INFO,
     UPDATE_EMAIL,
     UPDATE_PASS,
+    FORGET_PASS,
+    OTP,
+    RESET_PASS,
 }

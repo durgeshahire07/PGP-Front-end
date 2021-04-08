@@ -18,9 +18,9 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios'
 import { useState } from 'react/cjs/react.development';
-
+import config from '../config'
 const NewPass = ({ route, navigation }) => {
-
+    const resetPass_URL = config.RESET_PASS
     const { UserId } = route.params;
     // const id = JSON.stringify(UserId)
     // console.log(UserId)
@@ -75,7 +75,7 @@ const NewPass = ({ route, navigation }) => {
                 try {
                     var config = {
                         method: 'patch',
-                        url: 'http://192.168.43.19:3000/api/v1/auth/password',
+                        url: resetPass_URL,
                         headers: {},
                         data: {
                             userID: UserId,

@@ -14,12 +14,13 @@ import {
     Image,
     ActivityIndicator
 } from 'react-native';
-
+import config from '../config'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 
 const Otp = ({ route, navigation }) => {
+    const otp_URL = config.OTP
     // const Otp = () => {
     const { UserId } = route.params;
     // const { UserId } = 1;
@@ -65,7 +66,7 @@ const Otp = ({ route, navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: 'http://192.168.43.19:3000/api/v1/auth/otp',
+                    url: otp_URL,
                     headers: {},
                     data: { id: UserId, otp }
                 };

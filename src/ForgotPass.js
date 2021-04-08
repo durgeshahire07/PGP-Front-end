@@ -24,7 +24,7 @@ import { useState } from 'react/cjs/react.development';
 
 
 const ForgotPass = ({ navigation }) => {
-    
+    const forgetPass_URL = config.FORGET_PASS;
     const [data, setData] = React.useState({
         userEmailId: ''
     });
@@ -52,12 +52,11 @@ const ForgotPass = ({ navigation }) => {
 
         console.log(data)
         if (data.userEmailId) {
-            console.log(config.FORGET_PASS`${data.userEmailId}`)
             setLoading(true);
             try {
                 var config = {
                     method: 'get',
-                    url: `http://192.168.43.19:3000/api/v1/auth/otp?email=${data.userEmailId}`,
+                    url: `${forgetPass_URL}${data.userEmailId}`,
                     headers: {}
                 };
                 const response = await axios(config)
