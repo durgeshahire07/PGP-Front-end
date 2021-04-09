@@ -35,8 +35,7 @@ import Textarea from 'react-native-textarea';
 import { sub } from 'react-native-reanimated';
 
 const Daily = ({ navigation, route }) => {
-    const getSurvey_URL = config.GET_SURVEY
-    const saveResponse_URL = config.SAVE_RESPONSE
+    const {HOST,PORT,GET_SURVEY,SAVE_RESPONSE} = config;
     const user = useContext(UserContext);
     const { type } = route.params
     console.log(type)
@@ -65,7 +64,7 @@ const Daily = ({ navigation, route }) => {
        
         var config = {
             method: 'post',
-            url: getSurvey_URL,
+            url: `http://${HOST}:${PORT}${GET_SURVEY}`,
             headers: {},
             data: request
         };
@@ -234,7 +233,7 @@ const Daily = ({ navigation, route }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: saveResponse_URL,
+                    url: `http://${HOST}:${PORT}${SAVE_RESPONSE}`,
                     headers: {},
                     data: res.ans
                 };

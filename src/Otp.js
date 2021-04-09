@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 
 const Otp = ({ route, navigation }) => {
-    const otp_URL = config.OTP
+    const {HOST,PORT,OTP} = config;
     // const Otp = () => {
     const { UserId } = route.params;
     // const { UserId } = 1;
@@ -59,6 +59,7 @@ const Otp = ({ route, navigation }) => {
     //     , 1000);
     
     async function submitHandler() {
+        
         const otp = '' + pin1 + pin2 + pin3 + pin4;
         console.log(otp)
         if (pin1 && pin2 && pin3 && pin4) {
@@ -66,7 +67,7 @@ const Otp = ({ route, navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: otp_URL,
+                    url: `http://${HOST}:${PORT}${OTP}`,
                     headers: {},
                     data: { id: UserId, otp }
                 };

@@ -39,7 +39,8 @@ const Drawer = createDrawerNavigator();
 
 const HomeContent = ({ navigation }) => {
     const user = useContext(UserContext);
-    const surveyStatus_URL = config.SURVEY_STATUS;
+    const {HOST,PORT,SURVEY_STATUS} = config;
+    
     // console.log(user.userData)
     const [surveyList, setSurveyList] = useState({
         data: '',
@@ -95,7 +96,7 @@ const HomeContent = ({ navigation }) => {
 
                 var config = {
                     method: 'post',
-                    url: surveyStatus_URL,
+                    url: `http://${HOST}:${PORT}${SURVEY_STATUS}`,
                     headers: {},
                     data: {
                         "userID": userProfile.userID
@@ -285,9 +286,7 @@ const HomeContent = ({ navigation }) => {
 };
 
 const ProfileScreen = ({ navigation }) => {
-    const updateInfo_URL = config.UPDATE_INFO
-    const updateEmail_URL = config.UPDATE_EMAIL
-    const updatePass_URL = config.UPDATE_PASS
+    const {HOST,PORT,UPDATE_INFO,UPDATE_EMAIL,UPDATE_PASS} = config;
     const user = useContext(UserContext);
     const [data, setData] = useState({
         firstName: user.userData.firstName,
@@ -434,7 +433,7 @@ const ProfileScreen = ({ navigation }) => {
         try {
             var config = {
                 method: 'patch',
-                url: updateInfo_URL,
+                url: `http://${HOST}:${PORT}${UPDATE_INFO}`,
                 headers: {},
                 data: {
                     userID: user.userData.userID,
@@ -485,7 +484,7 @@ const ProfileScreen = ({ navigation }) => {
                     try {
                         var config = {
                             method: 'patch',
-                            url: updateEmail_URL,
+                            url: `http://${HOST}:${PORT}${UPDATE_EMAIL}`,
                             headers: {},
                             data: {
                                 userID: user.userData.userID,
@@ -551,7 +550,7 @@ const ProfileScreen = ({ navigation }) => {
                         try {
                             var config = {
                                 method: 'patch',
-                                url: updatePass_URL,
+                                url: `http://${HOST}:${PORT}${UPDATE_PASS}`,
                                 headers: {},
                                 data: {
                                     userID: user.userData.userID,

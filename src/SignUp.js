@@ -27,9 +27,11 @@ import axios from 'axios'
 import { UserContext } from '../userContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../config'
-const SignUp = ({ navigation }) => {
+const SignUp = ({ navigation }) => {    
+    
+    const {HOST,PORT,REGISTER} = config;
     const user = useContext(UserContext);
-    const SignUp_URL = config.REGISTER
+   
     const [data, setData] = React.useState({
         firstName: '',
         lastName: '',
@@ -123,7 +125,7 @@ const SignUp = ({ navigation }) => {
                 try {
                     var config = {
                         method: 'post',
-                        url: SignUp_URL,
+                        url: `http://${HOST}:${PORT}${REGISTER}`,
                         headers: {},
                         data: data
                     };

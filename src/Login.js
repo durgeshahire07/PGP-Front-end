@@ -28,7 +28,9 @@ import { useScrollToTop } from '@react-navigation/native';
 
 const Login = ({ navigation }) => {
   
-    const Login_URL = config.LOGIN;
+    const {HOST,PORT,LOGIN} = config;
+   
+    
     const user = useContext(UserContext);
     const [data, setData] = React.useState({
         userEmailId: '',
@@ -72,7 +74,7 @@ const Login = ({ navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: Login_URL,
+                    url: `http://${HOST}:${PORT}${LOGIN}`,
                     headers: {},
                     data: data
                 };

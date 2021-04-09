@@ -20,7 +20,7 @@ import axios from 'axios'
 import { useState } from 'react/cjs/react.development';
 import config from '../config'
 const NewPass = ({ route, navigation }) => {
-    const resetPass_URL = config.RESET_PASS
+    const {HOST,PORT,RESET_PASS} = config;
     const { UserId } = route.params;
     // const id = JSON.stringify(UserId)
     // console.log(UserId)
@@ -75,7 +75,7 @@ const NewPass = ({ route, navigation }) => {
                 try {
                     var config = {
                         method: 'patch',
-                        url: resetPass_URL,
+                        url: `http://${HOST}:${PORT}${RESET_PASS}`,
                         headers: {},
                         data: {
                             userID: UserId,

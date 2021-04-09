@@ -24,7 +24,8 @@ import { useState } from 'react/cjs/react.development';
 
 
 const ForgotPass = ({ navigation }) => {
-    const forgetPass_URL = config.FORGET_PASS;
+    
+    const {HOST,PORT,FORGET_PASS} = config;
     const [data, setData] = React.useState({
         userEmailId: ''
     });
@@ -56,7 +57,7 @@ const ForgotPass = ({ navigation }) => {
             try {
                 var config = {
                     method: 'get',
-                    url: `${forgetPass_URL}${data.userEmailId}`,
+                    url: `http://${HOST}:${PORT}${FORGET_PASS}${data.userEmailId}`,
                     headers: {}
                 };
                 const response = await axios(config)

@@ -1,4 +1,6 @@
 import { 
+    HOST,
+    PORT,
     REGISTER,
     LOGIN,
     GET_SURVEY,
@@ -13,6 +15,8 @@ import {
 } from '@env'
 
 export default {
+    HOST,
+    PORT,
     REGISTER,
     LOGIN,
     GET_SURVEY,
