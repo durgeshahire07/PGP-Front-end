@@ -105,6 +105,7 @@ const Daily = ({ navigation, route }) => {
         })
 
         setState({
+            ...state,
             data: tmp
         })
 
