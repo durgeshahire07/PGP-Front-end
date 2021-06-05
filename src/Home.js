@@ -577,7 +577,7 @@ const ProfileScreen = ({ navigation }) => {
                         } catch (error) {
                             setLoading(false)
                             console.log(error)
-                            if (error.response.status === 500) {
+                            if (error.response.status === 404) {
                                 ToastAndroid.show("Incorrect password!",
                                     ToastAndroid.SHORT)
                             }
