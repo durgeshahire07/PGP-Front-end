@@ -89,11 +89,13 @@ const Daily = ({ navigation, route }) => {
                     ToastAndroid.SHORT)
             });
     }
+
     useEffect(() => {
         getSurvey()
     }, [])
 
     const onChoiceChange = (selectedChoice, id) => {
+        
         var tmp = state.data
         tmp.map((val) => {
             if (val._id === id) {
@@ -105,6 +107,7 @@ const Daily = ({ navigation, route }) => {
         })
 
         setState({
+            ...state,
             data: tmp
         })
 
@@ -596,6 +599,8 @@ const Daily = ({ navigation, route }) => {
                 <FlatList
                     keyExtractor={(item) => item._id}
                     data={state.data}
+                    refreshing={state.isLoading}
+                    onRefresh={getSurvey}   
                     ListFooterComponent={submitButton}
                     renderItem={({ item }) => (
                         <View style={{ paddingVertical: 10 }} >

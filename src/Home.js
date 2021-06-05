@@ -834,14 +834,9 @@ const ProfileScreen = ({ navigation }) => {
                                 >
                                     <Text style={{ color: '#4700b3', fontFamily: 'nunito-bold' }}>Back</Text>
                                 </TouchableOpacity>
-
                             </View>
-
                         </Animatable.View>
                     </View>
-
-
-
                 </ScrollView>
             </Modal>
         )
