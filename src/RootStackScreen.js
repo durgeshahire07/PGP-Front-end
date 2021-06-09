@@ -9,6 +9,7 @@ import Otp from '../src/Otp'
 import NewPass from '../src/NewPass'
 import Home from '../src/Home'
 import Daily from '../src/Daily'
+import userInfo from '../src/userInfo'
 import { UserContext } from '../userContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { Tabs } from 'native-base'
@@ -20,6 +21,7 @@ const AuthStackScreen = () => {
   return(
   <AuthStack.Navigator headerMode='none'>
     <AuthStack.Screen name="SignUp" component={SignUp} />
+    <AuthStack.Screen name="userInfo" component={userInfo} />
     <AuthStack.Screen name="Login" component={Login} />
     <AuthStack.Screen name="ForgotPass" component={ForgotPass} />
     <AuthStack.Screen name="NewPass" component={NewPass} />

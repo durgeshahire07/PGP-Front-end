@@ -28,7 +28,7 @@ import { useScrollToTop } from '@react-navigation/native';
 
 const Login = ({ navigation }) => {
   
-    const {HOST,PORT,LOGIN} = config;
+    const {HOST,LOGIN} = config;
    
     
     const user = useContext(UserContext);
@@ -74,7 +74,7 @@ const Login = ({ navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: `http://${HOST}:${PORT}${LOGIN}`,
+                    url: `${HOST}${LOGIN}`,
                     headers: {},
                     data: data
                 };
@@ -221,7 +221,7 @@ const Login = ({ navigation }) => {
                             <Text style={[{ fontFamily: 'nunito-bold' }, { color: '#4700b3' }]}>Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.button}>
+                    <View style={styles.bottomContainer}>
                         <View
                             style={styles.signIn}
                             
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
         fontFamily: 'nunito-regular',
         color: '#000000',
     },
-    button: {
+    bottomContainer: {
         alignItems: 'center',
         marginTop: 50,
         paddingBottom: 10,

@@ -75,7 +75,7 @@ const NewPass = ({ route, navigation }) => {
                 try {
                     var config = {
                         method: 'patch',
-                        url: `http://${HOST}:${PORT}${RESET_PASS}`,
+                        url: `${HOST}${RESET_PASS}`,
                         headers: {},
                         data: {
                             userID: UserId,
