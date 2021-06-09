@@ -67,7 +67,7 @@ const Otp = ({ route, navigation }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: `http://${HOST}:${PORT}${OTP}`,
+                    url: `${HOST}${OTP}`,
                     headers: {},
                     data: { id: UserId, otp }
                 };

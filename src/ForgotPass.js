@@ -50,14 +50,14 @@ const ForgotPass = ({ navigation }) => {
         //     ...loading,
         //     isLoading: true
         // })
-
+        console.log(`${HOST}${FORGET_PASS}${data.userEmailId}`)
         console.log(data)
         if (data.userEmailId) {
             setLoading(true);
             try {
                 var config = {
                     method: 'get',
-                    url: `http://${HOST}:${PORT}${FORGET_PASS}${data.userEmailId}`,
+                    url: `${HOST}${FORGET_PASS}${data.userEmailId}`,
                     headers: {}
                 };
                 const response = await axios(config)
@@ -88,9 +88,13 @@ const ForgotPass = ({ navigation }) => {
                     ToastAndroid.show("User not found",
                     ToastAndroid.SHORT)
                 }
-                else{
-                    ToastAndroid.show(error,
+                else if(error.response.status === 503) {
+                    ToastAndroid.show("Server Error! Please try after sometime.",
                     ToastAndroid.SHORT)
+                }
+                else {
+                    ToastAndroid.show(error,
+                        ToastAndroid.SHORT)
                 }
             }
         }

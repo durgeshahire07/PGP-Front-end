@@ -64,7 +64,7 @@ const Daily = ({ navigation, route }) => {
        
         var config = {
             method: 'post',
-            url: `http://${HOST}:${PORT}${GET_SURVEY}`,
+            url: `${HOST}${GET_SURVEY}`,
             headers: {},
             data: request
         };
@@ -235,7 +235,7 @@ const Daily = ({ navigation, route }) => {
             try {
                 var config = {
                     method: 'post',
-                    url: `http://${HOST}:${PORT}${SAVE_RESPONSE}`,
+                    url: `${HOST}${SAVE_RESPONSE}`,
                     headers: {},
                     data: res.ans
                 };

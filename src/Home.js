@@ -39,7 +39,7 @@ const Drawer = createDrawerNavigator();
 
 const HomeContent = ({ navigation }) => {
     const user = useContext(UserContext);
-    const {HOST,PORT,SURVEY_STATUS} = config;
+    const {HOST,SURVEY_STATUS} = config;
     
     // console.log(user.userData)
     const [surveyList, setSurveyList] = useState({
@@ -77,6 +77,7 @@ const HomeContent = ({ navigation }) => {
     // }
 
     async function getSurveyStatus() {
+        
         try {
             const val = await AsyncStorage.getItem('userProfile')
 
@@ -96,7 +97,7 @@ const HomeContent = ({ navigation }) => {
 
                 var config = {
                     method: 'post',
-                    url: `http://${HOST}:${PORT}${SURVEY_STATUS}`,
+                    url: `${HOST}${SURVEY_STATUS}`,
                     headers: {},
                     data: {
                         "userID": userProfile.userID
@@ -433,7 +434,7 @@ const ProfileScreen = ({ navigation }) => {
         try {
             var config = {
                 method: 'patch',
-                url: `http://${HOST}:${PORT}${UPDATE_INFO}`,
+                url: `${HOST}${UPDATE_INFO}`,
                 headers: {},
                 data: {
                     userID: user.userData.userID,
@@ -484,7 +485,7 @@ const ProfileScreen = ({ navigation }) => {
                     try {
                         var config = {
                             method: 'patch',
-                            url: `http://${HOST}:${PORT}${UPDATE_EMAIL}`,
+                            url: `${HOST}${UPDATE_EMAIL}`,
                             headers: {},
                             data: {
                                 userID: user.userData.userID,
@@ -511,11 +512,11 @@ const ProfileScreen = ({ navigation }) => {
                     } catch (error) {
                         setLoading(false)
                         console.log(error)
-                        if (error.response.status === 500) {
+                        if (error.response.status === 404) {
                             ToastAndroid.show("Incorrect Password!",
                                 ToastAndroid.SHORT)
                         }
-                        else if (error.response.status === 404) {
+                        else if (error.response.status === 400) {
                             ToastAndroid.show("Invalid email!",
                                 ToastAndroid.SHORT)
                         }
@@ -550,7 +551,7 @@ const ProfileScreen = ({ navigation }) => {
                         try {
                             var config = {
                                 method: 'patch',
-                                url: `http://${HOST}:${PORT}${UPDATE_PASS}`,
+                                url: `${HOST}${UPDATE_PASS}`,
                                 headers: {},
                                 data: {
                                     userID: user.userData.userID,

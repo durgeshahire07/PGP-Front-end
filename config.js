@@ -1,6 +1,5 @@
 import { 
     HOST,
-    PORT,
     REGISTER,
     LOGIN,
     GET_SURVEY,
@@ -16,7 +15,6 @@ import {
 
 export default {
     HOST,
-    PORT,
     REGISTER,
     LOGIN,
     GET_SURVEY,
