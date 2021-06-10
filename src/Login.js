@@ -79,22 +79,30 @@ const Login = ({ navigation }) => {
                     data: data
                 };
                 const response = await axios(config)
-
+                console.log(response)
+                
                 if (response.data.success) {
-                   
-                    await AsyncStorage.setItem('userProfile', JSON.stringify({
-                     firstName: response.data.data.firstName,
-                         emailID: response.data.data.userEmailId,
-                          lastName: response.data.data.lastName,
-                        userID: response.data.data._id,
-                        token: '1'
-                    }));
-                    
-                    setSecureEntry({
-                        ...secureEntry,
-                        isLoading: false
-                    })
-                    navigation.navigate('App', { screen: 'Home' })
+                    if(!response.data.data.profession){
+                        setSecureEntry({
+                            ...secureEntry,
+                            isLoading: false
+                        })
+                        navigation.push('userInfo', {UserId: response.data.data._id,})
+                    }
+                    else{
+                        await AsyncStorage.setItem('userProfile', JSON.stringify({
+                            firstName: response.data.data.firstName,
+                                emailID: response.data.data.userEmailId,
+                                 lastName: response.data.data.lastName,
+                               userID: response.data.data._id,
+                               token: '1'
+                           }));
+                           setSecureEntry({
+                               ...secureEntry,
+                               isLoading: false
+                           })
+                           navigation.navigate('App', { screen: 'Home' })
+                    }   
                 }
                 else {
                     setSecureEntry({
@@ -120,6 +128,11 @@ const Login = ({ navigation }) => {
                     ToastAndroid.show("Enter a valid email!",
                         ToastAndroid.SHORT)
                 }
+                else if (error.response.status === 503) {
+                    ToastAndroid.show("Internal server error! Please try after sometime.",
+                        ToastAndroid.SHORT)
+                }
+                
                 else {
                     ToastAndroid.show(error,
                         ToastAndroid.SHORT)

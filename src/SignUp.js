@@ -111,82 +111,82 @@ const SignUp = ({ navigation }) => {
     }
 
     async function submitHandler() {
-        navigation.push('userInfo', {data: data.firstName})
-        // if (data.password != secureEntry.confirm_password) {
-        //     ToastAndroid.show("Password don't match!",
-        //         ToastAndroid.SHORT)
-        // }
-        // else if (data.password && data.firstName && data.lastName && data.userEmailId) {
-        //     if (data.password.length > 5) {
-        //         setSecureEntry({
-        //             ...secureEntry,
-        //             isLoading: true
-        //         })
-        //         try {
-        //             var config = {
-        //                 method: 'post',
-        //                 url: `${HOST}${REGISTER}`,
-        //                 headers: {},
-        //                 data: data
-        //             };
-        //             const response = await axios(config)
+        if (data.password != secureEntry.confirm_password) {
+            ToastAndroid.show("Password don't match!",
+                ToastAndroid.SHORT)
+        }
+        else if (data.password && data.firstName && data.lastName && data.userEmailId) {
+            if (data.password.length > 5) {
+                setSecureEntry({
+                    ...secureEntry,
+                    isLoading: true
+                })
+                try {
+                    var config = {
+                        method: 'post',
+                        url: `${HOST}${REGISTER}`,
+                        headers: {},
+                        data: data
+                    };
+                    const response = await axios(config)
+                    console.log(response);
 
-        //             if (response.data.success) {
-        //                 await AsyncStorage.setItem('userProfile', JSON.stringify({
-        //                     emailID: data.userEmailId,
-        //                     firstName: data.firstName,
-        //                     lastName: data.lastName,
-        //                     userID: response.data.userID,
-        //                     token: '1'
-        //                 }));
-        //                 setSecureEntry({
-        //                     ...secureEntry,
-        //                     isLoading: false
-        //                 })
-        //                 navigation.navigate('App', { screen: 'Home' })
-        //             }
-        //             else {
-        //                 ToastAndroid.show("Sign up Failed!",
-        //                     ToastAndroid.SHORT)
-        //                 setSecureEntry({
-        //                     ...secureEntry,
-        //                     isLoading: false
-        //                 })
-        //             }
-        //         } catch (error) {
-        //             console.log(error)
-        //             setSecureEntry({
-        //                 ...secureEntry,
-        //                 isLoading: false
-        //             })
-        //             if (error.response.status === 422) {
-        //                 ToastAndroid.show("Enter a valid email address!",
-        //                     ToastAndroid.LONG)
-        //             }
-        //             else if (error.response.status === 409) {
-        //                 ToastAndroid.show("Email id is already in use. Use different email address!",
-        //                     ToastAndroid.LONG)
-        //             }
-        //             else if (error.response.status === 500) {
-        //                 ToastAndroid.show("Oops...something went wrong!",
-        //                     ToastAndroid.SHORT)
-        //             }
-        //             else {
-        //                 ToastAndroid.show(error,
-        //                     ToastAndroid.SHORT)
-        //             }
+                    if (response.data.success) {
+                        await AsyncStorage.setItem('userProfile', JSON.stringify({
+                            emailID: data.userEmailId,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            userID: response.data.userID,
+                            token: '1'
+                        }));
+                        setSecureEntry({
+                            ...secureEntry,
+                            isLoading: false
+                        })
+                        navigation.push('userInfo', {UserId: response.data.userID,})
+                    }
+                    else {
+                        ToastAndroid.show("Sign up Failed!",
+                            ToastAndroid.SHORT)
+                        setSecureEntry({
+                            ...secureEntry,
+                            isLoading: false
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                    setSecureEntry({
+                        ...secureEntry,
+                        isLoading: false
+                    })
+                    if (error.response.status === 422) {
+                        ToastAndroid.show("Enter a valid email address!",
+                            ToastAndroid.LONG)
+                    }
+                    else if (error.response.status === 409) {
+                        ToastAndroid.show("Email id is already in use. Use different email address!",
+                            ToastAndroid.LONG)
+                    }
+                    else if (error.response.status === 500) {
+                        ToastAndroid.show("Oops...something went wrong!",
+                            ToastAndroid.SHORT)
+                    }
+                    else {
+                        ToastAndroid.show(error,
+                            ToastAndroid.SHORT)
+                    }
 
-        //         }
-        //     }
-        //     else {
-        //         ToastAndroid.show("Password must have least 6 characters!",
-        //             ToastAndroid.SHORT)
-        //     }
-        // }
-        // else {
-        //     ToastAndroid.show("Please fill all the information!",
-        //         ToastAndroid.SHORT)
-        // }
+                }
+            }
+            else {
+                ToastAndroid.show("Password must have least 6 characters!",
+                    ToastAndroid.SHORT)
+            }
+        }
+        else {
+            ToastAndroid.show("Please fill all the information!",
+                ToastAndroid.SHORT)
+        }
     }
     return (
         <SafeAreaView style={styles.container}>

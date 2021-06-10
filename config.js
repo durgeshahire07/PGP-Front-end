@@ -11,6 +11,7 @@ import {
     FORGET_PASS,
     OTP,
     RESET_PASS,
+    ADD_INFO,
 } from '@env'
 
 export default {
@@ -26,4 +27,5 @@ export default {
     FORGET_PASS,
     OTP,
     RESET_PASS,
+    ADD_INFO, 
 }

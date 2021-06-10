@@ -259,6 +259,14 @@ const Daily = ({ navigation, route }) => {
                     ToastAndroid.show(error,
                         ToastAndroid.SHORT)
                 }
+                else if (error.response.status === 503) {
+                    ToastAndroid.show("Internal Server Error! Please try after sometime.",
+                        ToastAndroid.SHORT)
+                }
+                else{
+                    ToastAndroid.show("Oops! Something went wrong.",
+                        ToastAndroid.SHORT)
+                }
             }
         }
         else {

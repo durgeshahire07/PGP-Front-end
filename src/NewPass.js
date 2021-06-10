@@ -98,6 +98,10 @@ const NewPass = ({ route, navigation }) => {
                         ToastAndroid.show("Oops...something went wrong!",
                             ToastAndroid.SHORT)
                     }
+                    else if (error.response.status === 503) {
+                        ToastAndroid.show("Internal server error! Please try after sometime.",
+                            ToastAndroid.SHORT)
+                    }
                     else {
                         ToastAndroid.show("Oops...something went wrong!",
                             ToastAndroid.SHORT)

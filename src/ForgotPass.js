@@ -89,7 +89,7 @@ const ForgotPass = ({ navigation }) => {
                     ToastAndroid.SHORT)
                 }
                 else if(error.response.status === 503) {
-                    ToastAndroid.show("Server Error! Please try after sometime.",
+                    ToastAndroid.show("Internal Server Error! Please try after sometime.",
                     ToastAndroid.SHORT)
                 }
                 else {

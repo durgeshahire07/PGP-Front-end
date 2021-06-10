@@ -29,11 +29,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../config'
 import {Picker} from '@react-native-picker/picker';
 const userInfo = ({navigation,route}) => {
+    const { UserId } = route.params;
+    console.log(UserId)
+    const {HOST,ADD_INFO} = config; 
     const { data } = route.params;
     const [selectedAge, setSelectedAge] = useState('0');
     const [selectedProfession, setSelectedProfession] = useState('student');
     const [picker, setPicker] = useState(true);
-    
+    const [isLoading,setIsLoading] = useState(false);
     const professionChange = (value) => {
         if(value==="others"){
             setSelectedProfession('');
@@ -50,7 +53,7 @@ const userInfo = ({navigation,route}) => {
         setSelectedProfession(text);
     }
 
-    const submitHandler = () => {
+    async function submitHandler() {
         console.log(selectedProfession);
         if(selectedProfession===""){
             ToastAndroid.show("Please Enter your Profession!",
@@ -61,7 +64,78 @@ const userInfo = ({navigation,route}) => {
             ToastAndroid.SHORT)
         }
         else{
-            console.log('success!')
+            setIsLoading(true);
+           
+             console.log(data);
+                    try {
+                        var config = {
+                            method: 'post',
+                            url: 'http://192.168.43.19:3000/api/v1/auth/additionalInfo',
+                            headers: {},
+                            data: {
+                                userID: UserId,
+                                ageGroupLevel: selectedAge,
+                                profession: selectedProfession
+                             }
+                        };
+                        const response = await axios(config)
+                        if (response.data.success) {
+                          
+                           setIsLoading(false);
+                           navigation.navigate('App', { screen: 'Home' })
+                            // await AsyncStorage.setItem('userProfile', JSON.stringify({
+                            //  firstName: response.data.data.firstName,
+                            //      emailID: response.data.data.userEmailId,
+                            //       lastName: response.data.data.lastName,
+                            //     userID: response.data.data._id,
+                            //     token: '1'
+                            // }));
+                            
+                            // setSecureEntry({
+                            //     ...secureEntry,
+                            //     isLoading: false
+                            // })
+                            // navigation.navigate('App', { screen: 'Home' })
+                        }
+                        else {
+                            setIsLoading(false);
+                            // setSecureEntry({
+                            //     ...secureEntry,
+                            //     isLoading: false
+                            // })
+                            ToastAndroid.show("Something went wrong!",
+                                ToastAndroid.SHORT)
+                        }
+                    } catch (error) {
+                        setIsLoading(false);
+                        // setSecureEntry({
+                        //     ...secureEntry,
+                        //     isLoading: false
+                        // })
+                        console.log(error)
+                        if (error.response.status === 404) {
+                            ToastAndroid.show("User not found!",
+                                ToastAndroid.SHORT)
+                        } else if (error.response.status === 500) {
+                            ToastAndroid.show("Oops...something went wrong!",
+                                ToastAndroid.SHORT)
+                        }
+                        else if (error.response.status === 503) {
+                            ToastAndroid.show("Internal Server Error! Please try after sometime.",
+                                ToastAndroid.SHORT)
+                        }
+                        else {
+                            ToastAndroid.show("error",
+                                ToastAndroid.SHORT)
+                        }
+                    }
+                
+               
+                
+            
+            
+            
+            
         }
         
     }
@@ -71,11 +145,11 @@ const userInfo = ({navigation,route}) => {
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor='#3d0099' barStyle="light-content" />
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-                {/* <Modal transparent={true} visible={secureEntry.isLoading} >
+                <Modal transparent={true} visible={isLoading} >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
                         <Image style={{ width: 100, height: 100 }} source={require('../assets/gif/new.gif')} />
                     </View>
-                </Modal> */}
+                </Modal>
                 <View style={styles.header}>
                 </View>
                 <View style={styles.footer}>
@@ -106,13 +180,13 @@ const userInfo = ({navigation,route}) => {
                          style={styles.picker}
                          onValueChange={(itemValue, itemIndex)=> professionChange(itemValue)}
                         >
-                            <Picker.Item label="Student" value="8000"></Picker.Item>
-                            <Picker.Item label="Healthcare and medicine" value="8000"></Picker.Item>
-                            <Picker.Item label="Arts and entertainment" value="567"></Picker.Item>
-                            <Picker.Item label="Business administration" value="8000"></Picker.Item>
-                            <Picker.Item label="Industrial and manufacturing" value="8000"></Picker.Item>
-                            <Picker.Item label="Law enforcement and armed forces" value="567"></Picker.Item>
-                            <Picker.Item label="Science and technology" value="8000"></Picker.Item>
+                            <Picker.Item label="Student" value="Student"></Picker.Item>
+                            <Picker.Item label="Healthcare and medicine" value="healthcare and medicine"></Picker.Item>
+                            <Picker.Item label="Arts and entertainment" value="arts and entertainment"></Picker.Item>
+                            <Picker.Item label="Business administration" value="business administration"></Picker.Item>
+                            <Picker.Item label="Industrial and manufacturing" value="industrial and manufacturing"></Picker.Item>
+                            <Picker.Item label="Law enforcement and armed forces" value="law enforcement and armed forces"></Picker.Item>
+                            <Picker.Item label="Science and technology" value="science and technology"></Picker.Item>
                             <Picker.Item label="Others" value="others"></Picker.Item>
                         
                         </Picker>
@@ -143,11 +217,10 @@ const userInfo = ({navigation,route}) => {
                          onValueChange={(itemValue, itemIndex)=> setSelectedAge(itemValue)}
                         >
                             <Picker.Item label="Select your age group" value="0"></Picker.Item>
-                            <Picker.Item label="Below 15" value="8000"></Picker.Item>
-                            <Picker.Item label="15 - 25" value="8000"></Picker.Item>
-                            <Picker.Item label="25 - 40" value="567"></Picker.Item>
-                            <Picker.Item label="Above 40" value="8000"></Picker.Item>
-                        
+                            <Picker.Item label="Below 15" value={1}></Picker.Item>
+                            <Picker.Item label="15 - 25" value={2}></Picker.Item>
+                            <Picker.Item label="25 - 40" value={3}></Picker.Item>
+                            <Picker.Item label="Above 40" value={4}></Picker.Item>
                         </Picker>
                     </View>
 
