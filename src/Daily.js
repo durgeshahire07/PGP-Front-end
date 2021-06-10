@@ -606,6 +606,8 @@ const Daily = ({ navigation, route }) => {
                 <FlatList
                     keyExtractor={(item) => item._id}
                     data={state.data}
+                    refreshing={state.isLoading}
+                    onRefresh={getSurvey} 
                     ListFooterComponent={submitButton}
                     renderItem={({ item }) => (
                         <View style={{ paddingVertical: 10 }} >
