@@ -260,7 +260,7 @@ const Otp = ({ route, navigation }) => {
                                 // { color: enableResend ? '#4700b3' : 'grey' }
                                 { color: '#4700b3' }]}
                             // >{" "}Resend OTP({countdown})</Text>
-                            >resend</Text>
+                            > Resend</Text>
                         </TouchableOpacity>
                     </View>
                 </Animatable.View>

@@ -279,12 +279,12 @@ const HomeContent = ({ navigation }) => {
                 datasets: [
                   {
                     data: [
-                      20,
-                      40,
-                      55,
-                      40,
-                      60,
-                      90,
+                      Math.random()*100,
+                      Math.random()*100,
+                      Math.random()*100,
+                      Math.random()*100,
+                      Math.random()*100,
+                      Math.random()*100,
                     ],
                   },
                 ],
@@ -318,6 +318,8 @@ const HomeContent = ({ navigation }) => {
             />
           );
     }
+
+   
       
       const MyBarChart = () => {
 
@@ -416,7 +418,7 @@ const HomeContent = ({ navigation }) => {
               paddingBottom:10
             }}>Your Personal Growth</Text>
             <MyBezierLineChart2 />
-            
+           
             {/* <MyBarChart /> */}
             {/* <MyProgressChart /> */}
             
@@ -425,7 +427,7 @@ const HomeContent = ({ navigation }) => {
           
            <MyPieChart />
            
-             <MyLineChart />
+            
            
            <MyStackedBarChart />
             <MyContributionGraph /> */}

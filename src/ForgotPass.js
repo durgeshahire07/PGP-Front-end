@@ -58,6 +58,7 @@ const ForgotPass = ({ navigation }) => {
                 var config = {
                     method: 'get',
                     url: `${HOST}${FORGET_PASS}${data.userEmailId}`,
+                    // url: `http://192.168.43.19:3000/api/v1/auth/otp?email=${data.userEmailId}`,
                     headers: {}
                 };
                 const response = await axios(config)

@@ -34,18 +34,31 @@ const userInfo = ({navigation,route}) => {
     const {HOST,ADD_INFO} = config; 
     const { data } = route.params;
     const [selectedAge, setSelectedAge] = useState('0');
+    const [selectedOccupation, setSelectedOccupation] = useState('student');
     const [selectedProfession, setSelectedProfession] = useState('student');
     const [picker, setPicker] = useState(true);
     const [isLoading,setIsLoading] = useState(false);
-    const professionChange = (value) => {
+    const OccupationChange = (value) => {
+        console.log(selectedOccupation)
+        if(value==="others"){
+            setSelectedOccupation('');
+            setPicker(false);
+            
+        }
+        else{
+            setSelectedOccupation(value);
+            
+        }
+    }
+    const ProfessionChange = (value) => {
+    
         if(value==="others"){
             setSelectedProfession('');
             setPicker(false);
             
         }
         else{
-            setSelectedProfession(value);
-            
+           setSelectedProfession(value);    
         }
     }
 
@@ -54,9 +67,9 @@ const userInfo = ({navigation,route}) => {
     }
 
     async function submitHandler() {
-        console.log(selectedProfession);
-        if(selectedProfession===""){
-            ToastAndroid.show("Please Enter your Profession!",
+        console.log(selectedOccupation);
+        if(selectedOccupation===""||selectedProfession==""){
+            ToastAndroid.show("Please fill out all the information!",
             ToastAndroid.SHORT)
         }
         else if(selectedAge==="0"){
@@ -66,19 +79,22 @@ const userInfo = ({navigation,route}) => {
         else{
             setIsLoading(true);
            
-             console.log(data);
                     try {
                         var config = {
                             method: 'post',
-                            url: 'http://192.168.43.19:3000/api/v1/auth/additionalInfo',
+                            // url: 'http://192.168.43.19:3000/api/v1/auth/additionalInfo',
+                            url: `${HOST}${ADD_INFO}`,
                             headers: {},
                             data: {
                                 userID: UserId,
                                 ageGroupLevel: selectedAge,
+                                occupation: selectedOccupation,
                                 profession: selectedProfession
                              }
                         };
+                        console.log(data);
                         const response = await axios(config)
+                       
                         if (response.data.success) {
                           
                            setIsLoading(false);
@@ -129,12 +145,6 @@ const userInfo = ({navigation,route}) => {
                                 ToastAndroid.SHORT)
                         }
                     }
-                
-               
-                
-            
-            
-            
             
         }
         
@@ -172,37 +182,114 @@ const userInfo = ({navigation,route}) => {
                         paddingVertical: 10,
                         color: 'grey',
                     }}>Your occupation : </Text>
-                    {
-                    picker ? 
-                    <Picker
-                    prompt={'Select your occupation'}
+                     <Picker
+                    prompt={'Select your Occupation'}
                     
                          style={styles.picker}
-                         onValueChange={(itemValue, itemIndex)=> professionChange(itemValue)}
+                         onValueChange={(itemValue, itemIndex)=> OccupationChange(itemValue)}
                         >
-                            <Picker.Item label="Student" value="Student"></Picker.Item>
+                            <Picker.Item label="Student" value="student"></Picker.Item>
                             <Picker.Item label="Healthcare and medicine" value="healthcare and medicine"></Picker.Item>
                             <Picker.Item label="Arts and entertainment" value="arts and entertainment"></Picker.Item>
                             <Picker.Item label="Business administration" value="business administration"></Picker.Item>
                             <Picker.Item label="Industrial and manufacturing" value="industrial and manufacturing"></Picker.Item>
                             <Picker.Item label="Law enforcement and armed forces" value="law enforcement and armed forces"></Picker.Item>
                             <Picker.Item label="Science and technology" value="science and technology"></Picker.Item>
-                            <Picker.Item label="Others" value="others"></Picker.Item>
+                           
                         
                         </Picker>
-                        : 
-
-                        <View style={styles.action}>
+                     
+                     
+                        </View>
+                        <View style={{flexDirection: 'row',paddingVertical:10,width:200}} >
+                        <Text  style={{
+                        fontFamily: 'nunito-bold',
+                        fontSize: 15,
+                        paddingVertical: 10,
+                        color: 'grey',
+                    }}>Your Profession : </Text>
+                    
+                    
+                        {
+                            picker ?
+                            (() => {
+                                if (selectedOccupation=="student")
+                                   return <Picker
+                                   prompt={'Select your Category'}
+                                   
+                                        style={styles.picker}
+                                        onValueChange={(itemValue, itemIndex)=> ProfessionChange(itemValue)}
+                                       >
+                                           <Picker.Item label="High School" value="healthcare and medicine"></Picker.Item>
+                                           <Picker.Item label="Undergraduate" value="arts and entertainment"></Picker.Item>
+                                           <Picker.Item label="Postgraduate" value="business administration"></Picker.Item>
+                                           <Picker.Item label="others" value="others"></Picker.Item>
+                                       </Picker>
+                                else if(selectedOccupation=="healthcare and medicine")
+                                return <Picker
+                                prompt={'Select your Profession'}
+                                
+                                     style={styles.picker}
+                                     onValueChange={(itemValue, itemIndex)=> ProfessionChange(itemValue)}
+                                    >
+                                        <Picker.Item label="Medical Student" value="healthcare and medicine"></Picker.Item>
+                                        <Picker.Item label="Doctor" value="healthcare and medicine"></Picker.Item>
+                                        <Picker.Item label="Nurse" value="arts and entertainment"></Picker.Item>
+                                        <Picker.Item label="Scientific Support" value="business administration"></Picker.Item>
+                                        <Picker.Item label="Management Technology and Business Support" value="business administration"></Picker.Item>
+                                        <Picker.Item label="others" value="others"></Picker.Item>
+                                    
+                                    </Picker>
+                                else if(selectedOccupation=="arts and entertainment")
+                                return <Picker
+                                prompt={'Select your Profession'}
+                                
+                                     style={styles.picker}
+                                     onValueChange={(itemValue, itemIndex)=> ProfessionChange(itemValue)}
+                                    >
+                                        <Picker.Item label="Multimedia Specialist" value="Multimedia Specialist"></Picker.Item>
+                                        <Picker.Item label="Film Director" value="Film Director"></Picker.Item>
+                                        <Picker.Item label="Product Designer" value="Product Designer"></Picker.Item>
+                                        <Picker.Item label="Art Director/Teacher" value="business administration"></Picker.Item>
+                                        <Picker.Item label="Illustrator" value="business administration"></Picker.Item>
+                                        <Picker.Item label="others" value="others"></Picker.Item>
+                                    
+                                    </Picker>
+                                else if(selectedOccupation=="business administration")
+                                return <Picker
+                                prompt={'Select your Profession'}
+                                
+                                     style={styles.picker}
+                                     onValueChange={(itemValue, itemIndex)=> ProfessionChange(itemValue)}
+                                    >
+                                        <Picker.Item label="BBA/BSABA Student" value="BBA/BSABA Student"></Picker.Item>
+                                        <Picker.Item label="Accountant" value="Accountantt"></Picker.Item>
+                                        <Picker.Item label="Management Consultant" value="Management Consultant"></Picker.Item>
+                                        <Picker.Item label="Finance Manager" value="Finance Manager"></Picker.Item>
+                                        <Picker.Item label="Illustrator" value="Illustrator"></Picker.Item>
+                                        <Picker.Item label="others" value="others"></Picker.Item>
+                                    
+                                    </Picker>
+                              
+                            })()
+                            :
+                             <View style={styles.action}>
                             <TextInput
                                 placeholder="Enter your Profession"
                                 style={styles.textInput}
                                 onChangeText={(text) => textInputProfession(text)}
                             />
                         </View>
-                        
-                        }
+                         }
+                    
+                   
                        
-                    </View>
+                       
+                    
+
+
+                       </View>
+                    
 
                     <View style={{flexDirection: 'row',paddingVertical:10}} >
                         <Text  style={{
@@ -218,9 +305,10 @@ const userInfo = ({navigation,route}) => {
                         >
                             <Picker.Item label="Select your age group" value="0"></Picker.Item>
                             <Picker.Item label="Below 15" value={1}></Picker.Item>
-                            <Picker.Item label="15 - 25" value={2}></Picker.Item>
-                            <Picker.Item label="25 - 40" value={3}></Picker.Item>
-                            <Picker.Item label="Above 40" value={4}></Picker.Item>
+                            <Picker.Item label="15 - 20" value={2}></Picker.Item>
+                            <Picker.Item label="20 - 30" value={3}></Picker.Item>
+                            <Picker.Item label="30 - 40" value={4}></Picker.Item>
+                            <Picker.Item label="Above 40" value={5}></Picker.Item>
                         </Picker>
                     </View>
 

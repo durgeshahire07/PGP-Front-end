@@ -82,7 +82,7 @@ const Login = ({ navigation }) => {
                 console.log(response)
                 
                 if (response.data.success) {
-                    if(!response.data.data.profession){
+                    if(response.data.data.additionalInfoPending){
                         setSecureEntry({
                             ...secureEntry,
                             isLoading: false
